@@ -34,6 +34,7 @@ export function ProjectCreateDialog(props: IProps) {
     } = useForm({
         icon: defaultEmoji,
         name: '',
+        description: '', // Добавлено поле описания
     });
 
     const createProject: FormEventHandler = (e) => {
@@ -72,6 +73,7 @@ export function ProjectCreateDialog(props: IProps) {
 
                 <form onSubmit={createProject} className="space-y-6">
                     <EmojiSelect onSelect={selectEmoji} selected={data.icon} />
+                    
                     <div className="w-full">
                         <Label
                             htmlFor="name"
@@ -92,6 +94,30 @@ export function ProjectCreateDialog(props: IProps) {
                             className="mt-1 block w-full"
                             autoComplete="name"
                         />
+                    </div>
+
+                    <div className="w-full">
+                        <Label
+                            htmlFor="description"
+                            className={cn(errors.description && "text-red-600")}
+                        >
+                            Description
+                        </Label>
+
+                        <textarea
+                            id="description"
+                            placeholder="Project description"
+                            value={data.description}
+                            onChange={(e) =>
+                                setData('description', e.target.value)
+                            }
+                            className="mt-1 block w-full rounded-md border-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        {errors.description && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.description}
+                            </p>
+                        )}
                     </div>
 
                     <DialogFooter>
