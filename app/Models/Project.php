@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Project extends Model
 {
     public $incrementing = false;
-    
+
     protected $keyType = 'string';
     protected $primaryKey = 'id';
 
     protected $fillable = [
         'name',
+        'description',
         'icon',
         'team_id',
     ];

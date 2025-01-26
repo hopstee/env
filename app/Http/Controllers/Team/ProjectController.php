@@ -16,20 +16,22 @@ class ProjectController extends Controller
         $request->validate([
             'icon' => 'required',
             'name' => 'required',
+            'description' => 'required',
         ]);
 
         $teamId = session('selected_team_id');
 
         $project = Project::create([
-            'icon'      => $request->icon,
-            'name'      => $request->name,
-            'team_id'   => $teamId,
+            'icon' => $request->icon,
+            'name' => $request->name,
+            'description' => $request->description,
+            'team_id' => $teamId,
         ]);
 
         ProjectUser::create([
-            'project_id'    => $project->id,
-            'user_id'       => $request->user()->id,
-            'role_id'       => 1,
+            'project_id' => $project->id,
+            'user_id' => $request->user()->id,
+            'role_id' => 1,
         ]);
 
         return Redirect::route('t.workspace', ['team_id' => session('selected_team_id')]);
