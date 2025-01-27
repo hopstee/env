@@ -1,5 +1,5 @@
 import { IProjectData } from "@/types";
-import { useRemember } from "@inertiajs/react"
+import { router, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { projectColumns } from "./Columns";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,16 @@ export function ProjectsDataTable({
     })
 
     console.log("name filtered", table.getColumn("name") || 'empty')
+    const handleBulkDelete = () => {
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => row.original.id);
+        if (confirm(`Delete ${selectedIds.length} projects?`)) {
+            router.delete(route('project.destroy-many'), {
+                data: { ids: selectedIds },
+                onSuccess: () => router.reload(),
+            })
+        }
+    }
+
 
     return (
         <div className="w-full space-y-3">
@@ -64,6 +74,7 @@ export function ProjectsDataTable({
                         variant="ghost"
                         size="icon"
                         className="text-red-600 hover:text-red-600 hover:bg-red-50"
+                        onClick={handleBulkDelete} // Добавлен обработчик
                     >
                         <Trash2Icon />
                     </Button>

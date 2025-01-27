@@ -3,7 +3,7 @@ import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { IProject } from "@/types"
-import { Link, usePage } from "@inertiajs/react"
+import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArchiveIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
@@ -78,7 +78,15 @@ export const projectColumns: ColumnDef<IProject>[] = [
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const payment = row.original
+            const project = row.original // Переименовано payment -> project
+
+            const handleDelete = () => {
+                if (confirm('Are you sure you want to delete this project?')) {
+                    router.delete(route('project.destroy', {
+                        project_id: project.id
+                    }))
+                }
+            }
 
             return (
                 <DropdownMenu>
@@ -91,7 +99,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
                     <DropdownMenuContent align="end" className="w-48">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
+                            onClick={() => navigator.clipboard.writeText(project.id)}
                         >
                             <CopyIcon className="text-muted-foreground" />
                             Copy link
@@ -110,7 +118,10 @@ export const projectColumns: ColumnDef<IProject>[] = [
                             Add to fav
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50">
+                        <DropdownMenuItem
+                            className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                            onClick={handleDelete} // Добавлен обработчик
+                        >
                             <Trash2Icon />
                             Delete
                         </DropdownMenuItem>

@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('project')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('project.create');
         Route::delete('/{project_id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+        Route::delete('/', [ProjectController::class, 'destroyMany'])->name('project.destroy-many');
     });
 
     Route::prefix('profile')->group(function () {

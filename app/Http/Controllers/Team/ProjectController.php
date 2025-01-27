@@ -37,8 +37,14 @@ class ProjectController extends Controller
         return Redirect::route('t.workspace', ['team_id' => session('selected_team_id')]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($project_id) // Исправлено
     {
-        Project::where('id', $request->project_id)->delete();
+        Project::where('id', $project_id)->delete();
+    }
+
+    public function destroyMany(Request $request)
+    {
+        $projectIds = $request->input('ids');
+        Project::whereIn('id', $projectIds)->delete();
     }
 }
