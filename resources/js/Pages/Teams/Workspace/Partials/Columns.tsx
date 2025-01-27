@@ -78,7 +78,20 @@ export const projectColumns: ColumnDef<IProject>[] = [
         id: "actions",
         enableHiding: false,
         cell: ({ row }) => {
-            const project = row.original // Переименовано payment -> project
+            const project = row.original
+
+            const handleFavToggle = () => {
+                if (project.is_fav) {
+                    router.post(route('project.unfav', { project: project.id }));
+                    console.log(project.is_fav);
+                } else {
+                    router.post(route('project.fav', { project: project.id }));
+                    console.log(project.is_fav);
+                }
+            };
+            // подсказка
+            // router.post(route('project.toggleFav', { project: project.id, is_fav: !project.is_fav }));
+
 
             const handleDelete = () => {
                 if (confirm('Are you sure you want to delete this project?')) {
@@ -115,14 +128,16 @@ export const projectColumns: ColumnDef<IProject>[] = [
                             <ArchiveIcon className="text-muted-foreground" />
                             Archive
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={handleFavToggle}
+                        >
                             <HeartIcon className="text-muted-foreground" />
-                            Add to fav
+                            {project.is_fav ? 'Remove from fav' : 'Add to fav'}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="text-red-600 focus:text-red-600 focus:bg-red-50"
-                            onClick={handleDelete} // Добавлен обработчик
+                            onClick={handleDelete}
                         >
                             <Trash2Icon />
                             Delete

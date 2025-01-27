@@ -70,6 +70,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProjectController::class, 'destroyMany'])->name('project.destroy-many');
         Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('project.archive');
         Route::post('/projects/archive', [ProjectController::class, 'archiveMany'])->name('project.archive-many');
+        Route::post('/projects/{project}/fav', [ProjectController::class, 'fav'])->name('project.fav');
+        Route::post('/projects/{project}/unfav', [ProjectController::class,'unfav'])->name('project.unfav');
 
     });
 

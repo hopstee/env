@@ -20,6 +20,7 @@ class Project extends Model
         'team_id',
         'is_archived',
         'archived_at',
+        'is_fav'
     ];
 
     protected static function boot()
@@ -52,6 +53,8 @@ class Project extends Model
         return $query->where('is_archived', false);
     }
 
+// сделать тогл для архива и  фава тру/фолс
+
     public function archive()
     {
         $this->update([
@@ -65,6 +68,19 @@ class Project extends Model
         $this->update([
             'is_archived' => false,
             'archived_at' => null
+        ]);
+    }
+
+    public function fav()
+    {
+        $this->update([
+            'is_fav' => true
+        ]);
+    }
+    public function unfav()
+    {
+        $this->update([
+            'is_fav' => false
         ]);
     }
 }

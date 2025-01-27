@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->boolean('is_deleted')->default(false);
+            $table->boolean('is_fav')->default(false);
             $table->boolean('is_archived')->default(false);
             $table->timestamp('archived_at')->nullable();
             $table->timestamps();
