@@ -37,7 +37,7 @@ class ProjectController extends Controller
         return Redirect::route('t.workspace', ['team_id' => session('selected_team_id')]);
     }
 
-    public function destroy($project_id) // Исправлено
+    public function destroy($project_id) 
     {
         Project::where('id', $project_id)->delete();
     }
@@ -47,4 +47,26 @@ class ProjectController extends Controller
         $projectIds = $request->input('ids');
         Project::whereIn('id', $projectIds)->delete();
     }
+
+    public function archive(Project $project)
+    {
+        $project->archive();
+    }
+
+    public function unarchive(Project $project)
+    {
+        $project->unarchive();
+        return response()->json(['message' => 'Проект восстановлен']);
+    }
+
+    public function archiveMany(Request $request)
+    {
+        $projectIds = $request->input('ids');
+        $projects = Project::whereIn('id', $projectIds)->get();
+
+        foreach ($projects as $project) {
+            $project->archive();
+        }
+    }
+
 }

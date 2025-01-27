@@ -39,15 +39,36 @@ export function ProjectsDataTable({
     })
 
     console.log("name filtered", table.getColumn("name") || 'empty')
+
     const handleBulkDelete = () => {
-        const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => row.original.id);
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
         if (confirm(`Delete ${selectedIds.length} projects?`)) {
             router.delete(route('project.destroy-many'), {
                 data: { ids: selectedIds },
-                onSuccess: () => router.reload(),
-            })
+                onSuccess: () => {
+                    setRowSelection({});
+                    router.reload();
+                },
+            });
         }
-    }
+    };
+
+    const handleBulkArchive = () => {
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
+        if (confirm(`Archive ${selectedIds.length} projects?`)) {
+            router.post(
+                route('project.archive-many'),
+                { ids: selectedIds },
+                {
+                    onSuccess: () => {
+                        setRowSelection({});
+                        router.reload();
+                    },
+                }
+            );
+        }
+    };
+
 
 
     return (
@@ -66,6 +87,7 @@ export function ProjectsDataTable({
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
                         size="icon"
+                        onClick={handleBulkArchive}
                     >
                         <ArchiveIcon />
                     </Button>

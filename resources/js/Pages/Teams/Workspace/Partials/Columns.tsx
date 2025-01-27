@@ -109,7 +109,9 @@ export const projectColumns: ColumnDef<IProject>[] = [
                             <PenSquareIcon className="text-muted-foreground" />
                             Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => router.post(route('project.archive', { project: project.id }))}
+                        >
                             <ArchiveIcon className="text-muted-foreground" />
                             Archive
                         </DropdownMenuItem>

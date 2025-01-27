@@ -40,18 +40,18 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{team_id}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.workspace');
-    
+
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
-        
+
             Route::get('/readme', [ReadmeController::class, 'show'])->name('t.readme');
-        
+
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
 
             Route::prefix('p')->group(function () {
                 Route::get('/', function () {
                     return redirect()->route('t', ['team_id' => session('selected_team_id')]);
                 })->name('p');
-        
+
                 Route::prefix('{project_id}')->middleware([CheckProjectAccess::class])->group(function () {
                     Route::get('/', [ProjectsController::class, 'show'])->name('p.workspace');
                 });
@@ -68,6 +68,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('project.create');
         Route::delete('/{project_id}', [ProjectController::class, 'destroy'])->name('project.destroy');
         Route::delete('/', [ProjectController::class, 'destroyMany'])->name('project.destroy-many');
+        Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('project.archive');
+        Route::post('/projects/archive', [ProjectController::class, 'archiveMany'])->name('project.archive-many');
+
     });
 
     Route::prefix('profile')->group(function () {
@@ -77,4 +80,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
