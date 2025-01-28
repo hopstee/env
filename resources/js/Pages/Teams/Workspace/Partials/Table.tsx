@@ -38,8 +38,6 @@ export default function ProjectsDataTable({
         },
     })
 
-    console.log("name filtered", table.getColumn("name") || 'empty')
-
     const handleBulkDelete = () => {
         const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
         if (confirm(`Delete ${selectedIds.length} projects?`)) {
@@ -69,8 +67,6 @@ export default function ProjectsDataTable({
         }
     };
 
-
-
     return (
         <div className="space-y-3">
             <div className="flex items-center justify-between space-x-3">
@@ -86,7 +82,7 @@ export default function ProjectsDataTable({
                     <Button
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
-                        size="icon"
+                        size="sm-icon"
                         onClick={handleBulkArchive}
                     >
                         <ArchiveIcon />
@@ -94,8 +90,8 @@ export default function ProjectsDataTable({
                     <Button
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
-                        size="icon"
-                        className="text-red-600 hover:text-red-600 hover:bg-red-50"
+                        size="sm-icon"
+                        className="text-red-600 hover:text-red-600 hover:bg-red-600/10"
                         onClick={handleBulkDelete}
                     >
                         <Trash2Icon />

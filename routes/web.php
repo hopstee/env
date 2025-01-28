@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Env\EnvFieldsController;
 use App\Http\Controllers\Env\EnvsController;
-use App\Http\Controllers\Team\ProjectController;
 use App\Http\Controllers\Team\TeamsController;
 use App\Http\Controllers\Team\MembersController;
 use App\Http\Controllers\Profile\ProfileController;
