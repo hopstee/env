@@ -64,14 +64,18 @@ export const projectColumns: ColumnDef<IProject>[] = [
         size: 50,
         enableHiding: false,
         cell: ({ row }) => {
+            const {
+                selectedTeamId,
+            }: {
+                selectedTeamId: string,
+            } = usePage().props;
+        
             const project = row.original
 
             const handleFavToggle = () => {
-                const updatedFavStatus = !project.is_fav;
-
                 router.post(
                     route('project.favToggle', { project: project.id }),
-                    { is_fav: updatedFavStatus }
+                    { is_fav: !project.is_fav }
                 );
             };
 
