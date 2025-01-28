@@ -1,5 +1,5 @@
 import { IProjectData } from "@/types";
-import { useRemember } from "@inertiajs/react"
+import { router, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { projectColumns } from "./Columns";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,35 @@ export default function ProjectsDataTable({
         },
     })
 
+    const handleBulkDelete = () => {
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
+        if (confirm(`Delete ${selectedIds.length} projects?`)) {
+            router.delete(route('project.destroy-many'), {
+                data: { ids: selectedIds },
+                onSuccess: () => {
+                    setRowSelection({});
+                    router.reload();
+                },
+            });
+        }
+    };
+
+    const handleBulkArchive = () => {
+        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
+        if (confirm(`Archive ${selectedIds.length} projects?`)) {
+            router.post(
+                route('project.archive-many'),
+                { ids: selectedIds },
+                {
+                    onSuccess: () => {
+                        setRowSelection({});
+                        router.reload();
+                    },
+                }
+            );
+        }
+    };
+
     return (
         <div className="space-y-3">
             <div className="flex items-center justify-between space-x-3">
@@ -54,6 +83,7 @@ export default function ProjectsDataTable({
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
                         size="sm-icon"
+                        onClick={handleBulkArchive}
                     >
                         <ArchiveIcon />
                     </Button>
@@ -62,6 +92,7 @@ export default function ProjectsDataTable({
                         variant="ghost"
                         size="sm-icon"
                         className="text-red-600 hover:text-red-600 hover:bg-red-600/10"
+                        onClick={handleBulkDelete}
                     >
                         <Trash2Icon />
                     </Button>

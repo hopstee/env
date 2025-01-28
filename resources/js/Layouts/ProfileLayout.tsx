@@ -1,5 +1,5 @@
-import { ProfileMenu } from '@/Components/ProfileMenu';
-import { ThemeSwitcher } from '@/Components/ThemeSwitcher';
+import ProfileMenu from '@/Components/ProfileMenu';
+import ThemeSwitcher from '@/Components/ThemeSwitcher';
 import { Button } from '@/Components/ui/button';
 import { ScrollArea } from '@/Components/ui/scroll-area';
 import { ArrowLeftIcon, UserPlusIcon } from 'lucide-react';

@@ -54,8 +54,43 @@ class ProjectsController extends Controller
         return Redirect::route('t.workspace', ['team_id' => session('selected_team_id')]);
     }
 
-    public function destroy(Request $request)
+    public function destroy($project_id)
     {
-        Project::where('id', $request->project_id)->delete();
+        Project::where('id', $project_id)->delete();
+    }
+
+    public function destroyMany(Request $request)
+    {
+        $projectIds = $request->input('ids');
+        Project::whereIn('id', $projectIds)->delete();
+    }
+
+    public function archive(Project $project)
+    {
+        $project->archive();
+    }
+
+    public function unarchive(Project $project)
+    {
+        $project->unarchive();
+    }
+
+    public function archiveMany(Request $request)
+    {
+        $projectIds = $request->input('ids');
+        $projects = Project::whereIn('id', $projectIds)->get();
+
+        foreach ($projects as $project) {
+            $project->archive();
+        }
+    }
+
+    public function favToggle(Project $project, Request $request)
+    {
+        $isFav = $request->input('is_fav');
+
+        $project->update([
+            'is_fav' => $isFav
+        ]);
     }
 }

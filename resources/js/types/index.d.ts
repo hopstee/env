@@ -25,6 +25,7 @@ export interface IProject {
     id: string;
     name: string;
     icon: string;
+    is_fav: boolean;
 }
 
 export interface IProjectData {
@@ -34,6 +35,7 @@ export interface IProjectData {
     created_at: Date;
     users_count: number;
     users: IUser[];
+    is_fav: boolean;
 }
 
 export interface IBreadcrumb {

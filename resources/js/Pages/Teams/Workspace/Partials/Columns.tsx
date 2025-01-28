@@ -3,7 +3,7 @@ import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { IProject } from "@/types"
-import { Link, usePage } from "@inertiajs/react"
+import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
@@ -69,14 +69,30 @@ export const projectColumns: ColumnDef<IProject>[] = [
             }: {
                 selectedTeamId: string,
             } = usePage().props;
-
+        
             const project = row.original
+
+            const handleFavToggle = () => {
+                router.post(
+                    route('project.favToggle', { project: project.id }),
+                    { is_fav: !project.is_fav }
+                );
+            };
+
+
+            const handleDelete = () => {
+                if (confirm('Are you sure you want to delete this project?')) {
+                    router.delete(route('project.destroy', {
+                        project_id: project.id
+                    }))
+                }
+            }
 
             return (
                 <div className="space-x-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm-icon">
+                            <Button variant="ghost" className="h-8 w-8 p-0">
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontalIcon />
                             </Button>
@@ -94,16 +110,23 @@ export const projectColumns: ColumnDef<IProject>[] = [
                                 <PenSquareIcon className="text-muted-foreground" />
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => router.post(route('project.archive', { project: project.id }))}
+                            >
                                 <ArchiveIcon className="text-muted-foreground" />
                                 Archive
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={handleFavToggle}
+                            >
                                 <HeartIcon className="text-muted-foreground" />
-                                Add to fav
+                                {project.is_fav ? 'Remove from fav' : 'Add to fav'}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-600/10">
+                            <DropdownMenuItem
+                                className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                                onClick={handleDelete}
+                            >
                                 <Trash2Icon />
                                 Delete
                             </DropdownMenuItem>

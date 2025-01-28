@@ -40,11 +40,11 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{team_id}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.workspace');
-    
+
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
-        
+
             Route::get('/readme', [ReadmeController::class, 'show'])->name('t.readme');
-        
+
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
 
             Route::prefix('p')->group(function () {
@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
 
                 Route::prefix('{project_id}')->group(function () {
                     Route::get('/', [ProjectsController::class, 'show'])->name('p.workspace');
-    
+
                     Route::prefix('e')->group(function () {
                         Route::get('/', [EnvsController::class, 'redirectToProject'])->name('e');
                         Route::get('/{env_id}', [EnvsController::class, 'show'])->name('e.show');
@@ -70,6 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('project')->group(function () {
         Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
         Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
+        Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
+        Route::post('/projects/{project}/archive', [ProjectsController::class, 'archive'])->name('project.archive');
+        Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
+        Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
     });
 
     Route::prefix('env')->group(function () {
@@ -86,4 +90,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

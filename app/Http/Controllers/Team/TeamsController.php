@@ -21,6 +21,7 @@ class TeamsController extends Controller
                     'id' => $project->id,
                     'icon' => $project->icon,
                     'name' => $project->name,
+                    'is_fav' => $project->is_fav,
                     'created_at' => $project->created_at,
                     'users_count' => $project->users_count,
                     'users' => $project->users->map(function ($user) {
