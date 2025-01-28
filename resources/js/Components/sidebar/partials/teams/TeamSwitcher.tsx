@@ -1,7 +1,6 @@
 "use client"
 
 import { Plus, ChevronDownIcon, CookieIcon } from "lucide-react"
-import * as lucideIcons from "lucide-react";
 
 import {
     DropdownMenu,
@@ -19,11 +18,10 @@ import {
 import { Link, useRemember } from "@inertiajs/react"
 import { ITeam } from "@/types"
 import { cn } from "@/lib/utils"
-import { TeamCreateDialog } from "./TeamCreateDialog"
+import TeamCreateDialog from "./TeamCreateDialog"
 import { DialogTrigger } from "@/Components/ui/dialog"
-import { ReactElement } from "react";
 
-export function TeamSwitcher({
+export default function TeamSwitcher({
     selectedTeamId,
     teams,
 }: {

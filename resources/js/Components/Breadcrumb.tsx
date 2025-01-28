@@ -12,7 +12,7 @@ export default function WorkspaceBreadcrumb() {
                     const showSeparator = index !== breadcrumbs.length - 1;
 
                     return (
-                        <div className="flex items-center">
+                        <>
                             <BreadcrumbItem key={index}>
                                 <BreadcrumbPage>
                                     {breadcrumb.url
@@ -27,7 +27,7 @@ export default function WorkspaceBreadcrumb() {
                                 </BreadcrumbPage>
                             </BreadcrumbItem>
                             {showSeparator && <BreadcrumbSeparator />}
-                        </div>
+                        </>
                     )
                 })}
             </BreadcrumbList>

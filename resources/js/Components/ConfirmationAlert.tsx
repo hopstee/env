@@ -1,4 +1,5 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/Components/ui/alert-dialog";
+import { useRemember } from "@inertiajs/react";
 import { CheckIcon, Loader2Icon } from "lucide-react";
 
 interface IConfirmationAlert {
@@ -9,7 +10,7 @@ interface IConfirmationAlert {
     children: JSX.Element;
 }
 
-export function ConfirmationAlert(props: IConfirmationAlert) {
+export default function ConfirmationAlert(props: IConfirmationAlert) {
     const {
         title,
         description,
@@ -18,15 +19,22 @@ export function ConfirmationAlert(props: IConfirmationAlert) {
         children,
     } = props
 
+    const [isOpen, setIsOpen] = useRemember(false)
+
+    const handleCancelAlert = () => {
+        if (onCancel) onCancel()
+        setIsOpen(false)
+    }
+
     return (
-        <AlertDialog>
+        <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel onClick={handleCancelAlert}>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

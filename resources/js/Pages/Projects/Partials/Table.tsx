@@ -1,27 +1,26 @@
-import { IProjectData } from "@/types";
-import { router, useRemember } from "@inertiajs/react"
+import { IEnv, IProjectData } from "@/types";
+import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { projectColumns } from "./Columns";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/Components/ui/button";
+import { envColumns } from "./Columns";
+import { Button } from "@/components/ui/button";
 import { ArchiveIcon, Trash2Icon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 
-interface IProjectsDataTable {
-    projectsData: IProjectData[];
+interface IEnvDataTable {
+    envs: IEnv[];
 }
 
-export default function ProjectsDataTable({
-    projectsData,
-}: IProjectsDataTable) {
+export default function EnvDataTable({
+    envs,
+}: IEnvDataTable) {
     const [sorting, setSorting] = useRemember<SortingState>([])
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
     const [rowSelection, setRowSelection] = useRemember({})
 
     const table = useReactTable({
-        data: projectsData,
-        columns: projectColumns,
+        data: envs,
+        columns: envColumns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -38,41 +37,8 @@ export default function ProjectsDataTable({
         },
     })
 
-    console.log("name filtered", table.getColumn("name") || 'empty')
-
-    const handleBulkDelete = () => {
-        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
-        if (confirm(`Delete ${selectedIds.length} projects?`)) {
-            router.delete(route('project.destroy-many'), {
-                data: { ids: selectedIds },
-                onSuccess: () => {
-                    setRowSelection({});
-                    router.reload();
-                },
-            });
-        }
-    };
-
-    const handleBulkArchive = () => {
-        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
-        if (confirm(`Archive ${selectedIds.length} projects?`)) {
-            router.post(
-                route('project.archive-many'),
-                { ids: selectedIds },
-                {
-                    onSuccess: () => {
-                        setRowSelection({});
-                        router.reload();
-                    },
-                }
-            );
-        }
-    };
-
-
-
     return (
-        <div className="space-y-3">
+        <div className="w-full space-y-3">
             <div className="flex items-center justify-between space-x-3">
                 {/* <Input
                     placeholder="Filter projects..."
@@ -86,17 +52,15 @@ export default function ProjectsDataTable({
                     <Button
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
-                        size="icon"
-                        onClick={handleBulkArchive}
+                        size="sm-icon"
                     >
                         <ArchiveIcon />
                     </Button>
                     <Button
                         disabled={!table.getFilteredSelectedRowModel().rows.length}
                         variant="ghost"
-                        size="icon"
-                        className="text-red-600 hover:text-red-600 hover:bg-red-50"
-                        onClick={handleBulkDelete}
+                        size="sm-icon"
+                        className="text-red-600 hover:text-red-600 hover:bg-red-600/10"
                     >
                         <Trash2Icon />
                     </Button>
@@ -142,7 +106,7 @@ export default function ProjectsDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={projectColumns.length}
+                                    colSpan={envColumns.length}
                                     className="h-24 text-center"
                                 >
                                     No results.

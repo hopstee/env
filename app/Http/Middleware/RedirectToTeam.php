@@ -31,7 +31,7 @@ class RedirectToTeam
                 }
             }
 
-            $team = $user->teams('id')->first();
+            $team = $user->teams()->first();
             if ($team) {
                 session(['selected_team_id' => $team->id]);
                 return redirect()->to('/t/' . $team->id);

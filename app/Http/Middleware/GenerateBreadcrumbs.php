@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Env;
+use App\Models\Project;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -54,9 +56,28 @@ class GenerateBreadcrumbs
             case 'p.workspace':
                 $projectId = request('project_id');
 
+                $project = Project::find($projectId);
+                $projectName = "$project->icon $project->name";
+
                 $breadcrumbs = [
                     $defaultActiveBreadcrumb,
-                    ['name' => "Team $projectId"],
+                    ['name' => $projectName],
+                ];
+                break;
+
+            case 'e.show':
+                $projectId = request('project_id');
+                $project = Project::find($projectId);
+                $projectName = "$project->icon $project->name";
+
+                $envId = request('env_id');
+                $env = Env::find($envId);
+                $envName = $env->name;
+
+                $breadcrumbs = [
+                    $defaultActiveBreadcrumb,
+                    ['name' => $projectName, 'url' => route('p.workspace', ['team_id' => request('team_id'), 'project_id' => $projectId])],
+                    ['name' => $envName],
                 ];
                 break;
 

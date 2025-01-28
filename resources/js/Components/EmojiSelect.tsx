@@ -18,7 +18,7 @@ interface EmojiData {
     }[];
 }
 
-export function EmojiSelect({ onSelect, selected }: IProjectEmojiSelect) {
+export default function EmojiSelect({ onSelect, selected }: IProjectEmojiSelect) {
     const [searchQuery, setSearchQuery] = useState("");
 
     const filteredEmojiData = Object.entries(emojiData).reduce((acc, [category, emojis]) => {
@@ -77,5 +77,3 @@ export function EmojiSelect({ onSelect, selected }: IProjectEmojiSelect) {
         </div>
     );
 };
-
-export default EmojiSelect;

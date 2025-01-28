@@ -10,6 +10,11 @@ class EnvField extends Model
         'env_key',
         'env_value',
         'env_id',
-        'archived_at',
+        'is_archived',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'env_field_users');
+    }
 }

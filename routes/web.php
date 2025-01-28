@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Env\EnvFieldsController;
+use App\Http\Controllers\Env\EnvsController;
+use App\Http\Controllers\Team\ProjectController;
 use App\Http\Controllers\Team\TeamsController;
 use App\Http\Controllers\Team\MembersController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Project\ProjectsController;
-use App\Http\Controllers\Team\ProjectController;
 use App\Http\Controllers\Team\ReadmeController;
 use App\Http\Controllers\Team\SettingsController;
 use App\Http\Middleware\CheckProjectAccess;
@@ -13,7 +15,6 @@ use App\Http\Middleware\GenerateBreadcrumbs;
 use App\Http\Middleware\RedirectToTeam;
 use App\Http\Middleware\ShareTeamsData;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,12 +49,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
 
             Route::prefix('p')->group(function () {
-                Route::get('/', function () {
-                    return redirect()->route('t', ['team_id' => session('selected_team_id')]);
-                })->name('p');
+                Route::get('/', [ProjectsController::class, 'redirectToTeam'])->name('p');
 
-                Route::prefix('{project_id}')->middleware([CheckProjectAccess::class])->group(function () {
+                Route::prefix('{project_id}')->group(function () {
                     Route::get('/', [ProjectsController::class, 'show'])->name('p.workspace');
+
+                    Route::prefix('e')->group(function () {
+                        Route::get('/', [EnvsController::class, 'redirectToProject'])->name('e');
+                        Route::get('/{env_id}', [EnvsController::class, 'show'])->name('e.show');
+                    });
                 });
             });
         });
@@ -71,8 +75,14 @@ Route::middleware('auth')->group(function () {
         Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('project.archive');
         Route::post('/projects/archive', [ProjectController::class, 'archiveMany'])->name('project.archive-many');
         Route::post('/projects/{project}/fav', [ProjectController::class, 'fav'])->name('project.fav');
-        Route::post('/projects/{project}/unfav', [ProjectController::class,'unfav'])->name('project.unfav');
+        Route::post('/projects/{project}/unfav', [ProjectController::class, 'unfav'])->name('project.unfav');
+    });
 
+    Route::prefix('env')->group(function () {
+        Route::post('/', [EnvsController::class, 'store'])->name('env.create');
+        Route::delete('/{env_id}', [EnvsController::class, 'destroy'])->name('env.destroy');
+
+        Route::put('/{env_id}/fields', [EnvFieldsController::class, 'update'])->name('env-field.update');
     });
 
     Route::prefix('profile')->group(function () {

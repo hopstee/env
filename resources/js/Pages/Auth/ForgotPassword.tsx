@@ -1,8 +1,10 @@
 import InputError from '@/Components/InputError';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Label } from '@/Components/ui/label';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import { Head, useForm } from '@inertiajs/react';
 import { Loader2Icon } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -36,8 +38,16 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     </div>
                 )}
                 <form onSubmit={submit}>
+                    <Label
+                        htmlFor="email"
+                        className={cn(errors.email && "text-red-600")}
+                    >
+                        Email
+                    </Label>
+
                     <Input
                         id="email"
+                        placeholder="test@test.com"
                         type="email"
                         name="email"
                         value={data.email}

@@ -6,13 +6,13 @@ interface Props {
     appearance?: "plain" | "outline"
 }
 
-export function ThemeSwitcher({ appearance = "plain" }: Props) {
+export default function ThemeSwitcher({ appearance = "plain" }: Props) {
     const { theme, setTheme } = useTheme()
 
     return (
         <Button
             variant="ghost"
-            size="icon"
+            size="sm-icon"
             aria-label="Switch theme"
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
         >

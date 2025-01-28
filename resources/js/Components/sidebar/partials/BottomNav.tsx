@@ -10,7 +10,7 @@ import {
 import { INavItem } from "@/types"
 import { Link } from "@inertiajs/react"
 
-export function BottomNav({
+export default function BottomNav({
     items,
     ...props
 }: {

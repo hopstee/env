@@ -6,11 +6,11 @@ import {
     SidebarHeader,
 } from "@/Components/ui/sidebar"
 import { usePage } from "@inertiajs/react"
-import { TeamSwitcher } from "./partials/teams/TeamSwitcher"
-import { MainNav } from "./partials/MainNav"
-import { Projects } from "./partials/projects/Projects"
+import TeamSwitcher from "./partials/teams/TeamSwitcher"
+import MainNav from "./partials/MainNav"
+import Projects from "./partials/projects/Projects"
 import { INavItem, IProject, ITeam } from "@/types"
-import { BottomNav } from "./partials/BottomNav"
+import BottomNav from "./partials/BottomNav"
 
 const navMain = (teamId: string): INavItem[] => [
     {
@@ -54,7 +54,7 @@ const secondaryItems = (teamId: string): INavItem[] => [
     },
 ]
 
-export function AppSidebar() {
+export default function AppSidebar() {
     const {
         selectedTeamId,
         teams,

@@ -8,7 +8,7 @@ import {
 import { INavItem } from "@/types"
 import { Link } from "@inertiajs/react"
 
-export function MainNav({
+export default function MainNav({
     items,
 }: {
     items: INavItem[]

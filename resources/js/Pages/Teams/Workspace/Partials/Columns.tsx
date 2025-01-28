@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { IProject } from "@/types"
 import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArchiveIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
+import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
 export const projectColumns: ColumnDef<IProject>[] = [
     {
@@ -32,7 +32,6 @@ export const projectColumns: ColumnDef<IProject>[] = [
     },
     {
         accessorKey: "name",
-        // size: 200,
         enableColumnFilter: true,
         header: ({ column }) => {
             return (
@@ -46,21 +45,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
             )
         },
         cell: ({ row }) => {
-            const {
-                selectedTeamId,
-            }: {
-                selectedTeamId: string,
-            } = usePage().props;
-
-            return (
-                <Link href={route('p.workspace', { 'team_id': selectedTeamId, 'project_id': row.original.id })}>
-                    <Button
-                        variant="link"
-                    >
-                        {row.original.icon + ' ' + row.getValue("name")}
-                    </Button>
-                </Link>
-            )
+            return row.original.icon + ' ' + row.getValue("name")
         },
     },
     {
@@ -76,6 +61,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
     },
     {
         id: "actions",
+        size: 50,
         enableHiding: false,
         cell: ({ row }) => {
             const project = row.original
