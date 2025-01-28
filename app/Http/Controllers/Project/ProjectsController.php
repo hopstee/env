@@ -84,12 +84,13 @@ class ProjectsController extends Controller
         }
     }
 
-    public function fav(Project $project)
+    public function favToggle(Project $project, Request $request)
     {
-        $project->fav();
+        $isFav = $request->input('is_fav');
+
+        $project->update([
+            'is_fav' => $isFav
+        ]);
     }
-    public function unfav(Project $project)
-    {
-        $project->unfav();
-    }
+
 }

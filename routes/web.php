@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
         Route::post('/projects/{project}/fav', [ProjectsController::class, 'fav'])->name('project.fav');
         Route::post('/projects/{project}/unfav', [ProjectsController::class, 'unfav'])->name('project.unfav');
+        Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
     });
 
     Route::prefix('env')->group(function () {

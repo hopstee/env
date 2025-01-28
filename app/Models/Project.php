@@ -53,7 +53,7 @@ class Project extends Model
         return $query->where('is_archived', false);
     }
 
-// сделать тогл для архива и  фава тру/фолс
+    // сделать тогл для архива и  фава тру/фолс
 
     public function archive()
     {
@@ -71,16 +71,10 @@ class Project extends Model
         ]);
     }
 
-    public function fav()
+    public function favToggle($status)
     {
         $this->update([
-            'is_fav' => true
-        ]);
-    }
-    public function unfav()
-    {
-        $this->update([
-            'is_fav' => false
+            'is_fav' => $status,
         ]);
     }
 }

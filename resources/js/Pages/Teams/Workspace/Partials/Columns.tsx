@@ -67,16 +67,13 @@ export const projectColumns: ColumnDef<IProject>[] = [
             const project = row.original
 
             const handleFavToggle = () => {
-                if (project.is_fav) {
-                    router.post(route('project.unfav', { project: project.id }));
-                    console.log(project.is_fav);
-                } else {
-                    router.post(route('project.fav', { project: project.id }));
-                    console.log(project.is_fav);
-                }
+                const updatedFavStatus = !project.is_fav;
+
+                router.post(
+                    route('project.favToggle', { project: project.id }),
+                    { is_fav: updatedFavStatus }
+                );
             };
-            // подсказка
-            // router.post(route('project.toggleFav', { project: project.id, is_fav: !project.is_fav }));
 
 
             const handleDelete = () => {
