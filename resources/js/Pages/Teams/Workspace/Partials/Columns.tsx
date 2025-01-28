@@ -69,7 +69,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
             }: {
                 selectedTeamId: string,
             } = usePage().props;
-        
+
             const project = row.original
 
             const handleFavToggle = () => {
@@ -89,52 +89,62 @@ export const projectColumns: ColumnDef<IProject>[] = [
             }
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontalIcon />
+                <div className="space-x-1">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontalIcon />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(project.id)}
+                            >
+                                <CopyIcon className="text-muted-foreground" />
+                                Copy link
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <PenSquareIcon className="text-muted-foreground" />
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => router.post(route('project.archive', { project: project.id }))}
+                            >
+                                <ArchiveIcon className="text-muted-foreground" />
+                                Archive
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={handleFavToggle}
+                            >
+                                {project.is_fav ? (
+                                    <HeartOffIcon className="text-muted-foreground" />
+                                ) : (
+                                    <HeartIcon className="text-muted-foreground" />
+                                )}
+                                {project.is_fav ? 'Remove from fav' : 'Add to fav'}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                                onClick={handleDelete}
+                            >
+                                <Trash2Icon />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Link href={route('p.workspace', { 'team_id': selectedTeamId, 'project_id': row.original.id })}>
+                        <Button
+                            variant="ghost"
+                            size="sm-icon"
+                        >
+                            <ArrowRightIcon />
                         </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(project.id)}
-                        >
-                            <CopyIcon className="text-muted-foreground" />
-                            Copy link
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <PenSquareIcon className="text-muted-foreground" />
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => router.post(route('project.archive', { project: project.id }))}
-                        >
-                            <ArchiveIcon className="text-muted-foreground" />
-                            Archive
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={handleFavToggle}
-                        >
-                            {project.is_fav ? (
-                                <HeartOffIcon className="text-muted-foreground" />
-                            ) : (
-                                <HeartIcon className="text-muted-foreground" />
-                            )}
-                            {project.is_fav ? 'Remove from fav' : 'Add to fav'}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            className="text-red-600 focus:text-red-600 focus:bg-red-50"
-                            onClick={handleDelete}
-                        >
-                            <Trash2Icon />
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                    </Link>
+                </div>
             )
         },
     },
