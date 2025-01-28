@@ -74,8 +74,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
         Route::post('/projects/{project}/archive', [ProjectsController::class, 'archive'])->name('project.archive');
         Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
-        Route::post('/projects/{project}/fav', [ProjectsController::class, 'fav'])->name('project.fav');
-        Route::post('/projects/{project}/unfav', [ProjectsController::class, 'unfav'])->name('project.unfav');
         Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
     });
 
