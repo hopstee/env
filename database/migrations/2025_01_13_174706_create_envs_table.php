@@ -15,6 +15,8 @@ return new class extends Migration
             // $table->string('id')->default(uniqid())->primary();
             $table->string('id')->primary();
             $table->string('name');
+            $table->string('project_id');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -25,14 +27,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
         });
-
-        Schema::create('project_envs', function (Blueprint $table) {
-            $table->id();
-            $table->string('project_id');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-            $table->string('env_id');
-            $table->foreign('env_id')->references('id')->on('envs')->onDelete('cascade');
-        });
     }
 
     /**
@@ -41,7 +35,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('env_users');
-        Schema::dropIfExists('project_envs');
         Schema::dropIfExists('envs');
     }
 };

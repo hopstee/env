@@ -2,12 +2,12 @@ import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { IProject } from "@/types"
+import { IEnv, IProject } from "@/types"
 import { Link, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
-export const projectColumns: ColumnDef<IProject>[] = [
+export const envColumns: ColumnDef<IEnv>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -32,6 +32,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
     },
     {
         accessorKey: "name",
+        // size: 200,
         enableColumnFilter: true,
         header: ({ column }) => {
             return (
@@ -45,23 +46,11 @@ export const projectColumns: ColumnDef<IProject>[] = [
             )
         },
         cell: ({ row }) => {
-            return row.original.icon + ' ' + row.getValue("name")
-        },
-    },
-    {
-        accessorKey: "users_count",
-        header: () => <div className="text-right">Members</div>,
-        cell: ({ row }) => {
-            const usersCount = parseFloat(row.getValue("users_count"))
-
-            const formatted = <Badge>{usersCount}<UsersIcon className="size-4 ml-1" /></Badge>
-
-            return <div className="text-right font-medium">{formatted}</div>
+            return row.getValue("name");
         },
     },
     {
         id: "actions",
-        size: 50,
         enableHiding: false,
         cell: ({ row }) => {
             const {
@@ -70,7 +59,9 @@ export const projectColumns: ColumnDef<IProject>[] = [
                 selectedTeamId: string,
             } = usePage().props;
 
-            const project = row.original
+            const projectId = route().routeParams.project_id;
+
+            const payment = row.original
 
             return (
                 <div className="space-x-1">
@@ -84,23 +75,14 @@ export const projectColumns: ColumnDef<IProject>[] = [
                         <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(project.id)}
+                                onClick={() => navigator.clipboard.writeText(payment.id)}
                             >
                                 <CopyIcon className="text-muted-foreground" />
                                 Copy link
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <PenSquareIcon className="text-muted-foreground" />
-                                Edit
-                            </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <ArchiveIcon className="text-muted-foreground" />
                                 Archive
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <HeartIcon className="text-muted-foreground" />
-                                Add to fav
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-600/10">
@@ -109,7 +91,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Link href={route('p.workspace', { 'team_id': selectedTeamId, 'project_id': row.original.id })}>
+                    <Link href={route('e.show', { 'team_id': selectedTeamId, 'project_id': projectId, 'env_id': row.original.id })}>
                         <Button
                             variant="ghost"
                             size="sm-icon"

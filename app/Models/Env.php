@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Env extends Model
 {
     public $incrementing = false;
-    
+
     protected $keyType = 'string';
     protected $primaryKey = 'id';
 
     protected $fillable = [
         'name',
+        'project_id',
     ];
 
     protected static function boot()
@@ -28,13 +30,30 @@ class Env extends Model
         });
     }
 
-    public function users(): HasMany
+    public function users(): BelongsToMany
     {
-        return $this->hasMany(EnvUser::class, 'env_id');
+        return $this->belongsToMany(EnvUser::class, 'env_users');
     }
 
-    public function envUsers(): HasMany
+    public function project(): BelongsTo
     {
-        return $this->hasMany(EnvUser::class, 'env_id');
+        return $this->belongsTo(Project::class);
+    }
+
+    public function fields(): HasMany
+    {
+        return $this->hasMany(EnvField::class);
+    }
+
+    public function getFieldsWithAvailability(int $userId)
+    {
+        return $this->fields()
+            ->with('users')
+            ->get()
+            ->map(function ($field) use ($userId) {
+                $field->is_available = $field->users->contains('id', $userId);
+                unset($field->users);
+                return $field;
+            });
     }
 }

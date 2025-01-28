@@ -1,27 +1,26 @@
-import { IProjectData } from "@/types";
+import { IEnv, IProjectData } from "@/types";
 import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { projectColumns } from "./Columns";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/Components/ui/button";
+import { envColumns } from "./Columns";
+import { Button } from "@/components/ui/button";
 import { ArchiveIcon, Trash2Icon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 
-interface IProjectsDataTable {
-    projectsData: IProjectData[];
+interface IEnvDataTable {
+    envs: IEnv[];
 }
 
-export default function ProjectsDataTable({
-    projectsData,
-}: IProjectsDataTable) {
+export default function EnvDataTable({
+    envs,
+}: IEnvDataTable) {
     const [sorting, setSorting] = useRemember<SortingState>([])
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
     const [rowSelection, setRowSelection] = useRemember({})
 
     const table = useReactTable({
-        data: projectsData,
-        columns: projectColumns,
+        data: envs,
+        columns: envColumns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -39,7 +38,7 @@ export default function ProjectsDataTable({
     })
 
     return (
-        <div className="space-y-3">
+        <div className="w-full space-y-3">
             <div className="flex items-center justify-between space-x-3">
                 {/* <Input
                     placeholder="Filter projects..."
@@ -107,7 +106,7 @@ export default function ProjectsDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={projectColumns.length}
+                                    colSpan={envColumns.length}
                                     className="h-24 text-center"
                                 >
                                     No results.

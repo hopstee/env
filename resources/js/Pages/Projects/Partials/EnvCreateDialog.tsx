@@ -4,23 +4,21 @@ import { useForm, useRemember } from "@inertiajs/react";
 import { FormEventHandler, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/Components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { Transition } from "@headlessui/react";
-import { defaultEmoji } from "../../../../constants/emoji";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/Components/ui/textarea";
 
 interface IProps {
     children: JSX.Element;
 }
 
-export default function ProjectCreateDialog(props: IProps) {
+export default function EnvCreateDialog(props: IProps) {
     const {
         children,
     } = props
 
-    const projectNameInput = useRef<HTMLInputElement>(null);
+    const envNameInput = useRef<HTMLInputElement>(null);
 
     const [isOpen, setIsOpen] = useRemember(false);
 
@@ -33,15 +31,14 @@ export default function ProjectCreateDialog(props: IProps) {
         processing,
         recentlySuccessful,
     } = useForm({
-        icon: defaultEmoji,
         name: '',
-        description: '',
+        project_id: route().routeParams.project_id,
     });
 
-    const createProject: FormEventHandler = (e) => {
+    const createEnv: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('project.create'), {
+        post(route('env.create'), {
             preserveScroll: true,
             onSuccess: () => {
                 reset()
@@ -50,15 +47,11 @@ export default function ProjectCreateDialog(props: IProps) {
             onError: (errors) => {
                 if (errors.name) {
                     reset('name');
-                    projectNameInput.current?.focus();
+                    envNameInput.current?.focus();
                 }
             },
         });
     };
-
-    const selectEmoji = (emoji: string) => {
-        setData('icon', emoji);
-    }
 
     const handleOpenState = () => {
         reset()
@@ -69,24 +62,22 @@ export default function ProjectCreateDialog(props: IProps) {
         <Dialog open={isOpen} onOpenChange={handleOpenState}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create Project</DialogTitle>
+                    <DialogTitle>Create Env</DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={createProject} className="space-y-6">
-                    <EmojiSelect onSelect={selectEmoji} selected={data.icon} />
-                    
+                <form onSubmit={createEnv} className="space-y-6">
                     <div className="w-full">
                         <Label
                             htmlFor="name"
                             className={cn(errors.name && "text-red-600")}
                         >
-                            Project name
+                            Env name
                         </Label>
 
                         <Input
                             id="name"
-                            placeholder="Hastle project"
-                            ref={projectNameInput}
+                            placeholder="Dev env"
+                            ref={envNameInput}
                             value={data.name}
                             onChange={(e) =>
                                 setData('name', e.target.value)
@@ -95,29 +86,6 @@ export default function ProjectCreateDialog(props: IProps) {
                             className="mt-1 block w-full"
                             autoComplete="name"
                         />
-                    </div>
-
-                    <div className="w-full">
-                        <Label
-                            htmlFor="description"
-                            className={cn(errors.description && "text-red-600")}
-                        >
-                            Description
-                        </Label>
-
-                        <Textarea
-                            id="description"
-                            placeholder="Project description"
-                            value={data.description}
-                            onChange={(e) =>
-                                setData('description', e.target.value)
-                            }
-                        />
-                        {errors.description && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {errors.description}
-                            </p>
-                        )}
                     </div>
 
                     <DialogFooter>

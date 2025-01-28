@@ -44,7 +44,7 @@ const getInitials = (name: string) => {
     return firstLetter + secondLetter
 }
 
-export function ProfileMenu() {
+export default function ProfileMenu() {
     const user = usePage().props.auth.user;
 
     return (

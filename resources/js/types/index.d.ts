@@ -46,6 +46,16 @@ export interface IEnv {
     name: string;
 }
 
+export interface IEnvField {
+    id: number;
+    env_key: string;
+    env_value: string;
+    is_available: boolean;
+    is_archived: boolean;
+    is_new?: boolean;
+    error?: string;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {

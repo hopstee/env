@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('env_value', 100);
             $table->string('env_id');
             $table->foreign('env_id')->references('id')->on('envs')->onDelete('cascade');
-            $table->timestamp('archived_at')->nullable();
+            $table->boolean('is_archived')->default(false);
             $table->timestamps();
         });
 

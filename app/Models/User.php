@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_users');
     }
 
+    public function envs(): BelongsToMany
+    {
+        return $this->belongsToMany(Env::class, 'env_users');
+    }
+
     public function accessibleProjectsByTeam(string $teamId): BelongsToMany
     {
         return $this->projects()->whereHas('team', function ($query) use ($teamId) {
@@ -88,17 +93,15 @@ class User extends Authenticatable
         })->exists();
     }
 
-    public function accessibleEnvsByProject(string $teamId, string $projectId)
+    public function accessibleEnvsByProject(string $projectId)
     {
-        return $this->hasManyThrough(
-            Env::class,
-            ProjectEnv::class,
-            'project_id',
-            'id',
-            'id',
-            'env_id'
-        )->whereHas('envUsers', function ($query) use ($teamId) {
-            $query->where('user_id', $this->id);
-        })->where('project_id', $projectId);
+        return $this->envs()->whereHas('project', function ($query) use ($projectId) {
+            $query->where('id', $projectId);
+        });
+    }
+    
+    public function accessibleEnvFields()
+    {
+        return $this->belongsToMany(EnvField::class, 'env_field_users');
     }
 }

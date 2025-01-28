@@ -1,13 +1,13 @@
 import WorkspaceBreadcrumb from '@/Components/Breadcrumb';
-import { ProfileMenu } from '@/Components/ProfileMenu';
-import { ThemeSwitcher } from '@/Components/ThemeSwitcher';
-import { AppSidebar } from '@/Components/sidebar/AppSidebar';
-import { CustomTrigger } from '@/Components/sidebar/partials/CustomTrigger';
+import ProfileMenu from '@/Components/ProfileMenu';
+import ThemeSwitcher from '@/Components/ThemeSwitcher';
+import AppSidebar from '@/Components/sidebar/AppSidebar';
+import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
 import { ScrollArea } from '@/Components/ui/scroll-area';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/Components/ui/sidebar';
+import { SidebarInset, SidebarProvider } from '@/Components/ui/sidebar';
 import { UserPlusIcon } from 'lucide-react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 
 export default function Authenticated({
     header,
@@ -32,7 +32,7 @@ export default function Authenticated({
                                     <ThemeSwitcher />
                                     <Button
                                         variant="ghost"
-                                        size="icon"
+                                        size="sm-icon"
                                     >
                                         <UserPlusIcon />
                                     </Button>

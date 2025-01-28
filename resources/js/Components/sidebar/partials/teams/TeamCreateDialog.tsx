@@ -12,7 +12,7 @@ interface IProps {
     children: JSX.Element;
 }
 
-export function TeamCreateDialog(props: IProps) {
+export default function TeamCreateDialog(props: IProps) {
     const {
         children,
     } = props

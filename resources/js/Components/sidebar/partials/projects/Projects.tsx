@@ -1,6 +1,6 @@
 "use client"
 
-import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, PenIcon, Plus, Trash2Icon, type LucideIcon } from "lucide-react"
+import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
 
 import {
     SidebarGroup,
@@ -15,13 +15,13 @@ import {
 } from "@/Components/ui/sidebar"
 import { Link, useForm } from "@inertiajs/react"
 import { IProject } from "@/types"
-import { ProjectCreateDialog } from "./ProjectCreateDialog"
+import ProjectCreateDialog from "./ProjectCreateDialog"
 import { DialogTrigger } from "@/Components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { ConfirmationAlert } from "@/Components/ConfirmationAlert"
+import ConfirmationAlert from "@/Components/ConfirmationAlert"
 import { AlertDialogTrigger } from "@/Components/ui/alert-dialog"
 
-export function Projects({
+export default function Projects({
     items,
     selectedTeamId,
 }: {
@@ -103,7 +103,7 @@ export function Projects({
                                                 asChild
                                                 onClick={() => setData('project_id', item.id)}
                                             >
-                                                <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50">
+                                                <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-600/10">
                                                     <Trash2Icon />
                                                     <span>Delete</span>
                                                 </DropdownMenuItem>

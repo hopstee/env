@@ -27,7 +27,7 @@ export default function Profile({
                             <ThemeSwitcher />
                             <Button
                                 variant="ghost"
-                                size="icon"
+                                size="sm-icon"
                             >
                                 <UserPlusIcon />
                             </Button>

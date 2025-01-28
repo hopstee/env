@@ -30,7 +30,6 @@ export default function DeleteUserForm() {
     };
 
     const deleteUser: FormEventHandler = (e) => {
-        console.log('delete user')
         e.preventDefault();
 
         destroy(route('profile.destroy'), {

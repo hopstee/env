@@ -12,9 +12,8 @@ use Inertia\Inertia;
 
 class TeamsController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request, string $teamId)
     {
-        $teamId = $request->route('team_id');
         $projectsData = $request->user()->accessibleProjectsWithUsersByTeam($teamId)
             ->get()
             ->map(function ($project) {
