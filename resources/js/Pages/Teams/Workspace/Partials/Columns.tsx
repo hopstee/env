@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { IProject } from "@/types"
 import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
+import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
 export const projectColumns: ColumnDef<IProject>[] = [
     {
@@ -69,7 +69,7 @@ export const projectColumns: ColumnDef<IProject>[] = [
             }: {
                 selectedTeamId: string,
             } = usePage().props;
-        
+
             const project = row.original
 
             const handleFavToggle = () => {
@@ -119,7 +119,11 @@ export const projectColumns: ColumnDef<IProject>[] = [
                             <DropdownMenuItem
                                 onClick={handleFavToggle}
                             >
-                                <HeartIcon className="text-muted-foreground" />
+                                {project.is_fav ? (
+                                    <HeartOffIcon className="text-muted-foreground" />
+                                ) : (
+                                    <HeartIcon className="text-muted-foreground" />
+                                )}
                                 {project.is_fav ? 'Remove from fav' : 'Add to fav'}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
