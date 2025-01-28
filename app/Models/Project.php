@@ -59,7 +59,8 @@ class Project extends Model
     {
         $this->update([
             'is_archived' => true,
-            'archived_at' => now()
+            'archived_at' => now(),
+            'is_fav' => false,
         ]);
     }
 
