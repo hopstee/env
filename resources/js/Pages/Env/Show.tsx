@@ -5,10 +5,9 @@ import { IEnvField } from "@/types";
 import { Table, TableBody, TableCell, TableFooter, TableRow } from "@/Components/ui/table";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import ConfirmationAlert from "@/Components/ConfirmationAlert";
-import { AlertDialogTrigger } from "@/Components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useConfirm } from "@/providers/ConfirmAlertProvider";
 
 export default function EnvFields({
     initialFields = [],
@@ -16,6 +15,7 @@ export default function EnvFields({
     initialFields: IEnvField[];
 }) {
     const { toast } = useToast()
+    const { openConfirm } = useConfirm()
 
     const {
         data,
@@ -109,6 +109,14 @@ export default function EnvFields({
             data.fields.some((field) => field.error) || data.newField.error !== ""
         );
     };
+
+    const confirmDelete = () => {
+        openConfirm({
+            title: "Save changes?",
+            description: "Are you sure you want to save the changes you made? Once saved, you won't be able to revert to the previous version.",
+            onConfirm: handleSave,
+        })
+    }
 
     return (
         <AuthenticatedLayout>
@@ -215,25 +223,16 @@ export default function EnvFields({
                         <RotateCcwIcon />
                     </Button>
 
-                    <ConfirmationAlert
-                        title="Save changes?"
-                        description="Are you sure you want to save the changes you made? Once saved, you won't be able to revert to the previous version."
-                        onConfirm={handleSave}
+                    <Button
+                        disabled={!isModified || hasErrors() || processing}
+                        onClick={confirmDelete}
                     >
-                        <AlertDialogTrigger
-                            asChild
-                        >
-                            <Button
-                                disabled={!isModified || hasErrors() || processing}
-                            >
-                                {processing
-                                    ? <Loader2Icon className="animate-spin" />
-                                    : <SaveIcon />
-                                }
-                                Сохранить
-                            </Button>
-                        </AlertDialogTrigger>
-                    </ConfirmationAlert>
+                        {processing
+                            ? <Loader2Icon className="animate-spin" />
+                            : <SaveIcon />
+                        }
+                        Сохранить
+                    </Button>
                 </div>
             </div>
         </AuthenticatedLayout>
