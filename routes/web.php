@@ -69,13 +69,13 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('project')->group(function () {
-        Route::post('/', [ProjectController::class, 'store'])->name('project.create');
-        Route::delete('/{project_id}', [ProjectController::class, 'destroy'])->name('project.destroy');
-        Route::delete('/', [ProjectController::class, 'destroyMany'])->name('project.destroy-many');
-        Route::post('/projects/{project}/archive', [ProjectController::class, 'archive'])->name('project.archive');
-        Route::post('/projects/archive', [ProjectController::class, 'archiveMany'])->name('project.archive-many');
-        Route::post('/projects/{project}/fav', [ProjectController::class, 'fav'])->name('project.fav');
-        Route::post('/projects/{project}/unfav', [ProjectController::class, 'unfav'])->name('project.unfav');
+        Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
+        Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
+        Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
+        Route::post('/projects/{project}/archive', [ProjectsController::class, 'archive'])->name('project.archive');
+        Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
+        Route::post('/projects/{project}/fav', [ProjectsController::class, 'fav'])->name('project.fav');
+        Route::post('/projects/{project}/unfav', [ProjectsController::class, 'unfav'])->name('project.unfav');
     });
 
     Route::prefix('env')->group(function () {
