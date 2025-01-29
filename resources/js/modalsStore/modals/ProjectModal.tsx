@@ -1,26 +1,30 @@
-import { Button } from "@/Components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
-import { Label } from "@/Components/ui/label";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { Transition } from "@headlessui/react";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
+import EmojiSelect from "@/Components/EmojiSelect";
 import { useForm, useRemember } from "@inertiajs/react";
-import { Loader2Icon, PlusIcon } from "lucide-react";
 import { FormEventHandler, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { Label } from "@/Components/ui/label";
+import { Button } from "@/Components/ui/button";
+import { Loader2Icon, PlusIcon } from "lucide-react";
+import { Transition } from "@headlessui/react";
+import { defaultEmoji } from "../../constants/emoji";
+import { Input } from "@/Components/ui/input";
+import { Textarea } from "@/Components/ui/textarea";
 
-interface IProps {
-    children: JSX.Element;
+type InitialValues = {
+    icon: string;
+    name: string;
+    description: string;
 }
 
-export default function TeamCreateDialog(props: IProps) {
-    const {
-        children,
-    } = props
+export type ProjectModalProps = {
+    onClose: () => void;
+    title: string;
+    initialValues: InitialValues;
+}
 
+export default function ProjectModal(props: ProjectModalProps) {
     const projectNameInput = useRef<HTMLInputElement>(null);
-    const projectTypeInput = useRef<HTMLInputElement>(null);
-
-    const [isOpen, setIsOpen] = useRemember(false);
 
     const {
         data,
@@ -31,55 +35,58 @@ export default function TeamCreateDialog(props: IProps) {
         processing,
         recentlySuccessful,
     } = useForm({
-        name: '',
-        type: '',
+        icon: props.initialValues?.icon || defaultEmoji,
+        name: props.initialValues?.name || '',
+        description: props.initialValues?.description || '',
     });
 
-    const createTeam: FormEventHandler = (e) => {
+    const createProject: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('team.create'), {
+        post(route('project.create'), {
             preserveScroll: true,
             onSuccess: () => {
-                reset()
-                setIsOpen(false)
+                handleOpenState()
             },
             onError: (errors) => {
                 if (errors.name) {
                     reset('name');
                     projectNameInput.current?.focus();
                 }
-
-                if (errors.type) {
-                    reset('type');
-                    projectTypeInput.current?.focus();
-                }
             },
         });
     };
 
+    const selectEmoji = (emoji: string) => {
+        setData('icon', emoji);
+    }
+
     const handleOpenState = () => {
-        setIsOpen(prevState => !prevState)
+        reset()
+        props.onClose()
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleOpenState}>
+        <Dialog open={true} onOpenChange={handleOpenState}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create Team</DialogTitle>
+                    <DialogTitle>{props.title}</DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={createTeam} className="space-y-6">
-                    <div>
+                <form onSubmit={createProject} className="space-y-6">
+                    <EmojiSelect onSelect={selectEmoji} selected={data.icon} />
+                    
+                    <div className="w-full">
                         <Label
                             htmlFor="name"
                             className={cn(errors.name && "text-red-600")}
                         >
-                            Name
+                            Project name
                         </Label>
 
                         <Input
                             id="name"
+                            placeholder="Hastle project"
                             ref={projectNameInput}
                             value={data.name}
                             onChange={(e) =>
@@ -90,29 +97,31 @@ export default function TeamCreateDialog(props: IProps) {
                             autoComplete="name"
                         />
                     </div>
-                    
-                    <div>
+
+                    <div className="w-full">
                         <Label
-                            htmlFor="type"
-                            className={cn(errors.type && "text-red-600")}
+                            htmlFor="description"
+                            className={cn(errors.description && "text-red-600")}
                         >
-                            Type
+                            Description
                         </Label>
 
-                        <Input
-                            id="type"
-                            ref={projectTypeInput}
-                            value={data.type}
+                        <Textarea
+                            id="description"
+                            placeholder="Project description"
+                            value={data.description}
                             onChange={(e) =>
-                                setData('type', e.target.value)
+                                setData('description', e.target.value)
                             }
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="type"
                         />
+                        {errors.description && (
+                            <p className="text-red-600 text-sm mt-1">
+                                {errors.description}
+                            </p>
+                        )}
                     </div>
 
-                    <div className="flex items-center justify-end gap-4">
+                    <DialogFooter>
                         <Transition
                             show={recentlySuccessful}
                             enter="transition ease-in-out"
@@ -132,10 +141,9 @@ export default function TeamCreateDialog(props: IProps) {
                             }
                             Add
                         </Button>
-                    </div>
+                    </DialogFooter>
                 </form>
             </DialogContent>
-            {children}
         </Dialog>
     )
 }

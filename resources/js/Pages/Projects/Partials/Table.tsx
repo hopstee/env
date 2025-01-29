@@ -1,8 +1,8 @@
-import { IEnv, IProjectData } from "@/types";
+import { IEnv } from "@/types";
 import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { envColumns } from "./Columns";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import { ArchiveIcon, Trash2Icon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 
