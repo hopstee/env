@@ -71,7 +71,7 @@ export default function Projects({
                 <SidebarGroupContent>
                     <SidebarMenu>
                         {favoriteProjects.map((item: IProject) => (
-                            <SidebarMenuItem>
+                            <SidebarMenuItem key={item.id}>
                                 <SidebarMenuButton
                                     isActive={route().current('p.workspace', { 'team_id': selectedTeamId, 'project_id': item.id })}
                                     asChild
