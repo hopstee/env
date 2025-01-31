@@ -1,7 +1,6 @@
 "use client"
 
 import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
-
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -48,6 +47,18 @@ export default function Projects({
         })
     }
 
+    const favoriteProjects = items.filter(item => item.is_fav === true);
+
+    // Функция handleFavToggle теперь принимает project как аргумент
+    const handleFavToggle = (project: IProject) => {
+        const updatedFavStatus = !project.is_fav;
+
+        router.post(
+            route('project.favToggle', { project: project.id }),
+            { is_fav: updatedFavStatus }
+        );
+    };
+
     return (
         <ProjectCreateDialog>
             <SidebarGroup>
@@ -59,7 +70,7 @@ export default function Projects({
                 </DialogTrigger>
                 <SidebarGroupContent>
                     <SidebarMenu>
-                        {items.map((item: IProject) => (
+                        {favoriteProjects.map((item: IProject) => (
                             <SidebarMenuItem>
                                 <SidebarMenuButton
                                     isActive={route().current('p.workspace', { 'team_id': selectedTeamId, 'project_id': item.id })}
@@ -88,7 +99,9 @@ export default function Projects({
                                             <CopyIcon className="text-muted-foreground" />
                                             Copy link
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => handleFavToggle(item)}
+                                        >
                                             <HeartOffIcon className="text-muted-foreground" />
                                             Remove from fav
                                         </DropdownMenuItem>
