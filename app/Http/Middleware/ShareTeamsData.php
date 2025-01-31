@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Utils\TeamDataUtil;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,15 +18,7 @@ class ShareTeamsData
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $teams = $request->user()->teams;
-        $teamId = session('selected_team_id') ?? $teams[0]->id;
-        $projects = $request->user()->accessibleProjectsByTeam($teamId)->get()->toArray();
-
-        Inertia::share([
-            'selectedTeamId'    => $teamId,
-            'teams'             => $teams,
-            'projects'          => $projects,
-        ]);
+        TeamDataUtil::shareSelectedTeamData($request);
 
         return $next($request);
     }

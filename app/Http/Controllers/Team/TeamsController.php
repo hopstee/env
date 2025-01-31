@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Team;
 use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Models\TeamUser;
+use App\Utils\TeamDataUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -35,6 +36,7 @@ class TeamsController extends Controller
             });
 
         session(['selected_team_id' => $teamId]);
+        TeamDataUtil::shareSelectedTeamData($request);
 
         return Inertia::render('Teams/Workspace/Show', [
             'projectsData' => $projectsData

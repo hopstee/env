@@ -1,7 +1,6 @@
 "use client"
 
 import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
-
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -48,11 +47,22 @@ export default function Projects({
         })
     }
 
+
     const openCreateProject = () => {
         openModal(ModalTypes.PROJECT_MODAL, {
             title: "Create Project",
         })
     }
+
+const favoriteProjects = items.filter(item => item.is_fav === true);
+    const handleFavToggle = (project: IProject) => {
+        const updatedFavStatus = !project.is_fav;
+
+        router.post(
+            route('project.favToggle', { project: project.id }),
+            { is_fav: updatedFavStatus }
+        );
+    };
 
     return (
         <SidebarGroup>
