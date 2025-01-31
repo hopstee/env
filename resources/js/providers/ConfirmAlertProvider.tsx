@@ -1,4 +1,6 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/Components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/Components/ui/alert-dialog";
+import { IconTypes, getIcon } from "@/lib/infoIcons";
+import { cn } from "@/lib/utils";
 import { ReactNode, createContext, useContext, useState } from 'react';
 
 type ConfirmProps = {
@@ -6,6 +8,7 @@ type ConfirmProps = {
     description: string;
     onConfirm: () => void;
     onCancel?: () => void;
+    type?: IconTypes;
 }
 
 type ConfirmAlertProps = ConfirmProps & {
@@ -30,6 +33,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
         description: '',
         onConfirm: () => { },
         onCancel: () => { },
+        type: IconTypes.INFO
     });
 
     const openConfirm = (props: ConfirmProps) => {
@@ -38,6 +42,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
             description: props.description,
             onConfirm: props.onConfirm || (() => { }),
             onCancel: props.onCancel || (() => { }),
+            type: props.type || IconTypes.INFO
         });
         setIsOpen(true);
     };
@@ -54,6 +59,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
                 onClose={closeConfirm}
                 title={confirmProps.title}
                 description={confirmProps.description}
+                type={confirmProps.type}
                 onConfirm={() => {
                     confirmProps.onConfirm();
                     closeConfirm();
@@ -69,16 +75,19 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
 
 export const useConfirm = () => useContext(ConfirmContext);
 
-function ConfirmAlert({ isOpen, onClose, title, description, onConfirm, onCancel }: ConfirmAlertProps) {
+function ConfirmAlert({ isOpen, onClose, title, description, onConfirm, onCancel, type }: ConfirmAlertProps) {
+    const alertIconData = getIcon(type)
+
     return (
         <AlertDialog open={isOpen} onOpenChange={onClose}>
             <AlertDialogContent>
-                <AlertDialogHeader>
+                <AlertDialogHeader className="sm:text-center">
+                    {alertIconData}
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+                <AlertDialogFooter className="sm:flex-col-reverse sm:justify-normal sm:space-x-0">
+                    <AlertDialogCancel className="sm:mt-2" onClick={onCancel}>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

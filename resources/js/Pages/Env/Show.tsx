@@ -4,17 +4,17 @@ import { Head, useForm } from "@inertiajs/react";
 import { IEnvField } from "@/types";
 import { Table, TableBody, TableCell, TableFooter, TableRow } from "@/Components/ui/table";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useConfirm } from "@/providers/ConfirmAlertProvider";
+import { IconTypes } from "@/lib/infoIcons";
+import { toast } from "sonner";
 
 export default function EnvFields({
     initialFields = [],
 }: {
     initialFields: IEnvField[];
 }) {
-    const { toast } = useToast()
     const { openConfirm } = useConfirm()
 
     const {
@@ -97,10 +97,7 @@ export default function EnvFields({
     const handleSave = () => {
         put(route('env-field.update', { 'env_id': envId }), {
             preserveScroll: true,
-            onSuccess: () => toast({
-                title: "Done!",
-                description: "Environment variables have been updated",
-            }),
+            onSuccess: () => toast.success("Environment variables have been updated"),
         });
     };
 
@@ -115,6 +112,7 @@ export default function EnvFields({
             title: "Save changes?",
             description: "Are you sure you want to save the changes you made? Once saved, you won't be able to revert to the previous version.",
             onConfirm: handleSave,
+            type: IconTypes.WARNING
         })
     }
 
