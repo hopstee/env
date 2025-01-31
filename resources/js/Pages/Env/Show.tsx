@@ -4,18 +4,19 @@ import { Head, useForm } from "@inertiajs/react";
 import { IEnvField } from "@/types";
 import { Table, TableBody, TableCell, TableFooter, TableRow } from "@/Components/ui/table";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useConfirm } from "@/providers/ConfirmAlertProvider";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 import { IconTypes } from "@/lib/infoIcons";
 import { toast } from "sonner";
+import useModalStore from "@/modalsStore/useModalStore";
+import { ModalTypes } from "@/constants/modals";
 
 export default function EnvFields({
     initialFields = [],
 }: {
     initialFields: IEnvField[];
 }) {
-    const { openConfirm } = useConfirm()
+    const { openModal } = useModalStore()
 
     const {
         data,
@@ -108,7 +109,7 @@ export default function EnvFields({
     };
 
     const confirmDelete = () => {
-        openConfirm({
+        openModal(ModalTypes.CONFIRM_ALERT, {
             title: "Save changes?",
             description: "Are you sure you want to save the changes you made? Once saved, you won't be able to revert to the previous version.",
             onConfirm: handleSave,

@@ -4,25 +4,27 @@ import { useForm, useRemember } from "@inertiajs/react";
 import { FormEventHandler, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/Components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { Transition } from "@headlessui/react";
-import { defaultEmoji } from "../../../../constants/emoji";
-import { Input } from "@/components/ui/input";
+import { defaultEmoji } from "../../constants/emoji";
+import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 
-interface IProps {
-    children: JSX.Element;
+type InitialValues = {
+    icon: string;
+    name: string;
+    description: string;
 }
 
-export default function ProjectCreateDialog(props: IProps) {
-    const {
-        children,
-    } = props
+export type ProjectModalProps = {
+    onClose: () => void;
+    title: string;
+    initialValues: InitialValues;
+}
 
+export default function ProjectModal(props: ProjectModalProps) {
     const projectNameInput = useRef<HTMLInputElement>(null);
-
-    const [isOpen, setIsOpen] = useRemember(false);
 
     const {
         data,
@@ -33,9 +35,9 @@ export default function ProjectCreateDialog(props: IProps) {
         processing,
         recentlySuccessful,
     } = useForm({
-        icon: defaultEmoji,
-        name: '',
-        description: '',
+        icon: props.initialValues?.icon || defaultEmoji,
+        name: props.initialValues?.name || '',
+        description: props.initialValues?.description || '',
     });
 
     const createProject: FormEventHandler = (e) => {
@@ -44,8 +46,7 @@ export default function ProjectCreateDialog(props: IProps) {
         post(route('project.create'), {
             preserveScroll: true,
             onSuccess: () => {
-                reset()
-                setIsOpen(false)
+                handleOpenState()
             },
             onError: (errors) => {
                 if (errors.name) {
@@ -62,14 +63,14 @@ export default function ProjectCreateDialog(props: IProps) {
 
     const handleOpenState = () => {
         reset()
-        setIsOpen(prevState => !prevState)
+        props.onClose()
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleOpenState}>
+        <Dialog open={true} onOpenChange={handleOpenState}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create Project</DialogTitle>
+                    <DialogTitle>{props.title}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={createProject} className="space-y-6">
@@ -143,7 +144,6 @@ export default function ProjectCreateDialog(props: IProps) {
                     </DialogFooter>
                 </form>
             </DialogContent>
-            {children}
         </Dialog>
     )
 }

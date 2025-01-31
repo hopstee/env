@@ -1,26 +1,27 @@
 import { Button } from "@/Components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { Label } from "@/Components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import { cn } from "@/lib/utils";
 import { Transition } from "@headlessui/react";
-import { useForm, useRemember } from "@inertiajs/react";
+import { useForm } from "@inertiajs/react";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { FormEventHandler, useRef } from "react";
 
-interface IProps {
-    children: JSX.Element;
+type InitialValues = {
+    name: string;
+    type: string;
 }
 
-export default function TeamCreateDialog(props: IProps) {
-    const {
-        children,
-    } = props
+export type TeamModalProps = {
+    onClose: () => void;
+    title: string;
+    initialValues: InitialValues;
+}
 
+export default function TeamModal(props: TeamModalProps) {
     const projectNameInput = useRef<HTMLInputElement>(null);
     const projectTypeInput = useRef<HTMLInputElement>(null);
-
-    const [isOpen, setIsOpen] = useRemember(false);
 
     const {
         data,
@@ -30,9 +31,9 @@ export default function TeamCreateDialog(props: IProps) {
         reset,
         processing,
         recentlySuccessful,
-    } = useForm({
-        name: '',
-        type: '',
+    } = useForm<InitialValues>({
+        name: props.initialValues?.name || '',
+        type: props.initialValues?.type || '',
     });
 
     const createTeam: FormEventHandler = (e) => {
@@ -42,7 +43,7 @@ export default function TeamCreateDialog(props: IProps) {
             preserveScroll: true,
             onSuccess: () => {
                 reset()
-                setIsOpen(false)
+                handleOpenState()
             },
             onError: (errors) => {
                 if (errors.name) {
@@ -59,14 +60,14 @@ export default function TeamCreateDialog(props: IProps) {
     };
 
     const handleOpenState = () => {
-        setIsOpen(prevState => !prevState)
+        props.onClose()
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleOpenState}>
+        <Dialog open={true} onOpenChange={props.onClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Create Team</DialogTitle>
+                    <DialogTitle>{props.title}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={createTeam} className="space-y-6">
@@ -135,7 +136,6 @@ export default function TeamCreateDialog(props: IProps) {
                     </div>
                 </form>
             </DialogContent>
-            {children}
         </Dialog>
     )
 }
