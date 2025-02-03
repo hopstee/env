@@ -3,6 +3,7 @@ import ConfirmAlert, { ConfirmAlertProps } from './modals/ConfirmAlert';
 import useModalStore from './useModalStore';
 import TeamModal, { TeamModalProps } from './modals/TeamModal';
 import ProjectModal, { ProjectModalProps } from './modals/ProjectModal';
+import EnvModal, { EnvModalProps } from './modals/EnvModal';
 
 const registerModals = () => {
   const { registerModal } = useModalStore.getState();
@@ -10,6 +11,7 @@ const registerModals = () => {
   registerModal<ConfirmAlertProps>(ModalTypes.CONFIRM_ALERT, ConfirmAlert);
   registerModal<TeamModalProps>(ModalTypes.TEAM_MODAL, TeamModal);
   registerModal<ProjectModalProps>(ModalTypes.PROJECT_MODAL, ProjectModal);
+  registerModal<EnvModalProps>(ModalTypes.ENV_MODAL, EnvModal);
 };
 
 export default registerModals;
