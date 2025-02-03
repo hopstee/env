@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/Components/ui/sidebar"
-import { Link, useForm } from "@inertiajs/react"
+import { Link, router, useForm } from "@inertiajs/react"
 import { IProject } from "@/types"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { IconTypes } from "@/lib/infoIcons"
@@ -38,7 +38,6 @@ export default function Projects({
     }
 
     const confirmDelete = (id: string) => {
-        console.log(id)
         openModal(ModalTypes.CONFIRM_ALERT, {
             title: "Are you sure?",
             description: "This action cannot be undone. This will permanently delete project and remove it data from our servers.",

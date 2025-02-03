@@ -20,7 +20,7 @@ type InitialValues = {
 export type ProjectModalProps = {
     onClose: () => void;
     title: string;
-    initialValues: InitialValues;
+    initialValues?: InitialValues;
 }
 
 export default function ProjectModal(props: ProjectModalProps) {

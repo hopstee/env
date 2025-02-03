@@ -1,13 +1,14 @@
 import { ModalTypes } from '@/constants/modals';
 import { create } from 'zustand';
+import { ModalPropsMapping } from './modalsRegistry';
 
 type ModalComponent<T = {}> = React.ComponentType<T>;
 
 type ModalStore = {
     modals: Record<ModalTypes, { component: ModalComponent<any>; props: any }>;
     isOpen: Record<ModalTypes, boolean>;
-    registerModal: <T>(id: ModalTypes, component: ModalComponent<T>) => void;
-    openModal: <T>(id: ModalTypes, props?: T) => void;
+    registerModal: <K extends ModalTypes>(id: K, component: ModalComponent<ModalPropsMapping[K]>) => void;
+    openModal: <K extends ModalTypes>(id: K, props?: Omit<ModalPropsMapping[K], 'onClose'>) => void;
     closeModal: (id: ModalTypes) => void;
 };
 
