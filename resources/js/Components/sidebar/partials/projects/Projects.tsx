@@ -12,13 +12,13 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/Components/ui/sidebar"
-import { Link, router, useForm } from "@inertiajs/react" // Добавлен router
+import { Link, router, useForm } from "@inertiajs/react"
 import { IProject } from "@/types"
 import ProjectCreateDialog from "./ProjectCreateDialog"
 import { DialogTrigger } from "@/Components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { AlertDialogTrigger } from "@/Components/ui/alert-dialog"
 import { useConfirm } from "@/providers/ConfirmAlertProvider"
+import { IconTypes } from "@/lib/infoIcons"
 
 export default function Projects({
     items,
@@ -43,6 +43,7 @@ export default function Projects({
             title: "Are you sure?",
             description: "This action cannot be undone. This will permanently delete project and remove it data from our servers.",
             onConfirm: () => handleConfirmDelete(id),
+            type: IconTypes.ERROR
         })
     }
 
