@@ -17,7 +17,7 @@ const navMain = (teamId: string): INavItem[] => [
         title: "Workspace",
         url: `/t/${teamId}`,
         icon: LayoutDashboardIcon,
-        route: "t.workspace",
+        route: "t.active",
     },
     {
         title: "Readme",

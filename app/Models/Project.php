@@ -53,29 +53,4 @@ class Project extends Model
         return $query->where('is_archived', false);
     }
 
-    // сделать тогл для архива и  фава тру/фолс
-
-    public function archive()
-    {
-        $this->update([
-            'is_archived' => true,
-            'archived_at' => now(),
-            'is_fav' => false,
-        ]);
-    }
-
-    public function unarchive()
-    {
-        $this->update([
-            'is_archived' => false,
-            'archived_at' => null
-        ]);
-    }
-
-    public function favToggle($status)
-    {
-        $this->update([
-            'is_fav' => $status,
-        ]);
-    }
 }

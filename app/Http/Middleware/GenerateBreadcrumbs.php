@@ -29,7 +29,7 @@ class GenerateBreadcrumbs
     {
         $breadcrumbs = [];
         $defaultBreadcrumb = ['name' => 'Workspace'];
-        $defaultActiveBreadcrumb = [...$defaultBreadcrumb, 'url' => route('t.workspace', request('team_id'))];
+        $defaultActiveBreadcrumb = [...$defaultBreadcrumb, 'url' => route('t.active', request('team_id'))];
 
         switch ($currentRoute->getName()) {
             case 't.members':

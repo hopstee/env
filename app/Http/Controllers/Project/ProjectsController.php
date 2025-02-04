@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -30,6 +31,7 @@ class ProjectsController extends Controller
         ]);
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -40,18 +42,18 @@ class ProjectsController extends Controller
         $teamId = session('selected_team_id');
 
         $project = Project::create([
-            'icon'      => $request->icon,
-            'name'      => $request->name,
-            'team_id'   => $teamId,
+            'icon' => $request->icon,
+            'name' => $request->name,
+            'team_id' => $teamId,
         ]);
 
         ProjectUser::create([
-            'project_id'    => $project->id,
-            'user_id'       => $request->user()->id,
-            'role_id'       => 1,
+            'project_id' => $project->id,
+            'user_id' => $request->user()->id,
+            'role_id' => 1,
         ]);
 
-        return Redirect::route('t.workspace', ['team_id' => session('selected_team_id')]);
+        return Redirect::route('t.active', ['team_id' => session('selected_team_id')]);
     }
 
     public function destroy($project_id)
@@ -65,16 +67,6 @@ class ProjectsController extends Controller
         Project::whereIn('id', $projectIds)->delete();
     }
 
-    public function archive(Project $project)
-    {
-        $project->archive();
-    }
-
-    public function unarchive(Project $project)
-    {
-        $project->unarchive();
-    }
-
     public function archiveMany(Request $request)
     {
         $projectIds = $request->input('ids');
@@ -85,6 +77,16 @@ class ProjectsController extends Controller
         }
     }
 
+    public function archiveToggle(Project $project, Request $request)
+    {
+        $is_archived = $request->input('is_archived');
+
+        $project->update([
+            'is_archived' => $is_archived,
+            'is_fav' => false,
+        ]);
+    }
+
     public function favToggle(Project $project, Request $request)
     {
         $isFav = $request->input('is_fav');
@@ -93,4 +95,6 @@ class ProjectsController extends Controller
             'is_fav' => $isFav
         ]);
     }
+
+
 }

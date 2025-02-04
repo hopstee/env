@@ -86,7 +86,7 @@ export default function TeamSwitcher({
 
 function TeamItem({ team }: { team: ITeam }) {
     return (
-        <Link href={route('t.workspace', team.id)}>
+        <Link href={route('t.active', team.id)}>
             <DropdownMenuItem className="gap-2 p-2">
                 {/* <div className="flex size-6 items-center justify-center rounded-sm border">
                                             <team.logo className="size-4 shrink-0" />

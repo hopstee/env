@@ -39,7 +39,8 @@ Route::middleware('auth')->group(function () {
         })->name('t');
 
         Route::prefix('{team_id}')->middleware([CheckTeamAccess::class])->group(function () {
-            Route::get('/', [TeamsController::class, 'show'])->name('t.workspace');
+            Route::get('/', [TeamsController::class, 'show'])->name('t.active');
+            Route::get('/archived', [TeamsController::class, 'showArchived'])->name('t.archived');
 
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
 
@@ -52,7 +53,6 @@ Route::middleware('auth')->group(function () {
 
                 Route::prefix('{project_id}')->group(function () {
                     Route::get('/', [ProjectsController::class, 'show'])->name('p.workspace');
-
                     Route::prefix('e')->group(function () {
                         Route::get('/', [EnvsController::class, 'redirectToProject'])->name('e');
                         Route::get('/{env_id}', [EnvsController::class, 'show'])->name('e.show');
@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
         Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
         Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
-        Route::post('/projects/{project}/archive', [ProjectsController::class, 'archive'])->name('project.archive');
+        Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
         Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
         Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
     });

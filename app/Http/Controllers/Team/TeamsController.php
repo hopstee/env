@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Team;
 use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Models\TeamUser;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -14,7 +16,35 @@ class TeamsController extends Controller
 {
     public function show(Request $request, string $teamId)
     {
-        $projectsData = $request->user()->accessibleProjectsWithUsersByTeam($teamId)
+        $projects = $this->getProjects($request->user(), $teamId);
+        session(['selected_team_id' => $teamId]);
+        return Inertia::render(
+            'Teams/Workspace/Show',
+            [
+                'projects' => $projects,
+                'type' => 'active',
+            ]
+        );
+    }
+
+    public function showArchived(Request $request, string $teamId)
+    {
+        $projects = $this->getProjects($request->user(), $teamId, true);
+        session(['selected_team_id' => $teamId]);
+        Log::info('projectsList', ['projects' => $projects]);
+        return Inertia::render(
+            'Teams/Workspace/Show',
+            [
+                'projects' => $projects,
+                'type' => 'archived',
+            ]
+        );
+    }
+
+    private function getProjects(User $user, string $teamId, bool $isArchived = false): Collection
+    {
+        return $user->accessibleProjectsWithUsersByTeam($teamId)
+            ->where("is_archived", $isArchived)
             ->get()
             ->map(function ($project) {
                 return [
@@ -22,6 +52,7 @@ class TeamsController extends Controller
                     'icon' => $project->icon,
                     'name' => $project->name,
                     'is_fav' => $project->is_fav,
+                    'is_archived' => $project->is_archived,
                     'created_at' => $project->created_at,
                     'users_count' => $project->users_count,
                     'users' => $project->users->map(function ($user) {
@@ -33,14 +64,7 @@ class TeamsController extends Controller
                     }),
                 ];
             });
-
-        session(['selected_team_id' => $teamId]);
-
-        return Inertia::render('Teams/Workspace/Show', [
-            'projectsData' => $projectsData
-        ]);
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -60,7 +84,7 @@ class TeamsController extends Controller
             'role_id' => 1,
         ]);
 
-        return Redirect::route('t.workspace', ['team_id' => $team->id]);
+        return Redirect::route('t.active', ['team_id' => $team->id]);
     }
 
     public function destroy(Request $request)

@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { IProject } from "@/types"
 import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
+import { ArchiveIcon, ArchiveRestoreIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 
 export const projectColumns: ColumnDef<IProject>[] = [
     {
@@ -72,10 +72,19 @@ export const projectColumns: ColumnDef<IProject>[] = [
 
             const project = row.original
 
+
             const handleFavToggle = () => {
                 router.post(
                     route('project.favToggle', { project: project.id }),
                     { is_fav: !project.is_fav }
+                );
+            };
+
+            const handleArchiveToggle = () => {
+                console.log(project.is_archived)
+                router.post(
+                    route('project.archiveToggle', { project: project.id }),
+                    { is_archived: !project.is_archived }
                 );
             };
 
@@ -111,10 +120,14 @@ export const projectColumns: ColumnDef<IProject>[] = [
                                 Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => router.post(route('project.archive', { project: project.id }))}
+                                onClick={handleArchiveToggle}
                             >
-                                <ArchiveIcon className="text-muted-foreground" />
-                                Archive
+                                {project.is_archived ? (
+                                    <ArchiveRestoreIcon className="text-muted-foreground" />
+                                ) : (
+                                    <ArchiveIcon className="text-muted-foreground" />
+                                )}
+                                {project.is_archived ? 'Unarchive' : 'Archive'}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={handleFavToggle}
