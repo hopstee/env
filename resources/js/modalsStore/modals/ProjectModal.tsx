@@ -79,7 +79,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                     <div className="w-full">
                         <Label
                             htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
+                            className={cn(errors.name && "text-destructive")}
                         >
                             Project name
                         </Label>
@@ -101,7 +101,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                     <div className="w-full">
                         <Label
                             htmlFor="description"
-                            className={cn(errors.description && "text-red-600")}
+                            className={cn(errors.description && "text-destructive")}
                         >
                             Description
                         </Label>

@@ -1,8 +1,8 @@
 import InputError from '@/Components/InputError';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
@@ -63,7 +63,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="current_password"
-                            className={cn(errors.current_password && "text-red-600")}
+                            className={cn(errors.current_password && "text-destructive")}
                         >
                             Current Password
                         </Label>
@@ -89,7 +89,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
+                            className={cn(errors.password && "text-destructive")}
                         >
                             New Password
                         </Label>
@@ -110,7 +110,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="password_confirmation"
-                            className={cn(errors.password_confirmation && "text-red-600")}
+                            className={cn(errors.password_confirmation && "text-destructive")}
                         >
                             Confirm Password
                         </Label>

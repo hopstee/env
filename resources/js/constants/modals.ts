@@ -3,4 +3,5 @@ export enum ModalTypes {
     TEAM_MODAL = "teamModal",
     PROJECT_MODAL = "projectModal",
     ENV_MODAL = "envModal",
+    ADD_MEMBER_MODAL = "addMemberModal",
 }

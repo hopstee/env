@@ -1,8 +1,8 @@
 import InputError from '@/Components/InputError';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
@@ -44,7 +44,7 @@ export default function UpdateProfileInformation({
                     <div>
                         <Label
                             htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
+                            className={cn(errors.name && "text-destructive")}
                         >
                             Name
                         </Label>
@@ -64,7 +64,7 @@ export default function UpdateProfileInformation({
                     <div>
                         <Label
                             htmlFor="email"
-                            className={cn(errors.email && "text-red-600")}
+                            className={cn(errors.email && "text-destructive")}
                         >
                             Email
                         </Label>

@@ -6,18 +6,18 @@ import {
     SidebarHeader,
 } from "@/Components/ui/sidebar"
 import { usePage } from "@inertiajs/react"
-import TeamSwitcher from "./partials/teams/TeamSwitcher"
+import TeamSwitcher from "./partials/TeamSwitcher"
 import MainNav from "./partials/MainNav"
-import Projects from "./partials/projects/Projects"
-import { INavItem, IProject, ITeam } from "@/types"
+import Projects from "./partials/Projects"
+import { NavItemType, ProjectType, TeamType } from "@/types"
 import BottomNav from "./partials/BottomNav"
 
-const navMain = (teamId: string): INavItem[] => [
+const navMain = (teamId: string): NavItemType[] => [
     {
         title: "Workspace",
         url: `/t/${teamId}`,
         icon: LayoutDashboardIcon,
-        route: "t.workspace",
+        route: "t.active",
     },
     {
         title: "Readme",
@@ -39,7 +39,7 @@ const navMain = (teamId: string): INavItem[] => [
     },
 ]
 
-const secondaryItems = (teamId: string): INavItem[] => [
+const secondaryItems = (teamId: string): NavItemType[] => [
     {
         title: "Support",
         url: `/t/${teamId}`,
@@ -61,8 +61,8 @@ export default function AppSidebar() {
         projects,
     }: {
         selectedTeamId: string,
-        teams: ITeam[],
-        projects: IProject[],
+        teams: TeamType[],
+        projects: ProjectType[],
     } = usePage().props;
     
     return (

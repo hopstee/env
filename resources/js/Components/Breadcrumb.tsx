@@ -1,5 +1,5 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/Components/ui/breadcrumb";
-import { IBreadcrumb, PageProps } from "@/types";
+import { BreadcrumbType, PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
 
 export default function WorkspaceBreadcrumb() {
@@ -8,25 +8,27 @@ export default function WorkspaceBreadcrumb() {
     return (
         <Breadcrumb>
             <BreadcrumbList>
-                {breadcrumbs.map((breadcrumb: IBreadcrumb, index: number) => {
+                {breadcrumbs.map((breadcrumb: BreadcrumbType, index: number) => {
                     const showSeparator = index !== breadcrumbs.length - 1;
 
-                    return [
-                        <BreadcrumbItem key={`item-${index}`}>
-                            <BreadcrumbPage>
-                                {breadcrumb.url
-                                    ? <Link
-                                        href={breadcrumb.url}
-                                        className="transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-50"
-                                    >
-                                        {breadcrumb.name}
-                                    </Link>
-                                    : breadcrumb.name
-                                }
-                            </BreadcrumbPage>
-                        </BreadcrumbItem>,
-                        showSeparator && <BreadcrumbSeparator key={`separator-${index}`} />
-                    ]
+                    return (
+                        <>
+                            <BreadcrumbItem key={index}>
+                                <BreadcrumbPage>
+                                    {breadcrumb.url
+                                        ? <Link
+                                            href={breadcrumb.url}
+                                            className="transition-colors text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-50"
+                                        >
+                                            {breadcrumb.name}
+                                        </Link>
+                                        : breadcrumb.name
+                                    }
+                                </BreadcrumbPage>
+                            </BreadcrumbItem>
+                            {showSeparator && <BreadcrumbSeparator />}
+                        </>
+                    )
                 })}
             </BreadcrumbList>
         </Breadcrumb>

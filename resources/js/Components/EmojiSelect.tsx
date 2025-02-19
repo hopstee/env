@@ -6,7 +6,7 @@ import { emojiData } from "@/constants/emoji";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Label } from "@/Components/ui/label";
 
-interface IProjectEmojiSelect {
+interface ProjectTypeEmojiSelect {
     onSelect: (emoji: string) => void;
     selected: string;
 }
@@ -18,7 +18,7 @@ interface EmojiData {
     }[];
 }
 
-export default function EmojiSelect({ onSelect, selected }: IProjectEmojiSelect) {
+export default function EmojiSelect({ onSelect, selected }: ProjectTypeEmojiSelect) {
     const [searchQuery, setSearchQuery] = useState("");
 
     const filteredEmojiData = Object.entries(emojiData).reduce((acc, [category, emojis]) => {

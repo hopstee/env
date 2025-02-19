@@ -16,7 +16,7 @@ type InitialValues = {
 export type TeamModalProps = {
     onClose: () => void;
     title: string;
-    initialValues: InitialValues;
+    initialValues?: InitialValues;
 }
 
 export default function TeamModal(props: TeamModalProps) {
@@ -74,7 +74,7 @@ export default function TeamModal(props: TeamModalProps) {
                     <div>
                         <Label
                             htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
+                            className={cn(errors.name && "text-destructive")}
                         >
                             Name
                         </Label>
@@ -95,7 +95,7 @@ export default function TeamModal(props: TeamModalProps) {
                     <div>
                         <Label
                             htmlFor="type"
-                            className={cn(errors.type && "text-red-600")}
+                            className={cn(errors.type && "text-destructive")}
                         >
                             Type
                         </Label>

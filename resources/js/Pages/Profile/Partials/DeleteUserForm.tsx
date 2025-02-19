@@ -2,8 +2,8 @@ import InputError from '@/Components/InputError';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useForm } from '@inertiajs/react';
 import { Loader2Icon, TrashIcon } from 'lucide-react';
@@ -66,7 +66,7 @@ export default function DeleteUserForm() {
                             htmlFor="password"
                             className={cn(
                                 "sr-only",
-                                errors.password && "text-red-600"
+                                errors.password && "text-destructive"
                             )}
                         >
                             Confirm Password
@@ -81,7 +81,7 @@ export default function DeleteUserForm() {
                             onChange={(e) =>
                                 setData('password', e.target.value)
                             }
-                            className="mt-1 block w-3/4"
+                            className="mt-1 block w-full"
                             placeholder="Password"
                         />
 

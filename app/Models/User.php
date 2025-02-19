@@ -4,9 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -51,57 +51,11 @@ class User extends Authenticatable
 
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'team_users');
-    }
-
-    public function projects(): BelongsToMany
-    {
-        return $this->belongsToMany(Project::class, 'project_users');
-    }
-
-    public function envs(): BelongsToMany
-    {
-        return $this->belongsToMany(Env::class, 'env_users');
-    }
-
-    public function accessibleProjectsByTeam(string $teamId): BelongsToMany
-    {
-        return $this->projects()->whereHas('team', function ($query) use ($teamId) {
-            $query->where('id', $teamId);
-        });
-    }
-
-    public function accessibleProjectsWithUsersByTeam(string $teamId): BelongsToMany
-    {
-        return $this->projects()
-            ->whereHas('team', function ($query) use ($teamId) {
-                $query->where('id', $teamId);
-            })
-            ->with(['users'])
-            ->withCount('users');
+        return $this->belongsToMany(Team::class, 'team_users')->withPivot('role');
     }
 
     public function hasAccessToTeam(string $teamId): bool
     {
-        return $this->teams()->where('team_id', $teamId)->exists();
-    }
-
-    public function hasAccessToProjectInTeam(string $projectId, string $teamId): bool
-    {
-        return $this->projects()->where('projects.id', $projectId)->whereHas('team', function ($query) use ($teamId) {
-            $query->where('teams.id', $teamId);
-        })->exists();
-    }
-
-    public function accessibleEnvsByProject(string $projectId)
-    {
-        return $this->envs()->whereHas('project', function ($query) use ($projectId) {
-            $query->where('id', $projectId);
-        });
-    }
-    
-    public function accessibleEnvFields()
-    {
-        return $this->belongsToMany(EnvField::class, 'env_field_users');
+        return $this->teams()->where('teams.id', $teamId)->exists();
     }
 }

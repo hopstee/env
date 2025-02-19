@@ -19,23 +19,13 @@ class RolesSeeder extends Seeder
         ]);
 
         Role::factory()->create([
-            'name' => 'Team admin',
-            'value' => 'team_admin',
+            'name' => 'Admin',
+            'value' => 'admin',
         ]);
 
         Role::factory()->create([
-            'name' => 'Project admin',
-            'value' => 'project_admin',
-        ]);
-
-        Role::factory()->create([
-            'name' => 'Env admin',
-            'value' => 'env_admin',
-        ]);
-
-        Role::factory()->create([
-            'name' => 'Viewer',
-            'value' => 'viewer',
+            'name' => 'Member',
+            'value' => 'member',
         ]);
     }
 }

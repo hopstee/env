@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Team;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,10 +26,10 @@ class RedirectToTeam
 
             $teamId = session('selected_team_id');
             if ($teamId) {
-                $team = $user->teams('id')->where('teams.id', $teamId)->first();
+                $hasAccess = $user->hasAccessToTeam($teamId);
 
-                if ($team) {
-                    return redirect()->to('/t/' . $team->id);
+                if ($hasAccess) {
+                    return redirect()->to('/t/' . $teamId);
                 }
             }
 

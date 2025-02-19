@@ -41,16 +41,10 @@ export default function ResetPassword({
             <CardContent>
                 <form onSubmit={submit}>
                     <div>
-                        <Label
-                            htmlFor="email"
-                            className={cn(errors.email && "text-red-600")}
-                        >
-                            Email
-                        </Label>
-
                         <Input
                             id="email"
                             type="email"
+                            placeholder="Email"
                             name="email"
                             value={data.email}
                             className="mt-1 block w-full"
@@ -62,16 +56,10 @@ export default function ResetPassword({
                     </div>
 
                     <div className="mt-4">
-                        <Label
-                            htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
-                        >
-                            Password
-                        </Label>
-
                         <Input
                             id="password"
                             type="password"
+                            placeholder="Password"
                             name="password"
                             value={data.password}
                             className="mt-1 block w-full"
@@ -83,16 +71,10 @@ export default function ResetPassword({
                     </div>
 
                     <div className="mt-4">
-                        <Label
-                            htmlFor="password_confirmation"
-                            className={cn(errors.password_confirmation && "text-red-600")}
-                        >
-                            Confirm Password
-                        </Label>
-
                         <Input
                             type="password"
                             name="password_confirmation"
+                            placeholder="Confirm Password"
                             value={data.password_confirmation}
                             className="mt-1 block w-full"
                             autoComplete="new-password"
@@ -107,12 +89,10 @@ export default function ResetPassword({
                         />
                     </div>
 
-                    <div className="mt-4 flex items-center justify-end">
-                        <Button disabled={processing}>
-                            {processing && <Loader2Icon className='animate-spin' />}
-                            Reset Password
-                        </Button>
-                    </div>
+                    <Button className="mt-4 w-full" disabled={processing}>
+                        {processing && <Loader2Icon className='animate-spin' />}
+                        Reset Password
+                    </Button>
                 </form>
             </CardContent>
         </GuestLayout>
