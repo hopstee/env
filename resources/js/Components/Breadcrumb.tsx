@@ -1,5 +1,5 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/Components/ui/breadcrumb";
-import { IBreadcrumb, PageProps } from "@/types";
+import { BreadcrumbType, PageProps } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
 
 export default function WorkspaceBreadcrumb() {
@@ -8,7 +8,7 @@ export default function WorkspaceBreadcrumb() {
     return (
         <Breadcrumb>
             <BreadcrumbList>
-                {breadcrumbs.map((breadcrumb: IBreadcrumb, index: number) => {
+                {breadcrumbs.map((breadcrumb: BreadcrumbType, index: number) => {
                     const showSeparator = index !== breadcrumbs.length - 1;
 
                     return (

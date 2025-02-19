@@ -68,7 +68,7 @@ export default function EnvModal(props: EnvModalProps) {
                     <div className="w-full">
                         <Label
                             htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
+                            className={cn(errors.name && "text-destructive")}
                         >
                             Env name
                         </Label>

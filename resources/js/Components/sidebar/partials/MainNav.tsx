@@ -5,17 +5,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/Components/ui/sidebar"
-import { INavItem } from "@/types"
+import { NavItemType } from "@/types"
 import { Link } from "@inertiajs/react"
 
 export default function MainNav({
     items,
 }: {
-    items: INavItem[]
+    items: NavItemType[]
 }) {
     return (
         <SidebarMenu>
-            {items.map((item: INavItem, index: number) => (
+            {items.map((item: NavItemType, index: number) => (
                 <SidebarMenuItem key={index}>
                     <SidebarMenuButton asChild isActive={route().current(item.route)}>
                         <Link href={item.url}>

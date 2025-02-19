@@ -36,16 +36,10 @@ export default function ConfirmPassword() {
             <CardContent>
                 <form onSubmit={submit}>
                     <div className="mt-4">
-                        <Label
-                            htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
-                        >
-                            Password
-                        </Label>
-
                         <Input
                             id="password"
                             type="password"
+                            placeholder="Password"
                             name="password"
                             value={data.password}
                             className="mt-1 block w-full"
@@ -55,12 +49,10 @@ export default function ConfirmPassword() {
                         <InputError message={errors.password} className="mt-2" />
                     </div>
 
-                    <div className="mt-4 flex items-center justify-end">
-                        <Button className="ms-4" disabled={processing}>
-                            {processing && <Loader2Icon className="animate-spin" />}
-                            Confirm
-                        </Button>
-                    </div>
+                    <Button className="mt-4 w-full" disabled={processing}>
+                        {processing && <Loader2Icon className="animate-spin" />}
+                        Confirm
+                    </Button>
                 </form>
             </CardContent>
         </GuestLayout>

@@ -1,27 +1,27 @@
 import { LucideIcon } from "lucide-react"
 
-export interface User {
+export type User = {
     id: number;
     name: string;
     email: string;
     email_verified_at?: string;
 }
 
-export interface ITeam {
+export type TeamType = {
     id: string;
     name: string;
     icon: string;
     type: string;
 }
 
-export interface INavItem {
+export type NavItemType = {
     title: string;
     url: string;
     icon: LucideIcon;
     route: string;
 }
 
-export interface IProject {
+export type ProjectType = {
     id: string;
     name: string;
     icon: string;
@@ -29,28 +29,28 @@ export interface IProject {
     is_archived: boolean;
 }
 
-export interface IProjectData {
+export type ProjectDataType = {
     id: string;
     name: string;
     icon: string;
     created_at: Date;
     users_count: number;
-    users: IUser[];
+    users: User[];
     is_fav: boolean;
     is_archived: boolean;
 }
 
-export interface IBreadcrumb {
+export type BreadcrumbType = {
     name: string;
     url?: string;
 }
 
-export interface IEnv {
+export type EnvType = {
     id: string;
     name: string;
 }
 
-export interface IEnvField {
+export type EnvFieldType = {
     id: number;
     env_key: string;
     env_value: string;
@@ -60,6 +60,37 @@ export interface IEnvField {
     error?: string;
 }
 
+type RoleType = {
+    id: number;
+    name: string;
+    value: string;
+}
+
+export type RolesType = {
+    'team': RoleType[];
+    'project': RoleType[];
+    'env': RoleType[];
+}
+
+export type InvitationType = {
+    token: string;
+    role_id: number;
+    accessable: {
+        name: string;
+    }
+}
+
+export type MembersDataType = {
+    id: number;
+    accessable_id: string;
+    accessable_type: string;
+    created_at: string;
+    role_id: number;
+    updated_at: string;
+    user: User;
+    user_id: number;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
@@ -67,8 +98,10 @@ export type PageProps<
         user: User;
     };
     selectedTeamId: string;
-    teams: ITeam[];
-    projects: IProject[];
-    breadcrumbs: IBreadcrumb[];
-    envs: IEnv[];
+    teams: TeamType[];
+    projects: ProjectType[];
+    breadcrumbs: BreadcrumbType[];
+    envs: EnvType[];
+    roles: RolesType;
+    invitation: InvitationType;
 };

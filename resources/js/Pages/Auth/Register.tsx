@@ -1,9 +1,9 @@
 import InputError from '@/Components/InputError';
-import { CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Label } from '@/Components/ui/label';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import { cn } from '@/lib/utils';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Loader2Icon } from 'lucide-react';
@@ -30,21 +30,18 @@ export default function Register() {
             <Head title="Register" />
 
             <CardHeader>
-                <CardTitle>Welcome! Create your account 🚀</CardTitle>
+                <CardTitle>Register in Env</CardTitle>
+                <CardDescription>
+                    Create account in a workspace that's secure, powerfull and totally private
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={submit}>
                     <div>
-                        <Label
-                            htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
-                        >
-                            Name
-                        </Label>
-
                         <Input
                             id="name"
                             name="name"
+                            placeholder="Name"
                             value={data.name}
                             className="mt-1 block w-full"
                             autoComplete="name"
@@ -52,20 +49,14 @@ export default function Register() {
                             required
                         />
 
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError message={errors.name} className="mt-1" />
                     </div>
 
-                    <div className="mt-4">
-                        <Label
-                            htmlFor="email"
-                            className={cn(errors.email && "text-red-600")}
-                        >
-                            Email
-                        </Label>
-
+                    <div className="mt-2">
                         <Input
                             id="email"
                             type="email"
+                            placeholder="Email"
                             name="email"
                             value={data.email}
                             className="mt-1 block w-full"
@@ -74,20 +65,14 @@ export default function Register() {
                             required
                         />
 
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-1" />
                     </div>
 
-                    <div className="mt-4">
-                        <Label
-                            htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
-                        >
-                            Password
-                        </Label>
-
+                    <div className="mt-2">
                         <Input
                             id="password"
                             type="password"
+                            placeholder="Password"
                             name="password"
                             value={data.password}
                             className="mt-1 block w-full"
@@ -96,20 +81,14 @@ export default function Register() {
                             required
                         />
 
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError message={errors.password} className="mt-1" />
                     </div>
 
-                    <div className="mt-4">
-                        <Label
-                            htmlFor="password_confirmation"
-                            className={cn(errors.password_confirmation && "text-red-600")}
-                        >
-                            Confirm Password
-                        </Label>
-
+                    <div className="mt-2">
                         <Input
                             id="password_confirmation"
                             type="password"
+                            placeholder="Confirm Password"
                             name="password_confirmation"
                             value={data.password_confirmation}
                             className="mt-1 block w-full"
@@ -120,24 +99,21 @@ export default function Register() {
                             required
                         />
 
-                        <InputError
-                            message={errors.password_confirmation}
-                            className="mt-2"
-                        />
+                        <InputError message={errors.password_confirmation} className="mt-1" />
                     </div>
 
-                    <div className="mt-4 flex items-center justify-end">
+                    <Button className="mt-4 w-full" disabled={processing}>
+                        {processing && <Loader2Icon className="animate-spin" />}
+                        Register
+                    </Button>
+
+                    <div className="mt-4">
                         <Link
                             href={route('login')}
-                            className="rounded-md text-sm text-muted-foreground hover:text-foreground underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="text-sm text-main hover:text-main-dark font-semibold"
                         >
                             Already registered?
                         </Link>
-
-                        <Button className="ms-4" disabled={processing}>
-                            {processing && <Loader2Icon className="animate-spin" />}
-                            Register
-                        </Button>
                     </div>
                 </form>
             </CardContent>

@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Env\EnvFieldsController;
-use App\Http\Controllers\Env\EnvsController;
-use App\Http\Controllers\Team\TeamsController;
-use App\Http\Controllers\Team\MembersController;
+use App\Http\Controllers\Dashboard\EnvFieldsController;
+use App\Http\Controllers\Dashboard\EnvsController;
+use App\Http\Controllers\Groups\GroupsController;
+use App\Http\Controllers\Dashboard\InvitationsController;
+use App\Http\Controllers\Dashboard\TeamsController;
+use App\Http\Controllers\Dashboard\MembersController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Project\ProjectsController;
-use App\Http\Controllers\Team\ReadmeController;
-use App\Http\Controllers\Team\SettingsController;
+use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Middleware\CheckProjectAccess;
 use App\Http\Middleware\CheckTeamAccess;
 use App\Http\Middleware\GenerateBreadcrumbs;
@@ -40,24 +41,13 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{team_id}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.active');
-            Route::get('/archived', [TeamsController::class, 'showArchived'])->name('t.archived');
 
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
 
-            Route::get('/readme', [ReadmeController::class, 'show'])->name('t.readme');
-
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
 
-            Route::prefix('p')->group(function () {
-                Route::get('/', [ProjectsController::class, 'redirectToTeam'])->name('p');
-
-                Route::prefix('{project_id}')->group(function () {
-                    Route::get('/', [ProjectsController::class, 'show'])->name('p.workspace');
-                    Route::prefix('e')->group(function () {
-                        Route::get('/', [EnvsController::class, 'redirectToProject'])->name('e');
-                        Route::get('/{env_id}', [EnvsController::class, 'show'])->name('e.show');
-                    });
-                });
+            Route::prefix('invitations')->group(function () {
+               
             });
         });
     });
@@ -67,26 +57,35 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{team_id}', [TeamsController::class, 'destroy'])->name('team.destroy');
     });
 
-    Route::prefix('project')->group(function () {
-        Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
-        Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
-        Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
-        Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
-        Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
-        Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
-    });
+    // Route::prefix('project')->group(function () {
+    //     Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
+    //     Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
+    //     Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
+    //     Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
+    //     Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
+    //     Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
+    // });
 
-    Route::prefix('env')->group(function () {
-        Route::post('/', [EnvsController::class, 'store'])->name('env.create');
-        Route::delete('/{env_id}', [EnvsController::class, 'destroy'])->name('env.destroy');
+    // Route::prefix('env')->group(function () {
+    //     Route::post('/', [EnvsController::class, 'store'])->name('env.create');
+    //     Route::delete('/{env_id}', [EnvsController::class, 'destroy'])->name('env.destroy');
 
-        Route::put('/{env_id}/fields', [EnvFieldsController::class, 'update'])->name('env-field.update');
-    });
+    //     Route::put('/{env_id}/fields', [EnvFieldsController::class, 'update'])->name('env-field.update');
+    // });
 
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+
+    Route::prefix('invitations')->group(function () {
+        Route::get('/accept/{token}', [InvitationsController::class, 'show'])->name('invitations.show');
+
+        Route::post('/send', [InvitationsController::class, 'send'])->name('invitations.send');
+        
+        Route::post('/confirm/{token}', [InvitationsController::class, 'confirm'])->name('invitations.confirm');
+        Route::post('/decline/{token}', [InvitationsController::class, 'decline'])->name('invitations.decline');
     });
 });
 

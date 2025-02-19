@@ -6,6 +6,10 @@ import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
 import { ScrollArea } from '@/Components/ui/scroll-area';
 import { SidebarInset, SidebarProvider } from '@/Components/ui/sidebar';
+import { ModalTypes } from '@/constants/modals';
+import useModalStore from '@/modalsStore/useModalStore';
+import { ProjectType, RolesType, TeamType } from '@/types';
+import { usePage } from '@inertiajs/react';
 import { UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
 
@@ -13,6 +17,30 @@ export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
+    const {
+        selectedTeamId,
+        teams,
+        projects,
+        roles,
+    }: {
+        selectedTeamId: string,
+        teams: TeamType[],
+        projects: ProjectType[],
+        roles: RolesType,
+    } = usePage().props
+
+    const { openModal } = useModalStore()
+
+    const handleOpenModal = () => {
+        openModal(ModalTypes.ADD_MEMBER_MODAL, {
+            title: "Invite members to team",
+            selectedTeamId,
+            teams,
+            projects,
+            roles,
+        });
+    }
+
     return (
         <SidebarProvider>
             <AppSidebar />
@@ -33,6 +61,7 @@ export default function Authenticated({
                                     <Button
                                         variant="ghost"
                                         size="sm-icon"
+                                        onClick={handleOpenModal}
                                     >
                                         <UserPlusIcon />
                                     </Button>

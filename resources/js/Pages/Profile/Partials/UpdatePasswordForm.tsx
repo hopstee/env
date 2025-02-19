@@ -63,7 +63,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="current_password"
-                            className={cn(errors.current_password && "text-red-600")}
+                            className={cn(errors.current_password && "text-destructive")}
                         >
                             Current Password
                         </Label>
@@ -89,7 +89,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
+                            className={cn(errors.password && "text-destructive")}
                         >
                             New Password
                         </Label>
@@ -110,7 +110,7 @@ export default function UpdatePasswordForm({
                     <div>
                         <Label
                             htmlFor="password_confirmation"
-                            className={cn(errors.password_confirmation && "text-red-600")}
+                            className={cn(errors.password_confirmation && "text-destructive")}
                         >
                             Confirm Password
                         </Label>

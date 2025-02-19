@@ -66,7 +66,7 @@ export default function DeleteUserForm() {
                             htmlFor="password"
                             className={cn(
                                 "sr-only",
-                                errors.password && "text-red-600"
+                                errors.password && "text-destructive"
                             )}
                         >
                             Confirm Password
@@ -81,7 +81,7 @@ export default function DeleteUserForm() {
                             onChange={(e) =>
                                 setData('password', e.target.value)
                             }
-                            className="mt-1 block w-3/4"
+                            className="mt-1 block w-full"
                             placeholder="Password"
                         />
 

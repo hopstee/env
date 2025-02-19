@@ -1,13 +1,11 @@
 import InputError from '@/Components/InputError';
-import { CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Checkbox } from '@/Components/ui/checkbox';
-import { Label } from '@/Components/ui/label';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { Head, Link, useForm } from '@inertiajs/react';
-import { Loader2Icon } from 'lucide-react';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Head, Link, useForm, useRemember } from '@inertiajs/react';
+import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 export default function Login({
@@ -17,6 +15,8 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    const [showPass, setShowPass] = useRemember(false);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -36,7 +36,10 @@ export default function Login({
             <Head title="Log in" />
 
             <CardHeader>
-                <CardTitle>Welcome back 👋</CardTitle>
+                <CardTitle>Login to Env</CardTitle>
+                <CardDescription>
+                    Welcome to a workspace that's secure, powerfull and totally private
+                </CardDescription>
             </CardHeader>
 
             <CardContent>
@@ -47,16 +50,10 @@ export default function Login({
                 )}
                 <form onSubmit={submit}>
                     <div>
-                        <Label
-                            htmlFor="email"
-                            className={cn(errors.email && "text-red-600")}
-                        >
-                            Email
-                        </Label>
-
                         <Input
                             id="email"
                             type="email"
+                            placeholder="Email"
                             name="email"
                             value={data.email}
                             className="mt-1 block w-full"
@@ -64,20 +61,14 @@ export default function Login({
                             onChange={(e) => setData('email', e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-1" />
                     </div>
 
-                    <div className="mt-4">
-                        <Label
-                            htmlFor="password"
-                            className={cn(errors.password && "text-red-600")}
-                        >
-                            Password
-                        </Label>
-
+                    <div className="mt-2">
                         <Input
                             id="password"
-                            type="password"
+                            type={showPass ? "text" : "password"}
+                            placeholder="Password"
                             name="password"
                             value={data.password}
                             className="mt-1 block w-full"
@@ -103,20 +94,32 @@ export default function Login({
                         </label>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-end">
+
+                    <Button className="mt-4 w-full" disabled={processing}>
+                        {processing && <Loader2Icon className="animate-spin" />}
+                        Log in
+                    </Button>
+
+
+                    <div className="mt-4">
                         {canResetPassword && (
                             <Link
                                 href={route('password.request')}
-                                className="rounded-md text-sm text-muted-foreground hover:text-foreground underline focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                className="text-sm text-main hover:text-main-dark font-semibold"
                             >
                                 Forgot your password?
                             </Link>
                         )}
+                    </div>
 
-                        <Button className="ms-4" disabled={processing}>
-                            {processing && <Loader2Icon className="animate-spin" />}
-                            Log in
-                        </Button>
+                    <div className='mt-2 text-sm'>
+                        Don't have an account?
+                        <Link
+                            href={route('register')}
+                            className="ml-2 text-main hover:text-main-dark font-semibold"
+                        >
+                            Sign Up
+                        </Link>
                     </div>
                 </form>
             </CardContent>

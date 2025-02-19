@@ -44,7 +44,7 @@ export default function UpdateProfileInformation({
                     <div>
                         <Label
                             htmlFor="name"
-                            className={cn(errors.name && "text-red-600")}
+                            className={cn(errors.name && "text-destructive")}
                         >
                             Name
                         </Label>
@@ -64,7 +64,7 @@ export default function UpdateProfileInformation({
                     <div>
                         <Label
                             htmlFor="email"
-                            className={cn(errors.email && "text-red-600")}
+                            className={cn(errors.email && "text-destructive")}
                         >
                             Email
                         </Label>
