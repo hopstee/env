@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->string('id')->primary();
+            $table->string('name');
+            $table->string('color');
+            $table->boolean('is_favorite')->default(true);
             $table->string('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-            $table->string('name');
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ export default function MainNav({
         <SidebarMenu>
             {items.map((item: NavItemType, index: number) => (
                 <SidebarMenuItem key={index}>
-                    <SidebarMenuButton asChild isActive={route().current(item.route)}>
+                    <SidebarMenuButton asChild isActive={route().current(item.route) && !('g' in route().params)}>
                         <Link href={item.url}>
                             <item.icon />
                             <span>{item.title}</span>

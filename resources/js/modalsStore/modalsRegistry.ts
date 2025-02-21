@@ -2,14 +2,14 @@ import { ModalTypes } from '@/constants/modals';
 import ConfirmAlert, { ConfirmAlertProps } from './modals/ConfirmAlert';
 import useModalStore from './useModalStore';
 import TeamModal, { TeamModalProps } from './modals/TeamModal';
-import ProjectModal, { ProjectModalProps } from './modals/ProjectModal';
+import GroupModal, { GroupModalProps } from './modals/GroupModal';
 import EnvModal, { EnvModalProps } from './modals/EnvModal';
 import AddMemberModal, { AddMemberModalProps } from './modals/AddMemberModal';
 
 type ModalPropsMapping = {
     [ModalTypes.CONFIRM_ALERT]: ConfirmAlertProps;
     [ModalTypes.TEAM_MODAL]: TeamModalProps;
-    [ModalTypes.PROJECT_MODAL]: ProjectModalProps;
+    [ModalTypes.GROUP_MODAL]: GroupModalProps;
     [ModalTypes.ENV_MODAL]: EnvModalProps;
     [ModalTypes.ADD_MEMBER_MODAL]: AddMemberModalProps;
 };
@@ -19,7 +19,7 @@ const registerModals = () => {
 
   registerModal<ModalTypes.CONFIRM_ALERT>(ModalTypes.CONFIRM_ALERT, ConfirmAlert);
   registerModal<ModalTypes.TEAM_MODAL>(ModalTypes.TEAM_MODAL, TeamModal);
-  registerModal<ModalTypes.PROJECT_MODAL>(ModalTypes.PROJECT_MODAL, ProjectModal);
+  registerModal<ModalTypes.GROUP_MODAL>(ModalTypes.GROUP_MODAL, GroupModal);
   registerModal<ModalTypes.ENV_MODAL>(ModalTypes.ENV_MODAL, EnvModal);
   registerModal<ModalTypes.ADD_MEMBER_MODAL>(ModalTypes.ADD_MEMBER_MODAL, AddMemberModal);
 };

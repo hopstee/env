@@ -58,4 +58,16 @@ class User extends Authenticatable
     {
         return $this->teams()->where('teams.id', $teamId)->exists();
     }
+
+    public function getAccessibleGroups(string $teamId, bool $isFavorite = false)
+    {
+        return Group::where('team_id', $teamId)
+            ->whereHas('team.users', function ($query) {
+                $query->where('user_id', $this->id);
+            })
+            ->when($isFavorite, function ($query) {
+                $query->where('is_favorite', true);
+            })
+            ->get();
+    }
 }

@@ -24,9 +24,8 @@ export type NavItemType = {
 export type ProjectType = {
     id: string;
     name: string;
-    icon: string;
-    is_fav: boolean;
-    is_archived: boolean;
+    color: string;
+    is_favorite: boolean;
 }
 
 export type ProjectDataType = {
@@ -99,7 +98,7 @@ export type PageProps<
     };
     selectedTeamId: string;
     teams: TeamType[];
-    projects: ProjectType[];
+    groups: ProjectType[];
     breadcrumbs: BreadcrumbType[];
     envs: EnvType[];
     roles: RolesType;
