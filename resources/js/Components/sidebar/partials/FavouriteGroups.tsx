@@ -18,8 +18,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { IconTypes } from "@/lib/infoIcons"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
+import { cn } from "@/lib/utils"
 
-export default function Projects({
+export default function FavouriteGroups({
     items,
     selectedTeamId,
 }: {
@@ -32,7 +33,7 @@ export default function Projects({
     const { delete: destroy } = useForm()
 
     const handleConfirmDelete = (id: string) => {
-        destroy(route('project.destroy', { 'project_id': id }), {
+        destroy(route('group.destroy', { 'group_id': id }), {
             preserveScroll: true,
         });
     }
@@ -40,50 +41,43 @@ export default function Projects({
     const confirmDelete = (id: string) => {
         openModal(ModalTypes.CONFIRM_ALERT, {
             title: "Are you sure?",
-            description: "This action cannot be undone. This will permanently delete project and remove it data from our servers.",
+            description: "This action cannot be undone. This will permanently delete group and remove it data from our servers.",
             onConfirm: () => handleConfirmDelete(id),
             type: IconTypes.ERROR
         });
     }
 
-    const favoriteProjects = items.filter(item => item.is_fav === true);
-
-    const openCreateProject = () => {
-        openModal(ModalTypes.PROJECT_MODAL, {
-            title: "Create Project",
+    const openCreateGroup = () => {
+        openModal(ModalTypes.GROUP_MODAL, {
+            title: "Create Group",
+            teamId: selectedTeamId,
         })
     }
 
-    const handleFavToggle = (project: ProjectType) => {
-        const updatedFavStatus = !project.is_fav;
-
-        router.post(
-            route('project.favToggle', { project: project.id }),
-            { is_fav: updatedFavStatus }
-        );
-    };
-
     return (
         <SidebarGroup>
-            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupLabel>Favourite Groups</SidebarGroupLabel>
             <SidebarGroupAction
-                title="Add Project"
-                onClick={openCreateProject}
+                title="Add Group"
+                onClick={openCreateGroup}
             >
-                <Plus /> <span className="sr-only">Add Project</span>
+                <Plus /> <span className="sr-only">Add Group</span>
             </SidebarGroupAction>
             <SidebarGroupContent>
                 <SidebarMenu>
-                    {items.map((item: ProjectType, index: number) => (
+                    {items?.map((item: ProjectType, index: number) => (
                         <SidebarMenuItem key={index}>
                             <SidebarMenuButton
-                                isActive={route().current('p.workspace', { 'team_id': selectedTeamId, 'project_id': item.id })}
+                                isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
                                 asChild
                             >
-                                <Link href={route('p.workspace', { 'team_id': selectedTeamId, 'project_id': item.id })}>
-                                    <span className="text-xs">{item.icon}</span>
-                                    <span>{item.name}</span>
-                                </Link>
+                                    <Link href={route('t.active', { 'team_id': selectedTeamId, 'g': item.id })}>
+                                        <span className={cn(
+                                            "w-4 h-1.5 min-w-4 rounded-full",
+                                            `bg-${item.color}`
+                                        )}></span>
+                                        <span>{item.name}</span>
+                                    </Link>
                             </SidebarMenuButton>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -92,16 +86,21 @@ export default function Projects({
                                         <span className="sr-only">More</span>
                                     </SidebarMenuAction>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent
+                                {/* <DropdownMenuContent
                                     className="w-48"
                                     side={isMobile ? "bottom" : "right"}
                                     align={isMobile ? "end" : "start"}
                                 >
-                                    <Link href={route('p.workspace', { 'team_id': selectedTeamId, 'project_id': item.id })}>
-                                        <span className="text-xs">{item.icon}</span>
-                                        <span>{item.name}</span>
-                                    </Link>
-                                </DropdownMenuContent>
+                                    <div>
+                                        <Link href={route('t.active', { 'team_id': selectedTeamId, 'g': item.id })}>
+                                            <div className="w-4 h-4 ">
+
+                                            </div>
+                                            <span className="text-xs">{item.color}</span>
+                                            <span>{item.name}</span>
+                                        </Link>
+                                    </div>
+                                </DropdownMenuContent> */}
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <SidebarMenuAction showOnHover>
@@ -119,12 +118,6 @@ export default function Projects({
                                         >
                                             <CopyIcon className="text-muted-foreground" />
                                             Copy link
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => handleFavToggle(item)}
-                                        >
-                                            <HeartOffIcon className="text-muted-foreground" />
-                                            Remove from fav
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem

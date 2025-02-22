@@ -6,6 +6,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import RootProvider from './providers';
 import { Toaster } from 'sonner';
+import ModalRenderer from './modalsStore/ModalRenderer';
+import registerModals from './modalsStore/modalsRegistry';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -19,9 +21,12 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
+        registerModals();
+
         root.render(
             <RootProvider>
                 <App {...props} />
+                <ModalRenderer />
                 <Toaster richColors />
             </RootProvider>
         );

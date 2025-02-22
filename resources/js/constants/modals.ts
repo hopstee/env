@@ -1,7 +1,7 @@
 export enum ModalTypes {
     CONFIRM_ALERT = "confirmAlert",
     TEAM_MODAL = "teamModal",
-    PROJECT_MODAL = "projectModal",
+    GROUP_MODAL = "groupModal",
     ENV_MODAL = "envModal",
     ADD_MEMBER_MODAL = "addMemberModal",
 }

@@ -41,6 +41,11 @@ class Team extends Model
         return $this->hasMany(Group::class);
     }
 
+    public function hasAdmin($user)
+    {
+        return $this->users()->where('user_id', $user->id)->where('role', 'admin')->exists();
+    }
+
     public function hasUser($user): bool
     {
         return $this->users()->where('user_id', $user->id)->exists();

@@ -48,7 +48,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         onChange={(e) => setData('email', e.target.value)}
                     />
 
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} className="mt-1" />
 
                     <Button className='mt-4 w-full' disabled={processing}>
                         {processing && <Loader2Icon className='animate-spin' />}

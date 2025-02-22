@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\EnvFieldsController;
 use App\Http\Controllers\Dashboard\EnvsController;
+use App\Http\Controllers\Dashboard\GroupsController as DashboardGroupsController;
 use App\Http\Controllers\Groups\GroupsController;
 use App\Http\Controllers\Dashboard\InvitationsController;
 use App\Http\Controllers\Dashboard\TeamsController;
@@ -57,14 +58,14 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{team_id}', [TeamsController::class, 'destroy'])->name('team.destroy');
     });
 
-    // Route::prefix('project')->group(function () {
-    //     Route::post('/', [ProjectsController::class, 'store'])->name('project.create');
-    //     Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
-    //     Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
-    //     Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
-    //     Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
-    //     Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
-    // });
+    Route::prefix('group')->group(function () {
+        Route::post('/', [DashboardGroupsController::class, 'store'])->name('group.create');
+        // Route::delete('/{project_id}', [ProjectsController::class, 'destroy'])->name('project.destroy');
+        // Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
+        // Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
+        // Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
+        // Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
+    });
 
     // Route::prefix('env')->group(function () {
     //     Route::post('/', [EnvsController::class, 'store'])->name('env.create');

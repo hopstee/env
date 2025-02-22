@@ -7,6 +7,7 @@ import { Transition } from "@headlessui/react";
 import { useForm } from "@inertiajs/react";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { FormEventHandler, useRef } from "react";
+import InputError from "@/Components/InputError";
 
 type InitialValues = {
     name: string;
@@ -20,8 +21,8 @@ export type TeamModalProps = {
 }
 
 export default function TeamModal(props: TeamModalProps) {
-    const projectNameInput = useRef<HTMLInputElement>(null);
-    const projectTypeInput = useRef<HTMLInputElement>(null);
+    const teamNameInput = useRef<HTMLInputElement>(null);
+    const teamTypeInput = useRef<HTMLInputElement>(null);
 
     const {
         data,
@@ -48,12 +49,12 @@ export default function TeamModal(props: TeamModalProps) {
             onError: (errors) => {
                 if (errors.name) {
                     reset('name');
-                    projectNameInput.current?.focus();
+                    teamNameInput.current?.focus();
                 }
 
                 if (errors.type) {
                     reset('type');
-                    projectTypeInput.current?.focus();
+                    teamTypeInput.current?.focus();
                 }
             },
         });
@@ -70,18 +71,12 @@ export default function TeamModal(props: TeamModalProps) {
                     <DialogTitle>{props.title}</DialogTitle>
                 </DialogHeader>
 
-                <form onSubmit={createTeam} className="space-y-6">
+                <form onSubmit={createTeam} className="space-y-4">
                     <div>
-                        <Label
-                            htmlFor="name"
-                            className={cn(errors.name && "text-destructive")}
-                        >
-                            Name
-                        </Label>
-
                         <Input
                             id="name"
-                            ref={projectNameInput}
+                            placeholder="Team"
+                            ref={teamNameInput}
                             value={data.name}
                             onChange={(e) =>
                                 setData('name', e.target.value)
@@ -90,19 +85,15 @@ export default function TeamModal(props: TeamModalProps) {
                             className="mt-1 block w-full"
                             autoComplete="name"
                         />
+
+                        <InputError message={errors.name} className="mt-1" />
                     </div>
                     
                     <div>
-                        <Label
-                            htmlFor="type"
-                            className={cn(errors.type && "text-destructive")}
-                        >
-                            Type
-                        </Label>
-
                         <Input
                             id="type"
-                            ref={projectTypeInput}
+                            placeholder="Type"
+                            ref={teamTypeInput}
                             value={data.type}
                             onChange={(e) =>
                                 setData('type', e.target.value)
@@ -111,6 +102,8 @@ export default function TeamModal(props: TeamModalProps) {
                             className="mt-1 block w-full"
                             autoComplete="type"
                         />
+
+                        <InputError message={errors.type} className="mt-1" />
                     </div>
 
                     <div className="flex items-center justify-end gap-4">

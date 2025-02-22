@@ -8,7 +8,7 @@ import {
 import { usePage } from "@inertiajs/react"
 import TeamSwitcher from "./partials/TeamSwitcher"
 import MainNav from "./partials/MainNav"
-import Projects from "./partials/Projects"
+import FavouriteGroups from "./partials/FavouriteGroups"
 import { NavItemType, ProjectType, TeamType } from "@/types"
 import BottomNav from "./partials/BottomNav"
 
@@ -58,11 +58,11 @@ export default function AppSidebar() {
     const {
         selectedTeamId,
         teams,
-        projects,
+        groups,
     }: {
         selectedTeamId: string,
         teams: TeamType[],
-        projects: ProjectType[],
+        groups: ProjectType[],
     } = usePage().props;
     
     return (
@@ -75,7 +75,7 @@ export default function AppSidebar() {
                 <MainNav items={navMain(selectedTeamId)} />
             </SidebarHeader>
             <SidebarContent>
-                <Projects items={projects} selectedTeamId={selectedTeamId} />
+                <FavouriteGroups items={groups} selectedTeamId={selectedTeamId} />
                 <BottomNav items={secondaryItems(selectedTeamId)} className="mt-auto" />
             </SidebarContent>
         </Sidebar>

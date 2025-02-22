@@ -53,33 +53,33 @@ class GenerateBreadcrumbs
                 ];
                 break;
 
-            case 'p.workspace':
-                $projectId = request('project_id');
+            // case 'p.workspace':
+            //     $projectId = request('project_id');
 
-                $project = Project::find($projectId);
-                $projectName = "$project->icon $project->name";
+            //     $project = Project::find($projectId);
+            //     $projectName = "$project->icon $project->name";
 
-                $breadcrumbs = [
-                    $defaultActiveBreadcrumb,
-                    ['name' => $projectName],
-                ];
-                break;
+            //     $breadcrumbs = [
+            //         $defaultActiveBreadcrumb,
+            //         ['name' => $projectName],
+            //     ];
+            //     break;
 
-            case 'e.show':
-                $projectId = request('project_id');
-                $project = Project::find($projectId);
-                $projectName = "$project->icon $project->name";
+            // case 'e.show':
+            //     $projectId = request('project_id');
+            //     $project = Project::find($projectId);
+            //     $projectName = "$project->icon $project->name";
 
-                $envId = request('env_id');
-                $env = Env::find($envId);
-                $envName = $env->name;
+            //     $envId = request('env_id');
+            //     $env = Env::find($envId);
+            //     $envName = $env->name;
 
-                $breadcrumbs = [
-                    $defaultActiveBreadcrumb,
-                    ['name' => $projectName, 'url' => route('p.workspace', ['team_id' => request('team_id'), 'project_id' => $projectId])],
-                    ['name' => $envName],
-                ];
-                break;
+            //     $breadcrumbs = [
+            //         $defaultActiveBreadcrumb,
+            //         ['name' => $projectName, 'url' => route('p.workspace', ['team_id' => request('team_id'), 'project_id' => $projectId])],
+            //         ['name' => $envName],
+            //     ];
+            //     break;
 
             default:
                 $breadcrumbs = [
