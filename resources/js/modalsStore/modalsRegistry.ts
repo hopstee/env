@@ -3,14 +3,14 @@ import ConfirmAlert, { ConfirmAlertProps } from './modals/ConfirmAlert';
 import useModalStore from './useModalStore';
 import TeamModal, { TeamModalProps } from './modals/TeamModal';
 import GroupModal, { GroupModalProps } from './modals/GroupModal';
-import EnvModal, { EnvModalProps } from './modals/EnvModal';
+import EnvironmentVariableModal, { EnvironmentVariableModalProps } from './modals/EnvironmentVariableModal';
 import AddMemberModal, { AddMemberModalProps } from './modals/AddMemberModal';
 
 type ModalPropsMapping = {
     [ModalTypes.CONFIRM_ALERT]: ConfirmAlertProps;
     [ModalTypes.TEAM_MODAL]: TeamModalProps;
     [ModalTypes.GROUP_MODAL]: GroupModalProps;
-    [ModalTypes.ENV_MODAL]: EnvModalProps;
+    [ModalTypes.ENVIRONMENT_VARIABLE_MODAL]: EnvironmentVariableModalProps;
     [ModalTypes.ADD_MEMBER_MODAL]: AddMemberModalProps;
 };
 
@@ -20,7 +20,7 @@ const registerModals = () => {
   registerModal<ModalTypes.CONFIRM_ALERT>(ModalTypes.CONFIRM_ALERT, ConfirmAlert);
   registerModal<ModalTypes.TEAM_MODAL>(ModalTypes.TEAM_MODAL, TeamModal);
   registerModal<ModalTypes.GROUP_MODAL>(ModalTypes.GROUP_MODAL, GroupModal);
-  registerModal<ModalTypes.ENV_MODAL>(ModalTypes.ENV_MODAL, EnvModal);
+  registerModal<ModalTypes.ENVIRONMENT_VARIABLE_MODAL>(ModalTypes.ENVIRONMENT_VARIABLE_MODAL, EnvironmentVariableModal);
   registerModal<ModalTypes.ADD_MEMBER_MODAL>(ModalTypes.ADD_MEMBER_MODAL, AddMemberModal);
 };
 

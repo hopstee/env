@@ -1,7 +1,7 @@
 import { Lock, Trash, Plus, RotateCcwIcon, SaveIcon, ArchiveRestoreIcon, Loader2Icon, ArchiveIcon } from "lucide-react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { EnvFieldType } from "@/types";
+import { EvironmentVariableType } from "@/types";
 import { Table, TableBody, TableCell, TableFooter, TableRow } from "@/Components/ui/table";
 import { cn } from "@/lib/utils";
 import { Input } from "@/Components/ui/input";
@@ -13,7 +13,7 @@ import { toast } from "sonner";
 export default function EnvFields({
     initialFields = [],
 }: {
-    initialFields: EnvFieldType[];
+    initialFields: EvironmentVariableType[];
 }) {
     const { openConfirm } = useConfirm()
 
@@ -77,7 +77,7 @@ export default function EnvFields({
             });
         }
 
-        const newField: EnvFieldType = {
+        const newField: EvironmentVariableType = {
             id: Date.now(),
             is_available: true,
             is_archived: false,
@@ -123,7 +123,7 @@ export default function EnvFields({
             <div className="space-y-4">
                 <Table>
                     <TableBody>
-                        {data.fields.map((field: EnvFieldType, index: number) => (
+                        {data.fields.map((field: EvironmentVariableType, index: number) => (
                             <TableRow key={field.id}>
                                 <TableCell className={cn("w-16 text-right", field.is_archived ? "text-muted-foreground" : "text-foreground")}>
                                     {field.is_archived && '//'}

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
 {
@@ -28,15 +30,31 @@ class Group extends Model
         });
     }
 
-    public function team() {
+    public function team(): BelongsTo
+    {
         return $this->belongsTo(Team::class);
     }
 
-    public function variables() {
-        return $this->hasMany(EnvironmentVariable::class);
-    }
-    
-    public function hasUserAccess($user) {
+    public function hasUserAccess($user): bool
+    {
         return $this->team->hasUser($user);
+    }
+
+    public function environmentVariables()
+    {
+        return $this->hasMany(EnvironmentVariable::class, 'group_id');
+    }
+
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, 'group_id');
+    }
+
+    public function grantPermission(int $userId, bool $canRead = true, bool $canWrite = false)
+    {
+        return $this->permissions()->updateOrCreate(
+            ['user_id' => $userId, 'group_id' => $this->id],
+            ['can_read' => $canRead, 'can_write' => $canWrite],
+        );
     }
 }

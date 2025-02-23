@@ -15,11 +15,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/Components/ui/sidebar"
-import { Link, useRemember } from "@inertiajs/react"
+import { Link } from "@inertiajs/react"
 import { TeamType } from "@/types"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
+import { useState } from "react"
 
 export default function TeamSwitcher({
     selectedTeamId,
@@ -30,7 +31,7 @@ export default function TeamSwitcher({
 }) {
     const { openModal } = useModalStore();
 
-    const [isDropdownOpen, setIsDropdownOpen] = useRemember(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     const selectedTeam = teams.filter(team => team.id === selectedTeamId)[0]
     // const SelectedTeamIcon = lucideIcons[selectedTeam.icon as keyof typeof lucideIcons]

@@ -16,7 +16,7 @@ class TeamDataUtil
         $teams = $user->teams;
         $teamId = session('selected_team_id') ?? $teams[0]->id;
 
-        $favoriteGroups = $user->getAccessibleGroups($teamId, true);
+        $favoriteGroups = $user->getAccessibleGroups($teamId, true)->get()->toArray();
 
         $roles = json_decode(Role::all(), true);
         $groupedRoles = [
@@ -51,7 +51,7 @@ class TeamDataUtil
         Inertia::share([
             'selectedTeamId'    => $teamId,
             'teams'             => $teams,
-            'groups'            => $favoriteGroups,
+            'favoriteGroups'    => $favoriteGroups,
             'roles'             => $groupedRoles,
         ]);
     }

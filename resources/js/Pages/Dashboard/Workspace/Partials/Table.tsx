@@ -1,27 +1,35 @@
-import { ProjectDataType } from "@/types";
-import { router, useRemember } from "@inertiajs/react"
+import { EvironmentVariableType, GroupType } from "@/types";
+import { router, usePage, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { projectColumns } from "./Columns";
-import { Input } from "@/components/ui/input";
+import { groupColumns } from "./Columns";
+import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { ArchiveIcon, Trash2Icon } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import GroupItem from "@/Components/GroupItem";
+import GroupsFilter from "./GroupsFilter";
+import { useState } from "react";
 
-interface ProjectTypesDataTable {
-    projectsData: ProjectDataType[];
-}
-
-export default function ProjectsDataTable({
-    projectsData,
-}: ProjectTypesDataTable) {
+export default function GroupsDataTable({
+    groups,
+    variables,
+}: {
+    groups: GroupType[];
+    variables: EvironmentVariableType[];
+}) {
     const [sorting, setSorting] = useRemember<SortingState>([])
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
     const [rowSelection, setRowSelection] = useRemember({})
 
+    const { selectedGroupIds } = usePage().props;
+
+    const [selectedGroups, setSelectedGroups] = useRemember<GroupType[]>(groups.filter(group => selectedGroupIds.includes(group.id)), 'selectedFilterGroups')
+
     const table = useReactTable({
-        data: projectsData,
-        columns: projectColumns,
+        data: variables,
+        columns: groupColumns(groups),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -68,35 +76,21 @@ export default function ProjectsDataTable({
     };
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-3 mt-3">
             <div className="flex items-center justify-between space-x-3">
                 {/* <Input
-                    placeholder="Filter projects..."
+                    placeholder="Filter variables..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
                         table.getColumn("name")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 /> */}
-                <div className="space-x-2">
-                    <Button
-                        disabled={!table.getFilteredSelectedRowModel().rows.length}
-                        variant="ghost"
-                        size="sm-icon"
-                        onClick={handleBulkArchive}
-                    >
-                        <ArchiveIcon />
-                    </Button>
-                    <Button
-                        disabled={!table.getFilteredSelectedRowModel().rows.length}
-                        variant="ghost"
-                        size="sm-icon"
-                        className="text-red-600 hover:text-red-600 hover:bg-red-600/10"
-                        onClick={handleBulkDelete}
-                    >
-                        <Trash2Icon />
-                    </Button>
-                </div>
+                <GroupsFilter
+                    items={groups}
+                    selectedItems={selectedGroups}
+                    onStateChanged={setSelectedGroups}
+                />
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -138,8 +132,8 @@ export default function ProjectsDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={projectColumns.length}
-                                    className="h-24 text-center"
+                                    colSpan={groupColumns.length}
+                                    className="h-16 text-center"
                                 >
                                     No results.
                                 </TableCell>

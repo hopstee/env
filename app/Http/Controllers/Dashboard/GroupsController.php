@@ -18,18 +18,19 @@ class GroupsController extends Controller
             'team_id'   => 'required',
         ]);
 
-        Log::info("Incoming data", [
-            'name' => $request-> name,
-            'color' => $request->color,
-            'team_id' => $request->team_id,
-        ]);
-
-        Group::create([
+        $group = Group::create([
             'name' => $request->name,
             'color' => $request->color,
             'team_id' => $request->team_id,
         ]);
 
+        $group->grantPermission($request->user()->id, true, true);
+
         return Redirect::back();
+    }
+
+    public function destroy(Request $request)
+    {
+        Group::where('id', $request->group_id)->delete();
     }
 }

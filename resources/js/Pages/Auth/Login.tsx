@@ -4,9 +4,9 @@ import { Checkbox } from '@/Components/ui/checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
-import { Head, Link, useForm, useRemember } from '@inertiajs/react';
-import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Loader2Icon } from 'lucide-react';
+import { FormEventHandler, useState } from 'react';
 
 export default function Login({
     status,
@@ -15,8 +15,6 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const [showPass, setShowPass] = useRemember(false);
-
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -67,7 +65,7 @@ export default function Login({
                     <div className="mt-2">
                         <Input
                             id="password"
-                            type={showPass ? "text" : "password"}
+                            type={"password"}
                             placeholder="Password"
                             name="password"
                             value={data.password}

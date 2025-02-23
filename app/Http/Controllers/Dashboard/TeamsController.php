@@ -15,14 +15,33 @@ class TeamsController extends Controller
 {
     public function show(Request $request, string $teamId)
     {
-        session(['selected_team_id' => $teamId]);
+        if (!session('selected_team_id')) {
+            session(['selected_team_id' => $teamId]);
+        }
+
+        $user = $request->user();
+
+        $groups = $user->getAccessibleGroups($teamId)->get();
+        $groupIds = $groups->pluck('groups.id')->toArray();
+
+        $variables = $user->getEnvironmentVariables($teamId);
+
+        $filters = $request->only(['g', 'page', 'perPage', 'query']);
+        $g = $request->query('g');
+
         return Inertia::render(
-            'Dashboard/Teams/Workspace/Show',
+            'Dashboard/Workspace/Show',
             [
-                'projects' => [],
-                'type' => 'active',
+                'groups'            => $groups,
+                'variables'         => $variables,
+                'selectedGroupIds'  => array_filter(array_map('trim', explode(',', $g))),
             ]
         );
+    }
+
+    private function applyFilters($filters)
+    {
+
     }
 
     public function store(Request $request)

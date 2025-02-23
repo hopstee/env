@@ -61,13 +61,35 @@ class User extends Authenticatable
 
     public function getAccessibleGroups(string $teamId, bool $isFavorite = false)
     {
-        return Group::where('team_id', $teamId)
-            ->whereHas('team.users', function ($query) {
-                $query->where('user_id', $this->id);
-            })
-            ->when($isFavorite, function ($query) {
-                $query->where('is_favorite', true);
-            })
-            ->get();
+        return $this->belongsToMany(Group::class, 'permissions')
+            ->withPivot('can_read', 'can_write')
+            ->where('groups.team_id', $teamId)
+            ->where('permissions.can_read', true)
+            ->when(
+                $isFavorite,
+                fn($query) =>
+                $query->where('groups.is_favorite', true)
+            );
+    }
+
+    public function getEnvironmentVariables(string $teamId)
+    {
+        return $this->getAccessibleGroups($teamId)
+            ->with('environmentVariables')
+            ->get()
+            ->flatMap(fn($group) => $group->environmentVariables->map(function ($env) use ($group) {
+                return [
+                    'id'            => $env->id,
+                    'key'           => $env->key,
+                    'value'         => $env->value,
+                    'is_active'     => $env->is_active,
+                    'group_id'      => $group->id,
+                    'group_name'    => $group->name,
+                    'group_color'   => $group->color,
+                    'can_read'      => $group->pivot->can_read,
+                    'can_write'     => $group->pivot->can_write,
+                ];
+            }))
+            ->all();
     }
 }

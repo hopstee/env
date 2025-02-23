@@ -87,7 +87,7 @@ export default function DeleteUserForm() {
 
                         <InputError
                             message={errors.password}
-                            className="mt-2"
+                            className="mt-1"
                         />
                     </div>
 

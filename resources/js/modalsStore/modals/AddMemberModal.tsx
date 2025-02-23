@@ -1,18 +1,13 @@
 import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { Label } from "@/Components/ui/label";
-import { Input } from "@/Components/ui/input";
 import { cn } from "@/lib/utils";
 import { Transition } from "@headlessui/react";
-import { useForm, usePage, useRemember } from "@inertiajs/react";
-import { Check, ChevronsUpDown, Loader2Icon, PlusIcon, UserPlusIcon } from "lucide-react";
-import { FormEventHandler, SetStateAction, useEffect, useRef } from "react";
+import { useForm } from "@inertiajs/react";
+import { Loader2Icon, UserPlusIcon } from "lucide-react";
+import { FormEventHandler } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { EnvType, ProjectType, RoleType, RolesType, TeamType } from "@/types";
-import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/Components/ui/command";
-import axios from "axios";
-import { Separator } from "@/Components/ui/separator";
+import { RoleType, RolesType, TeamType, GroupType } from "@/types";
 import TagInput from "@/Components/ui/tag-input";
 import InputError from "@/Components/InputError";
 import { toast } from "sonner";
@@ -28,7 +23,7 @@ export type AddMemberModalProps = {
     title: string;
     selectedTeamId: string,
     teams: TeamType[],
-    projects: ProjectType[],
+    groups: GroupType[],
     roles: RolesType,
 }
 
@@ -36,11 +31,9 @@ export default function AddMemberModal(props: AddMemberModalProps) {
     const {
         selectedTeamId,
         teams,
-        projects,
+        groups,
         roles,
     } = props
-
-    const [emails, setEmails] = useRemember<string[]>([])
 
     const {
         data,
@@ -120,7 +113,7 @@ export default function AddMemberModal(props: AddMemberModalProps) {
                                 </SelectContent>
                             </Select>
 
-                            <InputError message={errors.role} />
+                            <InputError message={errors.role} className="mt-1" />
                         </div>
                     </div>
 
@@ -146,7 +139,7 @@ export default function AddMemberModal(props: AddMemberModalProps) {
                             autoFocus={true}
                         />
 
-                        <InputError message={errors.emails} />
+                        <InputError message={errors.emails}  className="mt-1"/>
                     </div>
 
                     <div className="flex items-center justify-end gap-4">

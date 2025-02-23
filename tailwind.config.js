@@ -10,7 +10,11 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.tsx',
     ],
-
+    safelist: [
+        { pattern: /bg-(red|orange|yellow|green|sky|blue|purple|fuchsia|pink|gray|stone|black|white)-(\d{2,3})/ },
+        { pattern: /text-(red|orange|yellow|green|sky|blue|purple|fuchsia|pink|gray|stone|black|white)-(\d{2,3})/ },
+        { pattern: /border-(red|orange|yellow|green|sky|blue|purple|fuchsia|pink|gray|stone|black|white)-(\d{2,3})/ }
+    ],
     theme: {
         extend: {
             fontFamily: {

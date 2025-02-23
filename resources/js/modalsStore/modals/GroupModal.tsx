@@ -116,7 +116,7 @@ export default function GroupModal(props: GroupModalProps) {
                                 autoComplete="name"
                             />
 
-                            <InputError message={errors.name} />
+                            <InputError message={errors.name} className="mt-1" />
                         </div>
                     </div>
 

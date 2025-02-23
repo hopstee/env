@@ -21,27 +21,11 @@ export type NavItemType = {
     route: string;
 }
 
-export type ProjectType = {
+export type GroupType = {
     id: string;
     name: string;
     color: string;
     is_favorite: boolean;
-}
-
-export type ProjectDataType = {
-    id: string;
-    name: string;
-    icon: string;
-    created_at: Date;
-    users_count: number;
-    users: User[];
-    is_fav: boolean;
-    is_archived: boolean;
-}
-
-export type BreadcrumbType = {
-    name: string;
-    url?: string;
 }
 
 export type EnvType = {
@@ -49,14 +33,16 @@ export type EnvType = {
     name: string;
 }
 
-export type EnvFieldType = {
+export type EvironmentVariableType = {
     id: number;
-    env_key: string;
-    env_value: string;
-    is_available: boolean;
-    is_archived: boolean;
-    is_new?: boolean;
-    error?: string;
+    key: string;
+    value: string;
+    is_active: boolean;
+    group_id: string;
+    group_name: string;
+    group_color: string;
+    can_read: boolean;
+    can_write: boolean;
 }
 
 type RoleType = {
@@ -98,9 +84,10 @@ export type PageProps<
     };
     selectedTeamId: string;
     teams: TeamType[];
-    groups: ProjectType[];
-    breadcrumbs: BreadcrumbType[];
+    groups: GroupType[];
+    favoriteGroups: GroupType[];
     envs: EnvType[];
     roles: RolesType;
     invitation: InvitationType;
+    selectedGroupIds: string[];
 };

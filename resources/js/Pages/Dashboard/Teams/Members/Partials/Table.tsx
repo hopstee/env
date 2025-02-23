@@ -20,7 +20,7 @@ export default function MembersDataTable({
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
     const [rowSelection, setRowSelection] = useRemember({})
-    console.log(roles)
+
     const table = useReactTable({
         data: membersData,
         columns: memberColumns(user, roles),

@@ -13,20 +13,22 @@ import {
     useSidebar,
 } from "@/Components/ui/sidebar"
 import { Link, router, useForm } from "@inertiajs/react"
-import { ProjectType } from "@/types"
+import { GroupType } from "@/types"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { IconTypes } from "@/lib/infoIcons"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import { cn } from "@/lib/utils"
+import GroupItem from "@/Components/GroupItem"
 
-export default function FavouriteGroups({
+export default function FavoriteGroups({
     items,
     selectedTeamId,
 }: {
-    items: ProjectType[]
+    items: GroupType[]
     selectedTeamId: string,
 }) {
+
     const { isMobile } = useSidebar()
     const { openModal } = useModalStore()
 
@@ -65,18 +67,17 @@ export default function FavouriteGroups({
             </SidebarGroupAction>
             <SidebarGroupContent>
                 <SidebarMenu>
-                    {items?.map((item: ProjectType, index: number) => (
+                    {items?.map((item: GroupType, index: number) => (
                         <SidebarMenuItem key={index}>
                             <SidebarMenuButton
                                 isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
                                 asChild
                             >
                                     <Link href={route('t.active', { 'team_id': selectedTeamId, 'g': item.id })}>
-                                        <span className={cn(
-                                            "w-4 h-1.5 min-w-4 rounded-full",
-                                            `bg-${item.color}`
-                                        )}></span>
-                                        <span>{item.name}</span>
+                                        <GroupItem
+                                            name={item.name}
+                                            color={item.color}
+                                        />
                                     </Link>
                             </SidebarMenuButton>
                             <DropdownMenu>

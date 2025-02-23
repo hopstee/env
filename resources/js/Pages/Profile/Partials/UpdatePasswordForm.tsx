@@ -1,8 +1,8 @@
 import InputError from '@/Components/InputError';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import { cn } from '@/lib/utils';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
@@ -82,7 +82,7 @@ export default function UpdatePasswordForm({
 
                         <InputError
                             message={errors.current_password}
-                            className="mt-2"
+                            className="mt-1"
                         />
                     </div>
 
@@ -104,7 +104,7 @@ export default function UpdatePasswordForm({
                             autoComplete="new-password"
                         />
 
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError message={errors.password} className="mt-1" />
                     </div>
 
                     <div>
@@ -128,7 +128,7 @@ export default function UpdatePasswordForm({
 
                         <InputError
                             message={errors.password_confirmation}
-                            className="mt-2"
+                            className="mt-1"
                         />
                     </div>
 

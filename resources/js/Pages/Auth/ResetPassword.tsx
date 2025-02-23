@@ -52,7 +52,7 @@ export default function ResetPassword({
                             onChange={(e) => setData('email', e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2" />
+                        <InputError message={errors.email} className="mt-1" />
                     </div>
 
                     <div className="mt-4">
@@ -67,7 +67,7 @@ export default function ResetPassword({
                             onChange={(e) => setData('password', e.target.value)}
                         />
 
-                        <InputError message={errors.password} className="mt-2" />
+                        <InputError message={errors.password} className="mt-1" />
                     </div>
 
                     <div className="mt-4">
@@ -85,7 +85,7 @@ export default function ResetPassword({
 
                         <InputError
                             message={errors.password_confirmation}
-                            className="mt-2"
+                            className="mt-1"
                         />
                     </div>
 

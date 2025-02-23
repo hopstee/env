@@ -1,4 +1,3 @@
-import WorkspaceBreadcrumb from '@/Components/Breadcrumb';
 import ProfileMenu from '@/Components/ProfileMenu';
 import ThemeSwitcher from '@/Components/ThemeSwitcher';
 import AppSidebar from '@/Components/sidebar/AppSidebar';
@@ -8,7 +7,7 @@ import { ScrollArea } from '@/Components/ui/scroll-area';
 import { SidebarInset, SidebarProvider } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
 import useModalStore from '@/modalsStore/useModalStore';
-import { ProjectType, RolesType, TeamType } from '@/types';
+import { GroupType, RolesType, TeamType } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
@@ -20,12 +19,12 @@ export default function Authenticated({
     const {
         selectedTeamId,
         teams,
-        projects,
+        groups,
         roles,
     }: {
         selectedTeamId: string,
         teams: TeamType[],
-        projects: ProjectType[],
+        groups: GroupType[],
         roles: RolesType,
     } = usePage().props
 
@@ -36,7 +35,7 @@ export default function Authenticated({
             title: "Invite members to team",
             selectedTeamId,
             teams,
-            projects,
+            groups,
             roles,
         });
     }
@@ -74,7 +73,6 @@ export default function Authenticated({
                     <ScrollArea className='min-h-full'>
                         <div className="py-3 sm:py-6 lg:py-12">
                             <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-12 space-y-3 sm:space-y-6 lg:space-y-6">
-                                <WorkspaceBreadcrumb />
                                 <main>{children}</main>
                             </div>
                         </div>
