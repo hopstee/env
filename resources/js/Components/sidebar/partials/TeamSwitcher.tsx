@@ -37,6 +37,7 @@ export default function TeamSwitcher({
     // const SelectedTeamIcon = lucideIcons[selectedTeam.icon as keyof typeof lucideIcons]
 
     const openTeamCreateDialog = () => {
+        setIsDropdownOpen(false);
         openModal(ModalTypes.TEAM_MODAL, {
             title: "Add Team"
         });
@@ -77,8 +78,8 @@ export default function TeamSwitcher({
                         {teams.map((team: TeamType) => <TeamItem key={team.id} team={team} />)}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                        className="gap-2 p-2"
-                        onClick={openTeamCreateDialog}
+                            className="gap-2 p-2"
+                            onClick={openTeamCreateDialog}
                         >
                             <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                                 <Plus className="size-4" />

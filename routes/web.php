@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('environmebt_variables')->group(function () {
         Route::post('/', [EnvironmentVariablesController::class, 'store'])->name('environmebt_variables.create');
+        Route::post('/{variable}', [EnvironmentVariablesController::class, 'update'])->name('environmebt_variables.update');
         Route::delete('/{env_id}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt_variables.destroy');
     });
 

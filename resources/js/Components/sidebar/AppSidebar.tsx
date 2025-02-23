@@ -68,7 +68,7 @@ export default function AppSidebar() {
     return (
         <Sidebar
             collapsible="icon"
-            variant="inset"
+            // variant="inset"
         >
             <SidebarHeader>
                 <TeamSwitcher teams={teams} selectedTeamId={selectedTeamId} />

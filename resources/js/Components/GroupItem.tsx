@@ -1,3 +1,4 @@
+import { COLORS, ColorKeys } from "@/constants/colors"
 import { cn } from "@/lib/utils"
 
 export default function GroupItem(
@@ -6,7 +7,7 @@ export default function GroupItem(
         color,
     }: {
         name: string,
-        color: string,
+        color: ColorKeys,
     }
 ) {
     return [
@@ -14,7 +15,7 @@ export default function GroupItem(
             <div
                 className={cn(
                     "w-2 h-2 rounded-full",
-                    `bg-${color}`
+                    `bg-${COLORS[color].default}`
                 )}
             ></div>
         </div>,

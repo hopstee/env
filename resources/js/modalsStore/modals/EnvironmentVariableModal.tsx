@@ -4,7 +4,7 @@ import { FormEventHandler, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
-import { CheckIcon, ChevronDownIcon, Loader2Icon, PlusIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
 import { Transition } from "@headlessui/react";
 import { Input } from "@/Components/ui/input";
 import { GroupType, User } from "@/types";
@@ -19,13 +19,15 @@ import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle }
 type InitialValues = {
     key: string;
     value: string;
-    group_id: string | undefined;
+    env_id?: number;
+    group_id?: string;
 }
 
 export type EnvironmentVariableModalProps = {
     onClose: () => void;
     title: string;
     groups: GroupType[];
+    edit?: boolean;
     initialValues?: InitialValues;
 }
 
@@ -34,6 +36,7 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
         onClose,
         title,
         groups,
+        edit = false,
         initialValues,
     } = props;
 
@@ -48,7 +51,7 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
     } = useForm<InitialValues>({
         key: initialValues?.key || '',
         value: initialValues?.value || '',
-        group_id: groups[0]?.id || undefined,
+        group_id: initialValues?.group_id,
     });
 
     const selectedGroup = groups.find(group => group.id === data.group_id)?.name || "Select group";
@@ -56,26 +59,31 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
     const createEnv: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('environmebt_variables.create'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset()
-                onClose()
-            },
-            onError: (errors) => {
-                if (errors.key) {
-                    reset('key');
-                }
+        post(
+            edit
+                ? route('environmebt_variables.update', {'variable': initialValues?.env_id})
+                : route('environmebt_variables.create'),
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset()
+                    onClose()
+                },
+                onError: (errors) => {
+                    if (errors.key) {
+                        reset('key');
+                    }
 
-                if (errors.value) {
-                    reset('value');
-                }
+                    if (errors.value) {
+                        reset('value');
+                    }
 
-                if (errors.group_id) {
-                    reset('group_id');
-                }
-            },
-        });
+                    if (errors.group_id) {
+                        reset('group_id');
+                    }
+                },
+            }
+        );
     };
 
     const handleOpenState = () => {
@@ -159,9 +167,9 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
                         <Button disabled={processing}>
                             {processing
                                 ? <Loader2Icon className="animate-spin" />
-                                : <PlusIcon />
+                                : edit ? <SaveIcon /> : <PlusIcon />
                             }
-                            Add
+                            {edit ? "Update" : "Add"}
                         </Button>
                     </DialogFooter>
                 </form>

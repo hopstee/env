@@ -1,3 +1,4 @@
+import { ColorKeys } from "@/constants/colors";
 import { LucideIcon } from "lucide-react"
 
 export type User = {
@@ -24,7 +25,7 @@ export type NavItemType = {
 export type GroupType = {
     id: string;
     name: string;
-    color: string;
+    color: ColorKeys;
     is_favorite: boolean;
 }
 
@@ -40,9 +41,10 @@ export type EvironmentVariableType = {
     is_active: boolean;
     group_id: string;
     group_name: string;
-    group_color: string;
+    group_color: ColorKeys;
     can_read: boolean;
     can_write: boolean;
+    updated_at: string;
 }
 
 type RoleType = {

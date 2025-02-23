@@ -28,8 +28,7 @@ export default function FavoriteGroups({
     items: GroupType[]
     selectedTeamId: string,
 }) {
-
-    const { isMobile } = useSidebar()
+    const { isMobile, open } = useSidebar()
     const { openModal } = useModalStore()
 
     const { delete: destroy } = useForm()
@@ -120,7 +119,6 @@ export default function FavoriteGroups({
                                             <CopyIcon className="text-muted-foreground" />
                                             Copy link
                                         </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
                                         <DropdownMenuItem
                                             className="text-red-600 focus:text-red-600 focus:bg-red-600/10"
                                             onClick={() => confirmDelete(item.id)}

@@ -46,6 +46,20 @@ export default function GroupsDataTable({
         },
     })
 
+    // TODO: добавить виртуализацию для горизонтального скрола
+    // const rowVirtualizer = useVirtualizer({
+    //     count: rows.length,
+    //     estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
+    //     getScrollElement: () => tableContainerRef.current,
+    //     //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    //     measureElement:
+    //       typeof window !== 'undefined' &&
+    //       navigator.userAgent.indexOf('Firefox') === -1
+    //         ? element => element?.getBoundingClientRect().height
+    //         : undefined,
+    //     overscan: 5,
+    //   })
+
     const handleBulkDelete = () => {
         const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
         if (confirm(`Delete ${selectedIds.length} projects?`)) {
@@ -94,7 +108,7 @@ export default function GroupsDataTable({
             </div>
             <div className="rounded-md border">
                 <Table>
-                    <TableHeader>
+                    {/* <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
@@ -111,7 +125,7 @@ export default function GroupsDataTable({
                                 })}
                             </TableRow>
                         ))}
-                    </TableHeader>
+                    </TableHeader> */}
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
@@ -143,10 +157,10 @@ export default function GroupsDataTable({
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
+                {/* <div className="flex-1 text-sm text-muted-foreground">
                     {table.getFilteredSelectedRowModel().rows.length} of{" "}
                     {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
+                </div> */}
                 <div className="space-x-2">
                     <Button
                         variant="outline"
@@ -168,4 +182,13 @@ export default function GroupsDataTable({
             </div>
         </div>
     )
+}
+
+function useVirtualizer(arg0: {
+    count: any; estimateSize: () => number; //estimate row height for accurate scrollbar dragging
+    getScrollElement: () => any;
+    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    measureElement: ((element: any) => any) | undefined; overscan: number;
+}) {
+    throw new Error("Function not implemented.");
 }

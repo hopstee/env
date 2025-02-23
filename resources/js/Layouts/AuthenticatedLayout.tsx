@@ -44,9 +44,9 @@ export default function Authenticated({
         <SidebarProvider>
             <AppSidebar />
 
-            <SidebarInset className='border overflow-hidden !ml-0'>
+            {/* <SidebarInset className='border overflow-hidden !ml-0'> */}
                 <div className="min-h-full bg-background w-full">
-                    <nav className="bg-card border-b">
+                    <nav className="bg-card">
                         <div className="px-3">
                             <div className="flex h-16 justify-between">
                                 <div className="flex">
@@ -78,7 +78,7 @@ export default function Authenticated({
                         </div>
                     </ScrollArea>
                 </div>
-            </SidebarInset>
+            {/* </SidebarInset> */}
         </SidebarProvider>
     );
 }

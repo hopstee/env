@@ -14,7 +14,7 @@ import InputError from "@/Components/InputError";
 
 type InitialValues = {
     name: string;
-    color: string;
+    color: ColorKeys;
 }
 
 export type GroupModalProps = {
@@ -37,7 +37,7 @@ export default function GroupModal(props: GroupModalProps) {
         recentlySuccessful,
     } = useForm({
         name: props.initialValues?.name || '',
-        color: props.initialValues?.color || COLORS.RED_500,
+        color: props.initialValues?.color || "RED_500",
         team_id: props.teamId,
     });
 
@@ -59,7 +59,7 @@ export default function GroupModal(props: GroupModalProps) {
     };
 
     const selectColor = (color: ColorKeys) => {
-        setData('color', COLORS[color]);
+        setData('color', color);
     }
 
     const handleOpenState = () => {
@@ -83,12 +83,12 @@ export default function GroupModal(props: GroupModalProps) {
                                     onClick={() => selectColor(color)}
                                     className={cn(
                                         "h-6 rounded-md bg-background hover:bg-muted cursor-pointer p-2",
-                                        data.color === COLORS[color] && "bg-muted"
+                                        data.color === color && "bg-muted"
                                     )}
                                 >
                                     <div className={cn(
                                         "h-full w-full rounded",
-                                        `bg-${COLORS[color]}`,
+                                        `bg-${COLORS[color].default}`,
                                     )}></div>
                                 </div>
                             ))}
@@ -99,7 +99,7 @@ export default function GroupModal(props: GroupModalProps) {
                         <div className="size-10 p-3">
                             <div className={cn(
                                 'size-4 rounded-full',
-                                `bg-${data.color}`,
+                                `bg-${COLORS[data.color].default}`,
                             )}></div>
                         </div>
                         <div className="w-full">

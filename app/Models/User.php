@@ -83,6 +83,7 @@ class User extends Authenticatable
                     'key'           => $env->key,
                     'value'         => $env->value,
                     'is_active'     => $env->is_active,
+                    'updated_at'    => $env->updated_at,
                     'group_id'      => $group->id,
                     'group_name'    => $group->name,
                     'group_color'   => $group->color,
