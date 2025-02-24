@@ -1,17 +1,14 @@
 import GroupItem from "@/Components/GroupItem";
-import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
-import { Checkbox } from "@/Components/ui/checkbox";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from "@/Components/ui/command";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/Components/ui/drawer";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { GroupType } from "@/types";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, PlusCircleIcon } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon } from "lucide-react";
+import { useState } from "react";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"]
 
@@ -22,7 +19,7 @@ export default function GroupsFilter(
         selected,
     }: {
         items: GroupType[];
-        onValueChanged: (item: GroupItem) => void
+        onValueChanged: (item: GroupType) => void
         selected?: GroupType;
     }
 ) {
@@ -109,6 +106,7 @@ function GroupsList({
                             onSelect={() => {
                                 handleSelect(item)
                             }}
+                            className="cursor-pointer"
                         >
                             <GroupItem
                                 name={item.name}

@@ -72,12 +72,20 @@ export default function FavoriteGroups({
                                 isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
                                 asChild
                             >
-                                    <Link href={route('t.active', { 'team_id': selectedTeamId, 'g': item.id })}>
-                                        <GroupItem
-                                            name={item.name}
-                                            color={item.color}
-                                        />
-                                    </Link>
+                                <Link
+                                    href={
+                                        route('t.active', {
+                                            'team_id': selectedTeamId,
+                                            ...route().params,
+                                            'g': item.id,
+                                        })
+                                    }
+                                >
+                                    <GroupItem
+                                        name={item.name}
+                                        color={item.color}
+                                    />
+                                </Link>
                             </SidebarMenuButton>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
