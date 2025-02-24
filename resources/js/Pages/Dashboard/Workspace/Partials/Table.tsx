@@ -1,31 +1,53 @@
-import { EvironmentVariableType, GroupType } from "@/types";
-import { router, usePage, useRemember } from "@inertiajs/react"
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from "@/types";
+import { Link, router, usePage, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { groupColumns } from "./Columns";
 import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
-import { ArchiveIcon, Trash2Icon } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import GroupItem from "@/Components/GroupItem";
+import { Table, TableBody, TableCell, TableRow } from "@/Components/ui/table";
 import GroupsFilter from "./GroupsFilter";
 import { useState } from "react";
+import { Pagination, PaginationContent, PaginationFirst, PaginationItem, PaginationLast, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 
 export default function GroupsDataTable({
     groups,
     variables,
+    metadata,
+    filters,
 }: {
     groups: GroupType[];
     variables: EvironmentVariableType[];
+    metadata: VariablesPaginatedDataType;
+    filters: EvironmentVariableFiltersType;
 }) {
-    const [sorting, setSorting] = useRemember<SortingState>([])
-    const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
-    const [rowSelection, setRowSelection] = useRemember({})
+    const [sorting, setSorting] = useRemember<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useRemember({});
 
-    const { selectedGroupIds } = usePage().props;
+    const selectedGroupIds = filters.g || [];
 
-    const [selectedGroups, setSelectedGroups] = useRemember<GroupType[]>(groups.filter(group => selectedGroupIds.includes(group.id)), 'selectedFilterGroups')
+    const [selectedGroups, setSelectedGroups] = useRemember<GroupType[]>(groups.filter(group => selectedGroupIds.includes(group.id)), 'selectedFilterGroups');
+    const [queryString, setQueryString] = useState("");
+
+    const perPage = String(metadata.per_page);
+    const perPageOptions = metadata.per_page_options;
+
+    const currentPage = metadata.current_page;
+    const currentPageData = metadata.links[currentPage - 1]
+    const totalPages = Math.ceil(metadata.total / metadata.per_page)
+
+    const total = metadata.total;
+    const shown = (currentPage - 1) * metadata.per_page + metadata.data.length;
+
+    const isFirstPage = currentPage === 1;
+    const firstPageUrl = isFirstPage ? null : metadata.first_page_url;
+    const prevPageUrl = isFirstPage ? null : metadata.prev_page_url;
+
+    const isLastPage = metadata.last_page === currentPage;
+    const lastPageUrl = isLastPage ? null : metadata.last_page_url;
+    const nextPageUrl = isLastPage ? null : metadata.next_page_url;
 
     const table = useReactTable({
         data: variables,
@@ -43,6 +65,10 @@ export default function GroupsDataTable({
             columnFilters,
             columnVisibility,
             rowSelection,
+            pagination: {
+                pageIndex: 0,
+                pageSize: Number(perPage)
+            }
         },
     })
 
@@ -60,46 +86,15 @@ export default function GroupsDataTable({
     //     overscan: 5,
     //   })
 
-    const handleBulkDelete = () => {
-        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
-        if (confirm(`Delete ${selectedIds.length} projects?`)) {
-            router.delete(route('project.destroy-many'), {
-                data: { ids: selectedIds },
-                onSuccess: () => {
-                    setRowSelection({});
-                    router.reload();
-                },
-            });
-        }
-    };
-
-    const handleBulkArchive = () => {
-        const selectedIds = table.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
-        if (confirm(`Archive ${selectedIds.length} projects?`)) {
-            router.post(
-                route('project.archive-many'),
-                { ids: selectedIds },
-                {
-                    onSuccess: () => {
-                        setRowSelection({});
-                        router.reload();
-                    },
-                }
-            );
-        }
-    };
-
     return (
         <div className="space-y-3 mt-3">
-            <div className="flex items-center justify-between space-x-3">
-                {/* <Input
+            <div className="flex flex-col md:flex-row items-center gap-3">
+                <Input
                     placeholder="Filter variables..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                /> */}
+                    value={queryString}
+                    onChange={(event) => setQueryString(event.target.value)}
+                    className="w-full md:max-w-sm"
+                />
                 <GroupsFilter
                     items={groups}
                     selectedItems={selectedGroups}
@@ -156,28 +151,51 @@ export default function GroupsDataTable({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                {/* <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div> */}
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                disabled={isFirstPage}
+                                href={prevPageUrl}
+                                size="sm-icon"
+                                preserveScroll={true}
+                            />
+                        </PaginationItem>
+
+                        <PaginationItem>
+                            <span className="text-sm text-muted-foreground mx-2">
+                                {`${currentPageData?.label}/${totalPages}`}
+                            </span>
+                        </PaginationItem>
+
+                        <PaginationItem>
+                            <PaginationNext
+                                disabled={isLastPage}
+                                href={nextPageUrl}
+                                size="sm-icon"
+                                preserveScroll={true}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+
+                <div className="flex items-center gap-3">
+                    <div className="flex-1 text-sm text-muted-foreground">
+                        {shown} of{" "}
+                        {total} row(s).
+                    </div>
+                    <Tabs defaultValue={perPage}>
+                        <TabsList>
+                            {perPageOptions.map((option, index: number) => (
+                                <TabsTrigger key={index} value={String(option.label)}>
+                                    <Link href={option.link} preserveScroll={true}>
+                                        {option.label}
+                                    </Link>
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+                    </Tabs>
                 </div>
             </div>
         </div>

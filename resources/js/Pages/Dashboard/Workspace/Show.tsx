@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { EvironmentVariableType, GroupType } from '@/types';
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from '@/types';
 import { Head } from '@inertiajs/react';
 import GroupsDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
@@ -9,10 +9,12 @@ import { ModalTypes } from '@/constants/modals';
 
 export default function Dashboard({
     groups,
-    variables,
+    variablesData,
+    filters,
 }: {
     groups: GroupType[];
-    variables: EvironmentVariableType[];
+    variablesData: VariablesPaginatedDataType;
+    filters: EvironmentVariableFiltersType;
 }) {
     const { openModal } = useModalStore();
 
@@ -43,7 +45,9 @@ export default function Dashboard({
 
             <GroupsDataTable
                 groups={groups}
-                variables={variables}
+                variables={variablesData.data}
+                metadata={variablesData}
+                filters={filters}
             />
         </AuthenticatedLayout>
     );

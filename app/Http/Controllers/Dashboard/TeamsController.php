@@ -24,24 +24,17 @@ class TeamsController extends Controller
         $groups = $user->getAccessibleGroups($teamId)->get();
         $groupIds = $groups->pluck('groups.id')->toArray();
 
-        $variables = $user->getEnvironmentVariables($teamId);
-
         $filters = $request->only(['g', 'page', 'perPage', 'query']);
-        $g = $request->query('g');
+        $variablesData = $user->getEnvironmentVariables($teamId, $filters);
 
         return Inertia::render(
             'Dashboard/Workspace/Show',
             [
-                'groups'            => $groups,
-                'variables'         => $variables,
-                'selectedGroupIds'  => array_filter(array_map('trim', explode(',', $g))),
+                'groups'        => $groups,
+                'variablesData' => $variablesData,
+                'filters'       => $filters,
             ]
         );
-    }
-
-    private function applyFilters($filters)
-    {
-
     }
 
     public function store(Request $request)

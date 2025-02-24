@@ -18,7 +18,7 @@ import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle }
 
 type InitialValues = {
     key: string;
-    value: string;
+    value?: string;
     env_id?: number;
     group_id?: string;
 }

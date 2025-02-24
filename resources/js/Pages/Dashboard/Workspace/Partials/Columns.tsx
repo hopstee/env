@@ -56,10 +56,12 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
             },
             cell: ({ row }) => {
                 return (
-                    <CopyTooltip
-                        trigger={row.getValue("key")}
-                        valueToCopy={row.getValue("key")}
-                    />
+                    <div className="w-[200px] truncate">
+                        <CopyTooltip
+                            trigger={row.getValue("key")}
+                            valueToCopy={row.getValue("key")}
+                        />
+                    </div>
                 )
             },
         },
@@ -130,9 +132,11 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
                 const date = format(row.getValue("updated_at"), 'dd-MM-yyyy')
 
                 return (
-                    <Badge variant="secondary">
-                        Updated at {date}
-                    </Badge>
+                    <div className="w-[200px]">
+                        <Badge variant="secondary">
+                            Updated at {date}
+                        </Badge>
+                    </div>
                 )
             },
         },

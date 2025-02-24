@@ -70,13 +70,13 @@ export default function Authenticated({
                         </div>
                     </nav>
 
-                    <ScrollArea className='min-h-full'>
+                    {/* <ScrollArea className='min-h-full'> */}
                         <div className="py-3 sm:py-6 lg:py-12">
                             <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-12 space-y-3 sm:space-y-6 lg:space-y-6">
                                 <main>{children}</main>
                             </div>
                         </div>
-                    </ScrollArea>
+                    {/* </ScrollArea> */}
                 </div>
             {/* </SidebarInset> */}
         </SidebarProvider>

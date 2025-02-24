@@ -14,7 +14,7 @@ class EnvironmentVariablesController extends Controller
     {
         $validated = $request->validate([
             'key'       => 'required|string',
-            'value'     => 'required|string',
+            'value'     => 'nullable',
             'group_id'  => 'required|string',
         ]);
 
@@ -32,7 +32,7 @@ class EnvironmentVariablesController extends Controller
         Log::info("Env Data", ["data" => $variable]);
         $validated = $request->validate([
             'key'       => 'required|string',
-            'value'     => 'required|string',
+            'value'     => 'string',
             'group_id'  => 'required|string',
         ]);
         Log::info("Validated data", ["data" => $validated]);
