@@ -33,7 +33,12 @@ class Team extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'team_users')->withPivot('role');
+        // TODO: пофиксить получение пользователей
+        return $this->belongsToMany(User::class, 'team_users')
+            ->withPivot('*')
+            ->withTimestamps()
+            ->join('roles', 'team_users.role_id', '=', 'roles.id')
+            ->addSelect('roles.name as role_name');
     }
 
     public function groups(): HasMany
@@ -43,7 +48,7 @@ class Team extends Model
 
     public function hasAdmin($user)
     {
-        return $this->users()->where('user_id', $user->id)->where('role', 'admin')->exists();
+        return $this->users()->where('user_id', $user->id)->where('role_id', 'admin')->exists();
     }
 
     public function hasUser($user): bool
@@ -53,7 +58,7 @@ class Team extends Model
 
     public function addUser($userId, $roleId): void
     {
-        $this->users()->attach($userId, ['role' => $roleId]);
+        $this->users()->attach($userId, ['role_id' => $roleId]);
     }
 
     public function invitations(): BelongsToMany

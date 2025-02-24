@@ -75,7 +75,7 @@ export default function TeamSwitcher({
                         <DropdownMenuLabel className="text-xs text-muted-foreground">
                             Teams
                         </DropdownMenuLabel>
-                        {teams.map((team: TeamType) => <TeamItem key={team.id} team={team} />)}
+                        {teams.map((team: TeamType, index: number) => <TeamItem key={index} team={team} />)}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="gap-2 p-2"

@@ -13,8 +13,9 @@ use Inertia\Inertia;
 
 class TeamsController extends Controller
 {
-    public function show(Request $request, string $teamId)
+    public function show(Request $request, Team $team)
     {
+        $teamId = $team->id;
         if (!session('selected_team_id')) {
             session(['selected_team_id' => $teamId]);
         }
@@ -51,7 +52,7 @@ class TeamsController extends Controller
             1,
         );
 
-        return Redirect::route('t.active', ['team_id' => $team->id]);
+        return back();
     }
 
     public function destroy(Request $request)

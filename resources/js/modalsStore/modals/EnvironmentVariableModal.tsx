@@ -1,20 +1,13 @@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { useForm } from "@inertiajs/react";
 import { FormEventHandler, useRef } from "react";
-import { cn } from "@/lib/utils";
-import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
-import { CheckIcon, ChevronDownIcon, Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
 import { Transition } from "@headlessui/react";
 import { Input } from "@/Components/ui/input";
-import { GroupType, User } from "@/types";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/Components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
-import GroupItem from "@/Components/GroupItem";
+import { GroupType } from "@/types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
-import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/Components/ui/sheet";
 
 type InitialValues = {
     key: string;
@@ -142,8 +135,8 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
                                 <SelectValue placeholder={selectedGroup} />
                             </SelectTrigger>
                             <SelectContent>
-                                {groups?.map((group: GroupType) => (
-                                    <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>
+                                {groups?.map((group: GroupType, index: number) => (
+                                    <SelectItem key={index} value={group.id}>{group.name}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>

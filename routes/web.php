@@ -31,10 +31,10 @@ Route::middleware('auth')->group(function () {
         ShareTeamsData::class,
     ])->group(function () {
         Route::get('/', function () {
-            return redirect()->route('t', ['team_id' => session('selected_team_id')]);
+            return redirect()->route('t', ['team' => session('selected_team_id')]);
         })->name('t');
 
-        Route::prefix('{team_id}')->middleware([CheckTeamAccess::class])->group(function () {
+        Route::prefix('{team}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.active');
 
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');

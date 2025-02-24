@@ -24,7 +24,7 @@ class TeamPolicy
      */
     public function view(User $user, Team $team)
     {
-        return $user->hasAccessToTeam($team);
+        return $user->hasAccessToTeam($team->id);
     }
 
     /**
@@ -36,6 +36,6 @@ class TeamPolicy
      */
     public function admin(User $user, Team $team)
     {
-        return $team->users()->where('user_id', $user->id)->where('role', 'admin')->exists();
+        return $team->users()->where('user_id', $user->id)->where('role_id', 'admin')->exists();
     }
 }

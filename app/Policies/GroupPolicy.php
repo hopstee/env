@@ -24,7 +24,7 @@ class GroupPolicy
      */
     public function view(User $user, Group $team)
     {
-        return $user->hasAccessToTeam($team);
+        return $user->hasAccessToTeam($team->id);
     }
 
     /**
@@ -36,6 +36,6 @@ class GroupPolicy
      */
     public function admin(User $user, Group $team)
     {
-        return $team->users()->where('user_id', $user->id)->where('role', 'admin')->exists();
+        return $team->users()->where('user_id', $user->id)->where('role_id', 'admin')->exists();
     }
 }

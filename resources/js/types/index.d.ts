@@ -69,14 +69,21 @@ export type InvitationType = {
 }
 
 export type MembersDataType = {
-    id: number;
-    accessable_id: string;
-    accessable_type: string;
-    created_at: string;
-    role_id: number;
-    updated_at: string;
-    user: User;
-    user_id: number;
+    id: number
+    team_id: string
+    user_id: number
+    name: string
+    email: string
+    email_verified_at: string
+    created_at: string
+    updated_at: string
+    role: string
+    pivot: {
+        created_at: string
+        team_id: string
+        updated_at: string
+        user_id: number
+    }
 }
 
 export type EvironmentVariableFiltersType = {

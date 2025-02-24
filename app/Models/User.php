@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'team_users')->withPivot('role');
+        return $this->belongsToMany(Team::class, 'team_users')->withPivot('role_id');
     }
 
     public function hasAccessToTeam(string $teamId): bool

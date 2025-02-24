@@ -39,14 +39,14 @@ class InvitationsController extends Controller
     {
         $validatedData = $request->validate([
             'team'      => 'required|string',
-            'role'      => 'required|string|exists:roles,value',
+            'role_id'   => 'required|string|exists:roles,value',
             'emails'    => 'required|array',
             'emails.*'  => 'required|email',
         ]);
 
         $team = Team::findOrFail($validatedData['team']);
 
-        $role = Role::where('value', $validatedData['role'])->firstOrFail();
+        $role = Role::where('value', $validatedData['role_id'])->firstOrFail();
 
         $invitations = [];
         $skippedEmails = [];

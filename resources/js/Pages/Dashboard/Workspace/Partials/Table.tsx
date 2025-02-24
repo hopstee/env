@@ -112,13 +112,13 @@ export default function GroupsDataTable({
                     </TableHeader> */}
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                            table.getRowModel().rows.map((row, index) => (
                                 <TableRow
-                                    key={row.id}
+                                    key={index}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                    {row.getVisibleCells().map((cell, index) => (
+                                        <TableCell key={index}>
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()
@@ -177,8 +177,8 @@ export default function GroupsDataTable({
                     <Tabs defaultValue={perPage}>
                         <TabsList>
                             {perPageOptions.map((option, index: number) => (
-                                <Link href={option.link} preserveScroll={true}>
-                                    <TabsTrigger key={index} value={String(option.label)}>
+                                <Link key={index} href={option.link} preserveScroll={true}>
+                                    <TabsTrigger value={String(option.label)}>
                                         {option.label}
                                     </TabsTrigger>
                                 </Link>

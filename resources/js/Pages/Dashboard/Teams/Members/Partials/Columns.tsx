@@ -13,7 +13,7 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
 
     return [
         {
-            accessorKey: "user.name",
+            accessorKey: "name",
             enableColumnFilter: true,
             header: ({ column }) => {
                 return (
@@ -29,13 +29,13 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
             cell: ({ row }) => {
                 return (
                     <span className="px-4">
-                        {row.original.user.name}
+                        {row.getValue("name")}
                     </span>
                 )
             },
         },
         {
-            accessorKey: "user.email",
+            accessorKey: "email",
             enableColumnFilter: true,
             header: ({ column }) => {
                 return (
@@ -51,7 +51,7 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
             cell: ({ row }) => {
                 return (
                     <span className="px-4">
-                        {row.original.user.email}
+                        {row.getValue("email")}
                     </span>
                 )
             },
@@ -60,7 +60,7 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
             accessorKey: "created_at",
             header: () => <div className="text-left">Member From</div>,
             cell: ({ row }) => {
-                return format(row.getValue("created_at"), "dd-MM-yyyy")
+                return format(row.original.pivot.created_at, "dd-MM-yyyy")
             },
         },
         {
@@ -68,7 +68,7 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
             enableHiding: false,
             header: () => <div className="text-left">Team Role</div>,
             cell: ({ row }) => {
-                if (row.original.user.id === user.id) {
+                if (row.original.id === user.id) {
                     return (
                         <span
                             className="text-muted-foreground"

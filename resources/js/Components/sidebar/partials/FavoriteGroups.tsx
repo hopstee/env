@@ -70,13 +70,13 @@ export default function FavoriteGroups({
                         <SidebarMenuItem key={index}>
                             <SidebarMenuButton
                                 asChild
-                                isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
+                                isActive={route().current('t.active', { 'team': selectedTeamId, 'g': item.id })}
                                 tooltip={item.name}
                             >
                                 <Link
                                     href={
                                         route('t.active', {
-                                            'team_id': selectedTeamId,
+                                            'team': selectedTeamId,
                                             ...route().params,
                                             'g': item.id,
                                         })
@@ -101,7 +101,7 @@ export default function FavoriteGroups({
                                     align={isMobile ? "end" : "start"}
                                 >
                                     <div>
-                                        <Link href={route('t.active', { 'team_id': selectedTeamId, 'g': item.id })}>
+                                        <Link href={route('t.active', { 'team': selectedTeamId, 'g': item.id })}>
                                             <div className="w-4 h-4 ">
 
                                             </div>

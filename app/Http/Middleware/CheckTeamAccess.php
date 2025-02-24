@@ -16,7 +16,8 @@ class CheckTeamAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $teamId = $request->route('team_id');
+        $team = $request->route('team');
+        $teamId = $team->id;
 
         $hasAccess = $request->user()->hasAccessToTeam($teamId);
         if ($hasAccess) {
@@ -24,9 +25,8 @@ class CheckTeamAccess
         }
 
         if (!$hasAccess) {
-            $selectedTeamId = session('selected_team_id');
-            if ($selectedTeamId) {
-                return redirect()->to('/t/'. $selectedTeamId);
+            if ($teamId) {
+                return redirect()->to('/t/'. $teamId);
             }
 
             $team = $request->user()->teams()->first();
