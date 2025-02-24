@@ -58,7 +58,7 @@ const PaginationLink = ({
         }),
         className
     )
-    console.log(href);
+
     if (href) {
         return (
             <Link

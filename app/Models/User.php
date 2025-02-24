@@ -86,12 +86,12 @@ class User extends Authenticatable
     {
         $perPageOptions = [10, 25, 50, 100];
 
-        $groupIds = array_key_exists('g', $filters) ? explode(',', $filters['g']) : [];
+        $selectedGroupId = array_key_exists('g', $filters) ? $filters['g'] : '';
 
         $groupsQuery = $this->getAccessibleGroups($teamId)->with('environmentVariables');
 
-        if (!empty($groupIds)) {
-            $groupsQuery->whereIn('id', $groupIds);
+        if (!empty($selectedGroupId)) {
+            $groupsQuery->where('groups.id', $selectedGroupId);
         }
 
         $groups = $groupsQuery->get();

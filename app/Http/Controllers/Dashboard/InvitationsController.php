@@ -86,7 +86,6 @@ class InvitationsController extends Controller
     public function confirm(Request $request, string $token)
     {
         $invitation = Invitation::where('token', $token)->first();
-        Log::info("invitation", ["record" => $invitation]);
         if (!$invitation) {
             abort(404, 'Invitation not found');
         }
@@ -109,7 +108,7 @@ class InvitationsController extends Controller
                 'role_id' => $invitation->role_id,
             ]);
         }
-        Log::info("ACCESSABLE DATA", ["data" => $accessable]);
+        
         return redirect()->route('t')
             ->with('success', 'Invitation has been accepted.');
     }

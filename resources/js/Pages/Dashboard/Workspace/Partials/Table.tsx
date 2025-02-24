@@ -28,7 +28,6 @@ export default function GroupsDataTable({
 
     const selectedGroupIds = filters.g || [];
 
-    const [selectedGroups, setSelectedGroups] = useRemember<GroupType[]>(groups.filter(group => selectedGroupIds.includes(group.id)), 'selectedFilterGroups');
     const [queryString, setQueryString] = useState("");
 
     const perPage = String(metadata.per_page);
@@ -72,19 +71,9 @@ export default function GroupsDataTable({
         },
     })
 
-    // TODO: добавить виртуализацию для горизонтального скрола
-    // const rowVirtualizer = useVirtualizer({
-    //     count: rows.length,
-    //     estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
-    //     getScrollElement: () => tableContainerRef.current,
-    //     //measure dynamic row height, except in firefox because it measures table border height incorrectly
-    //     measureElement:
-    //       typeof window !== 'undefined' &&
-    //       navigator.userAgent.indexOf('Firefox') === -1
-    //         ? element => element?.getBoundingClientRect().height
-    //         : undefined,
-    //     overscan: 5,
-    //   })
+    const handleSelectGroup = (group: GroupType) => {
+        router.get(group.link);
+    }
 
     return (
         <div className="space-y-3 mt-3">
@@ -97,8 +86,8 @@ export default function GroupsDataTable({
                 />
                 <GroupsFilter
                     items={groups}
-                    selectedItems={selectedGroups}
-                    onStateChanged={setSelectedGroups}
+                    onValueChanged={handleSelectGroup}
+                    selected={groups.filter(group => group.id === filters.g)[0]}
                 />
             </div>
             <div className="rounded-md border">
@@ -180,7 +169,7 @@ export default function GroupsDataTable({
                     </PaginationContent>
                 </Pagination>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-center gap-3">
                     <div className="flex-1 text-sm text-muted-foreground">
                         {shown} of{" "}
                         {total} row(s).
@@ -188,11 +177,11 @@ export default function GroupsDataTable({
                     <Tabs defaultValue={perPage}>
                         <TabsList>
                             {perPageOptions.map((option, index: number) => (
-                                <TabsTrigger key={index} value={String(option.label)}>
-                                    <Link href={option.link} preserveScroll={true}>
+                                <Link href={option.link} preserveScroll={true}>
+                                    <TabsTrigger key={index} value={String(option.label)}>
                                         {option.label}
-                                    </Link>
-                                </TabsTrigger>
+                                    </TabsTrigger>
+                                </Link>
                             ))}
                         </TabsList>
                     </Tabs>

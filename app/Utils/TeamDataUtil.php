@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Http\Controllers\Dashboard\GroupsController;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +17,7 @@ class TeamDataUtil
         $teams = $user->teams;
         $teamId = session('selected_team_id') ?? $teams[0]->id;
 
-        $favoriteGroups = $user->getAccessibleGroups($teamId, true)->get()->toArray();
+        $favoriteGroups = GroupsController::getGroups($teamId)->toArray();
 
         $roles = json_decode(Role::all(), true);
         $groupedRoles = [

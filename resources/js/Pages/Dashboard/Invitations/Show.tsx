@@ -5,7 +5,6 @@ const AcceptInvitation = () => {
     const { invitation } = usePage().props;
 
     const handleConfirm = () => {
-        console.log('confirm')
         router.post(route('invitations.confirm', invitation.token));
     };
 

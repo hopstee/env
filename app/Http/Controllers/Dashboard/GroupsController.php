@@ -33,4 +33,32 @@ class GroupsController extends Controller
     {
         Group::where('id', $request->group_id)->delete();
     }
+
+    public static function getGroups(string $teamId, bool $addDefault = false)
+    {
+        $user = auth()->user();
+
+        $groups = $user->getAccessibleGroups($teamId)->get();
+        $groups = $groups->map(function ($group) {
+            return [
+                'id'          => $group->id,
+                'name'        => $group->name,
+                'color'       => $group->color,
+                'is_favorite' => $group->is_favorite,
+                'link'        => request()->fullUrlWithQuery(['g' => $group->id]),
+            ];
+        });
+        
+        if ($addDefault) {
+            $groups->prepend([
+                'id'          => null,
+                'name'        => 'All groups',
+                'color'       => 'GRAY_700',
+                'is_favorite' => false,
+                'link'        => request()->fullUrlWithQuery(['g' => null]),
+            ]);
+        }
+
+        return $groups;
+    }
 }

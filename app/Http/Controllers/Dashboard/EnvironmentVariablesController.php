@@ -29,13 +29,12 @@ class EnvironmentVariablesController extends Controller
 
     public function update(Request $request, EnvironmentVariable $variable)
     {
-        Log::info("Env Data", ["data" => $variable]);
         $validated = $request->validate([
             'key'       => 'required|string',
             'value'     => 'string',
             'group_id'  => 'required|string',
         ]);
-        Log::info("Validated data", ["data" => $validated]);
+
         $variable->update([
             'key'       => $validated['key'],
             'value'     => $validated['value'],

@@ -81,7 +81,6 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
                 return (
                     <Select
                         defaultValue={String(row.getValue("role_id"))}
-                        onValueChange={console.log}
                     >
                         <SelectTrigger className="w-40">
                             <SelectValue />

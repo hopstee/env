@@ -21,8 +21,7 @@ class TeamsController extends Controller
 
         $user = $request->user();
 
-        $groups = $user->getAccessibleGroups($teamId)->get();
-        $groupIds = $groups->pluck('groups.id')->toArray();
+        $groups = GroupsController::getGroups($teamId, true);
 
         $filters = $request->only(['g', 'page', 'perPage', 'query']);
         $variablesData = $user->getEnvironmentVariables($teamId, $filters);

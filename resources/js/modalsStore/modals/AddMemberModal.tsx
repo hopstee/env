@@ -61,7 +61,6 @@ export default function AddMemberModal(props: AddMemberModalProps) {
                 props.onClose()
             },
             onError: (errors) => {
-                console.log(errors)
                 toast.error('Errors')
             },
         });

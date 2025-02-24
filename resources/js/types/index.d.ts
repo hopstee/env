@@ -27,6 +27,7 @@ export type GroupType = {
     name: string;
     color: ColorKeys;
     is_favorite: boolean;
+    link: string;
 }
 
 export type EnvType = {
@@ -79,7 +80,7 @@ export type MembersDataType = {
 }
 
 export type EvironmentVariableFiltersType = {
-    g: string[];
+    g: string;
     page: number;
     perPage: number;
     query: string;
