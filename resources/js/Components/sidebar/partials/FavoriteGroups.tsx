@@ -69,8 +69,9 @@ export default function FavoriteGroups({
                     {items?.map((item: GroupType, index: number) => (
                         <SidebarMenuItem key={index}>
                             <SidebarMenuButton
-                                isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
                                 asChild
+                                isActive={route().current('t.active', { 'team_id': selectedTeamId, 'g': item.id })}
+                                tooltip={item.name}
                             >
                                 <Link
                                     href={

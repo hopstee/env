@@ -3,8 +3,7 @@ import ThemeSwitcher from '@/Components/ThemeSwitcher';
 import AppSidebar from '@/Components/sidebar/AppSidebar';
 import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
-import { ScrollArea } from '@/Components/ui/scroll-area';
-import { SidebarInset, SidebarProvider } from '@/Components/ui/sidebar';
+import { SidebarProvider } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
 import useModalStore from '@/modalsStore/useModalStore';
 import { GroupType, RolesType, TeamType } from '@/types';
@@ -44,41 +43,37 @@ export default function Authenticated({
         <SidebarProvider>
             <AppSidebar />
 
-            {/* <SidebarInset className='border overflow-hidden !ml-0'> */}
-                <div className="min-h-full bg-background w-full">
-                    <nav className="bg-card">
-                        <div className="px-3">
-                            <div className="flex h-16 justify-between">
-                                <div className="flex">
-                                    <div className="flex shrink-0 items-center">
-                                        <CustomTrigger />
-                                    </div>
-                                </div>
-
-                                <div className="ms-6 flex items-center gap-3">
-                                    <ThemeSwitcher />
-                                    <Button
-                                        variant="ghost"
-                                        size="sm-icon"
-                                        onClick={handleOpenModal}
-                                    >
-                                        <UserPlusIcon />
-                                    </Button>
-                                    <ProfileMenu />
+            <div className="min-h-full bg-background w-full">
+                <nav className="bg-card">
+                    <div className="px-3">
+                        <div className="flex h-16 justify-between">
+                            <div className="flex">
+                                <div className="flex shrink-0 items-center">
+                                    <CustomTrigger />
                                 </div>
                             </div>
-                        </div>
-                    </nav>
 
-                    {/* <ScrollArea className='min-h-full'> */}
-                        <div className="py-3 sm:py-6 lg:py-12">
-                            <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-12 space-y-3 sm:space-y-6 lg:space-y-6">
-                                <main>{children}</main>
+                            <div className="ms-6 flex items-center gap-3">
+                                <ThemeSwitcher />
+                                <Button
+                                    variant="ghost"
+                                    size="sm-icon"
+                                    onClick={handleOpenModal}
+                                >
+                                    <UserPlusIcon />
+                                </Button>
+                                <ProfileMenu />
                             </div>
                         </div>
-                    {/* </ScrollArea> */}
+                    </div>
+                </nav>
+
+                <div className="py-3 sm:py-6 lg:py-12">
+                    <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-12 space-y-3 sm:space-y-6 lg:space-y-6">
+                        <main>{children}</main>
+                    </div>
                 </div>
-            {/* </SidebarInset> */}
+            </div>
         </SidebarProvider>
     );
 }

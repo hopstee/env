@@ -22,7 +22,11 @@ export default function BottomNav({
                 <SidebarMenu>
                     {items.map((item: NavItemType, index: number) => (
                         <SidebarMenuItem key={index}>
-                            <SidebarMenuButton asChild isActive={route().current(item.route)}>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={route().current(item.route)}
+                                tooltip={item.title}
+                            >
                                 <Link href={item.url}>
                                     <item.icon />
                                     <span>{item.title}</span>
