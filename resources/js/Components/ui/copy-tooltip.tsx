@@ -21,7 +21,7 @@ export default function CopyTooltip({
     return (
         <Tooltip>
             <TooltipTrigger asChild>
-                <div onClick={handleCopy} className="cursor-pointer w-fit">
+                <div onClick={handleCopy} className="cursor-pointer w-full">
                     {trigger}
                 </div>
             </TooltipTrigger>

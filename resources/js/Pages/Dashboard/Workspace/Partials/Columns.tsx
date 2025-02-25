@@ -56,9 +56,11 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
             },
             cell: ({ row }) => {
                 return (
-                    <div className="w-[200px] truncate">
+                    <div className="w-[200px]">
                         <CopyTooltip
-                            trigger={row.getValue("key")}
+                            trigger={
+                                <div className="max-w-[200px] truncate">{row.getValue("key")}</div>
+                            }
                             valueToCopy={row.getValue("key")}
                         />
                     </div>
