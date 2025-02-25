@@ -67,29 +67,14 @@ export default function GroupsDataTable({
         },
     })
 
-    const handleSelectGroup = (group: GroupType) => {
-        router.get(group.link);
-    }
-
-    const handleSearchGroup = (value: string | undefined) => {
-        router.get(route('t.active', {...route().params}), {
-            query: value || undefined,
-        }, {
-            preserveState: true,
-            replace: true,
-        });
-    }
-
     return (
         <div className="space-y-3 mt-3">
             <div className="flex flex-col md:flex-row items-center gap-3">
                 <GroupSearch
-                    onSearch={handleSearchGroup}
-                    query={filters.query}
+                    queryParam={filters.query}
                 />
                 <GroupsFilter
                     items={groups}
-                    onValueChanged={handleSelectGroup}
                     selected={groups.filter(group => group.id === filters.g)[0]}
                 />
             </div>

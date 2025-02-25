@@ -76,6 +76,8 @@ export default function FavoriteGroups({
                                 <Link
                                     href={
                                         route('t.active', {
+                                            preserveState: true,
+                                            preserveScroll: true,
                                             ...route().params,
                                             'g': item.id,
                                         })

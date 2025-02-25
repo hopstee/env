@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { GroupType } from "@/types";
+import { router } from "@inertiajs/react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon } from "lucide-react";
 import { useState } from "react";
@@ -15,11 +16,9 @@ type Checked = DropdownMenuCheckboxItemProps["checked"]
 export default function GroupsFilter(
     {
         items,
-        onValueChanged,
         selected,
     }: {
         items: GroupType[];
-        onValueChanged: (item: GroupType) => void
         selected?: GroupType;
     }
 ) {
@@ -27,9 +26,10 @@ export default function GroupsFilter(
     const isMobile = useIsMobile()
 
     const [selectedItem, setSelectedItem] = useState(selected || items[0])
-    // const [selectedStatus, setSelectedStatus] = useState<Status | null>(
-    //     null
-    // )
+
+    const onValueChanged = (group: GroupType) => {
+        router.get(group.link);
+    }
 
     const handleSelectItem = (value: GroupType) => {
         setOpen(false);
