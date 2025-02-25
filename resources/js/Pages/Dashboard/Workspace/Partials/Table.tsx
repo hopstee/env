@@ -1,14 +1,14 @@
 import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from "@/types";
-import { Link, router, usePage, useRemember } from "@inertiajs/react"
+import { Link, router, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { groupColumns } from "./Columns";
 import { Input } from "@/Components/ui/input";
 import { Table, TableBody, TableCell, TableRow } from "@/Components/ui/table";
 import GroupsFilter from "./GroupsFilter";
 import { useState } from "react";
-import { Pagination, PaginationContent, PaginationFirst, PaginationItem, PaginationLast, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import GroupSearch from "./GroupsSearch";
 
 export default function GroupsDataTable({
     groups,
@@ -26,8 +26,6 @@ export default function GroupsDataTable({
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({});
     const [rowSelection, setRowSelection] = useRemember({});
 
-    const selectedGroupIds = filters.g || [];
-
     const [queryString, setQueryString] = useState("");
 
     const perPage = String(metadata.per_page);
@@ -41,11 +39,9 @@ export default function GroupsDataTable({
     const shown = (currentPage - 1) * metadata.per_page + metadata.data.length;
 
     const isFirstPage = currentPage === 1;
-    const firstPageUrl = isFirstPage ? null : metadata.first_page_url;
     const prevPageUrl = isFirstPage ? null : metadata.prev_page_url;
 
     const isLastPage = metadata.last_page === currentPage;
-    const lastPageUrl = isLastPage ? null : metadata.last_page_url;
     const nextPageUrl = isLastPage ? null : metadata.next_page_url;
 
     const table = useReactTable({
@@ -75,14 +71,21 @@ export default function GroupsDataTable({
         router.get(group.link);
     }
 
+    const handleSearchGroup = (value: string | undefined) => {
+        router.get(route('t.active', {...route().params}), {
+            query: value || undefined,
+        }, {
+            preserveState: true,
+            replace: true,
+        });
+    }
+
     return (
         <div className="space-y-3 mt-3">
             <div className="flex flex-col md:flex-row items-center gap-3">
-                <Input
-                    placeholder="Filter variables..."
-                    value={queryString}
-                    onChange={(event) => setQueryString(event.target.value)}
-                    className="w-full md:max-w-sm"
+                <GroupSearch
+                    onSearch={handleSearchGroup}
+                    query={filters.query}
                 />
                 <GroupsFilter
                     items={groups}
@@ -92,24 +95,6 @@ export default function GroupsDataTable({
             </div>
             <div className="rounded-md border">
                 <Table>
-                    {/* <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableHeader> */}
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row, index) => (

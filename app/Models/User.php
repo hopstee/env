@@ -87,8 +87,13 @@ class User extends Authenticatable
         $perPageOptions = [10, 25, 50, 100];
 
         $selectedGroupId = array_key_exists('g', $filters) ? $filters['g'] : '';
+        $environmentVariableNameQuery = array_key_exists('query', $filters) ? $filters['query'] : '';
 
-        $groupsQuery = $this->getAccessibleGroups($teamId)->with('environmentVariables');
+        $groupsQuery = $this->getAccessibleGroups($teamId)->with(['environmentVariables' => function ($query) use ($environmentVariableNameQuery) {
+            if (!empty($environmentVariableNameQuery)) {
+                $query->where('environment_variables.key', 'ILIKE', "%{$environmentVariableNameQuery}%"); // Используем ILIKE для нечувствительного к регистру поиска в PostgreSQL
+            }
+        }]);
 
         if (!empty($selectedGroupId)) {
             $groupsQuery->where('groups.id', $selectedGroupId);

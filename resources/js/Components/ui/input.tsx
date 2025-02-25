@@ -3,8 +3,13 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-    ({ className, type, ...props }, ref) => {
+type ExtendedInputType = {
+    startIcon?: React.ReactNode,
+    endIcon?: React.ReactNode,
+} & React.ComponentProps<"input">
+
+const Input = React.forwardRef<HTMLInputElement, ExtendedInputType>(
+    ({ className, type, startIcon, endIcon, ...props }, ref) => {
         const [showPass, setShowPass] = React.useState(false);
 
         return (
@@ -12,18 +17,22 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
                 "relative w-full",
                 className
             )}>
+                <div className="absolute top-0 left-0 h-10 w-10 flex items-center justify-center">
+                    {startIcon}
+                </div>
                 <input
                     type={(type === "password" && showPass) ? "text" : type}
                     className={cn(
                         "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
                         className,
-                        type === "password" && "pr-10",
+                        startIcon && "pl-10",
+                        (type === "password" || endIcon) && "pr-10",
                     )}
                     ref={ref}
                     {...props}
                 />
 
-                {type === "password" && (
+                {type === "password" ? (
                     <button
                         type="button"
                         onClick={() => setShowPass(!showPass)}
@@ -41,6 +50,10 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
                             )} />
                         }
                     </button>
+                ) : (
+                    <div className="absolute top-0 right-0 h-10 w-10 flex items-center justify-center">
+                        {endIcon}
+                    </div>
                 )}
             </div>
         )

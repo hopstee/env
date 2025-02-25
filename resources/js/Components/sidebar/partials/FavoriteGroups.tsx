@@ -76,7 +76,6 @@ export default function FavoriteGroups({
                                 <Link
                                     href={
                                         route('t.active', {
-                                            'team': selectedTeamId,
                                             ...route().params,
                                             'g': item.id,
                                         })
