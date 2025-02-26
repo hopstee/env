@@ -17,7 +17,7 @@ class TeamDataUtil
         $teams = $user->teams;
         $teamId = session('selected_team_id') ?? $teams[0]->id;
 
-        $favoriteGroups = GroupsController::getGroups($teamId)->toArray();
+        $favoriteGroups = $user->getAccessibleGroups($teamId, true)->get();
 
         $roles = json_decode(Role::all(), true);
         $groupedRoles = [

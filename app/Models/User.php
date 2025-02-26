@@ -63,15 +63,38 @@ class User extends Authenticatable
 
     public function getAccessibleGroups(string $teamId, bool $isFavorite = false)
     {
-        return $this->belongsToMany(Group::class, 'permissions')
+        $query = $this->belongsToMany(Group::class, 'permissions')
             ->withPivot('can_read', 'can_write')
             ->where('groups.team_id', $teamId)
             ->where('permissions.can_read', true)
-            ->when(
-                $isFavorite,
-                fn($query) =>
-                $query->where('groups.is_favorite', true)
-            );
+            ->withExists(['favoritedByUsers as is_favorite' => function ($query) {
+                $query->where('user_id', $this->id);
+            }]);
+
+        if ($isFavorite) {
+            $query->whereHas('favoritedByUsers', function ($q) {
+                $q->where('user_id', $this->id);
+            });
+        }
+
+        return $query;
+    }
+
+    public function favoriteGroups()
+    {
+        return $this->belongsToMany(Group::class, 'favorite_groups')->withTimestamps();
+    }
+
+    public function addFavoriteGroup(string $groupId)
+    {
+        if (!$this->favoriteGroups()->where('group_id', $groupId)->exists()) {
+            $this->favoriteGroups()->attach($groupId);
+        }
+    }
+
+    public function removeFavoriteGroup(string $groupId)
+    {
+        $this->favoriteGroups()->detach($groupId);
     }
 
     /**

@@ -55,9 +55,9 @@ class TeamsController extends Controller
         return back();
     }
 
-    public function destroy(Request $request)
+    public function destroy(Team $team)
     {
-        Team::where('id', $request->team_id)->delete();
+        $team->delete();
     }
 
     public static function createInitialTeam(string $name, int $userId, int $roleId = 1): Team

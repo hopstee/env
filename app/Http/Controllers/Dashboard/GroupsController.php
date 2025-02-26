@@ -58,9 +58,9 @@ class GroupsController extends Controller
         return back();
     }
 
-    public function destroy(Request $request)
+    public function destroy(Group $group)
     {
-        Group::where('id', $request->group_id)->delete();
+        $group->delete();
     }
 
     public static function getGroups(string $teamId, bool $addDefault = false)
@@ -89,5 +89,18 @@ class GroupsController extends Controller
         }
 
         return $groups;
+    }
+
+    public function toggleFavorite(Group $group, Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->favoriteGroups()->where('group_id', $group->id)->exists()) {
+            $user->removeFavoriteGroup($group->id);
+            return back();
+        } else {
+            $user->addFavoriteGroup($group->id, $group->team_id);
+            return back();
+        }
     }
 }

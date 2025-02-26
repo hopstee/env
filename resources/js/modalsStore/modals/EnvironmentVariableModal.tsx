@@ -9,6 +9,7 @@ import { GroupType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
 import { useIsMobile } from "@/hooks/use-mobile";
+import GroupItem from "@/Components/GroupItem";
 
 type InitialValues = {
     key: string;
@@ -42,7 +43,7 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
                     </DrawerHeader>
 
                     <div className="p-4">
-                        <EnvironmentVariableForm {...props}/>
+                        <EnvironmentVariableForm {...props} />
                     </div>
                 </DrawerContent>
             </Drawer>
@@ -56,7 +57,7 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
 
-                <EnvironmentVariableForm {...props}/>
+                <EnvironmentVariableForm {...props} />
             </DialogContent>
         </Dialog>
     )
@@ -72,7 +73,6 @@ function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
         post,
         reset,
         processing,
-        recentlySuccessful,
     } = useForm<InitialValues>({
         key: initialValues?.key || '',
         value: initialValues?.value || '',
@@ -156,8 +156,13 @@ function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
                         <SelectValue placeholder={selectedGroup} />
                     </SelectTrigger>
                     <SelectContent>
-                        {groups?.map((group: GroupType, index: number) => (
-                            <SelectItem key={index} value={group.id}>{group.name}</SelectItem>
+                        {groups?.filter(group => group.id).map((group: GroupType, index: number) => (
+                            <SelectItem key={index} value={group.id}>
+                                <GroupItem
+                                    name={group.name}
+                                    color={group.color}
+                                />
+                            </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>

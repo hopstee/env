@@ -1,6 +1,6 @@
 "use client"
 
-import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
+import { CopyIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -12,13 +12,12 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/Components/ui/sidebar"
-import { Link, router, useForm } from "@inertiajs/react"
+import { Link, useForm } from "@inertiajs/react"
 import { GroupType } from "@/types"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { IconTypes } from "@/lib/infoIcons"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
-import { cn } from "@/lib/utils"
 import GroupItem from "@/Components/GroupItem"
 
 export default function FavoriteGroups({
@@ -34,7 +33,7 @@ export default function FavoriteGroups({
     const { delete: destroy } = useForm()
 
     const handleConfirmDelete = (id: string) => {
-        destroy(route('group.destroy', { 'group_id': id }), {
+        destroy(route('group.destroy', { 'group': id }), {
             preserveScroll: true,
         });
     }
@@ -83,9 +82,24 @@ export default function FavoriteGroups({
                                         })
                                     }
                                 >
+                                    {/* <div className={cn(
+                                        "px-0.5 py-0 text-xs rounded-md overflow-hidden transition-all duration-400",
+                                        `bg-${COLORS[item.color].default} text-${COLORS[item.color].foreground}`,
+                                        open && "px-2 py-0.5"
+                                    )}>
+                                        <span
+                                            className={cn(
+                                                "opacity-0 transition-opacity duration-400",
+                                                open && "opacity-100"
+                                            )}
+                                        >
+                                            {item.name}
+                                        </span>
+                                    </div> */}
                                     <GroupItem
                                         name={item.name}
                                         color={item.color}
+                                        compact={!open}
                                     />
                                 </Link>
                             </SidebarMenuButton>

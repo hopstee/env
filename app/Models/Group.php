@@ -30,6 +30,12 @@ class Group extends Model
         });
     }
 
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorite_groups')->withTimestamps();
+    }
+
+
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);

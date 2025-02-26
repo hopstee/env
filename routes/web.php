@@ -11,7 +11,6 @@ use App\Http\Middleware\CheckTeamAccess;
 use App\Http\Middleware\RedirectToTeam;
 use App\Http\Middleware\ShareTeamsData;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -51,23 +50,20 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('team')->group(function () {
         Route::post('/', [TeamsController::class, 'store'])->name('team.create');
-        Route::delete('/{team_id}', [TeamsController::class, 'destroy'])->name('team.destroy');
+        Route::delete('/{team}', [TeamsController::class, 'destroy'])->name('team.destroy');
     });
 
     Route::prefix('group')->group(function () {
         Route::post('/', [GroupsController::class, 'store'])->name('group.create');
         Route::post('/{group}', [GroupsController::class, 'update'])->name('group.update');
-        Route::delete('/{group_id}', [GroupsController::class, 'destroy'])->name('group.destroy');
-        // Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
-        // Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');
-        // Route::post('/projects/archive', [ProjectsController::class, 'archiveMany'])->name('project.archive-many');
-        // Route::post('/projects/{project}/favToggle', [ProjectsController::class, 'favToggle'])->name('project.favToggle');
+        Route::post('/{group}/toggle-favorite', [GroupsController::class, 'toggleFavorite'])->name('group.favorite');
+        Route::delete('/{group}', [GroupsController::class, 'destroy'])->name('group.destroy');
     });
 
     Route::prefix('environmebt_variables')->group(function () {
         Route::post('/', [EnvironmentVariablesController::class, 'store'])->name('environmebt_variables.create');
         Route::post('/{variable}', [EnvironmentVariablesController::class, 'update'])->name('environmebt_variables.update');
-        Route::delete('/{env_id}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt_variables.destroy');
+        Route::delete('/{variable}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt_variables.destroy');
     });
 
     Route::prefix('profile')->group(function () {

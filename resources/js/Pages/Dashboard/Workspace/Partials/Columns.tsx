@@ -21,7 +21,7 @@ export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<Evir
             enableColumnFilter: true,
             cell: ({ row }) => {
                 return (
-                    <div className="max-w-[200px] w-fit">
+                    <div className="w-[200px]">
                         <CopyTooltip
                             trigger={
                                 <div className="truncate">{row.getValue("key")}</div>

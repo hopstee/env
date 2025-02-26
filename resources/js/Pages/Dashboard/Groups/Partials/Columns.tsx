@@ -22,28 +22,6 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
 
     return [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
             accessorKey: "name",
             enableColumnFilter: true,
             header: ({ column }) => {
@@ -66,6 +44,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
             size: 50,
             enableHiding: false,
             cell: ({ row }) => {
+                console.log(row.original)
                 const handleOpenCreateDialog = () => {
                     openModal(ModalTypes.GROUP_MODAL, {
                         title: "Add group",
@@ -79,12 +58,37 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                     })
                 }
 
+                const handleChangeFavoriteStatus = () => {
+                    router.post(route('group.favorite', { group: row.original.id, favorite: !row.original.is_favorite }), {
+                        preserveScroll: true,
+                    });
+                }
+
+                const handleDelete = () => {
+                    openModal(ModalTypes.CONFIRM_ALERT, {
+                        title: "Are you sure?",
+                        description: "This action cannot be undone. This will permanently delete group and remove it data from our servers.",
+                        onConfirm: handleConfirmDelete,
+                        type: IconTypes.ERROR
+                    })
+                }
+
+                const handleConfirmDelete = () => {
+                    router.delete(route('group.destroy', { group: row.original.id }), {
+                        preserveScroll: true,
+                    });
+                }
+
                 return (
                     <div>
-                        <Button variant="ghost" size="sm-icon">
-                            {row.getValue('is_favorite')
+                        <Button
+                            variant="ghost"
+                            size="sm-icon"
+                            onClick={handleChangeFavoriteStatus}
+                        >
+                            {row.original.is_favorite
                                 ? <HeartIcon className="size-4" />
-                                : <HeartOffIcon className="size-4" />
+                                : <HeartOffIcon className="size-4 stroke-2" />
                             }
                         </Button>
                         <Button
@@ -93,6 +97,14 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                             onClick={handleOpenCreateDialog}
                         >
                             <EditIcon className="size-4" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm-icon"
+                            onClick={handleDelete}
+                            className="text-red-600 hover:text-red-600"
+                        >
+                            <Trash2Icon className="size-4" />
                         </Button>
                     </div>
                 )

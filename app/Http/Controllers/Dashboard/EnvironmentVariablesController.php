@@ -44,8 +44,8 @@ class EnvironmentVariablesController extends Controller
         return back();
     }
 
-    public function destroy(Request $request)
+    public function destroy(EnvironmentVariable $variable)
     {
-        EnvironmentVariable::where('id', $request->env_id)->delete();
+        $variable->delete();
     }
 }
