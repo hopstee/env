@@ -4,12 +4,26 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class GroupsController extends Controller
 {
+    public function show(Request $request, Team $team)
+    {
+        $groups = $this->getGroups($team->id);
+
+        return Inertia::render(
+            'Dashboard/Groups/Show',
+            [
+                'groups' => $groups,
+            ]
+        );
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -27,6 +41,21 @@ class GroupsController extends Controller
         $group->grantPermission($request->user()->id, true, true);
 
         return Redirect::back();
+    }
+
+    public function update(Request $request, Group $group)
+    {
+        $validated = $request->validate([
+            'name'  => 'required|string',
+            'color' => 'required|string',
+        ]);
+
+        $group->update([
+            'name'  => $validated['name'],
+            'color' => $validated['color'],
+        ]);
+
+        return back();
     }
 
     public function destroy(Request $request)
@@ -48,7 +77,7 @@ class GroupsController extends Controller
                 'link'        => request()->fullUrlWithQuery(['g' => $group->id]),
             ];
         });
-        
+
         if ($addDefault) {
             $groups->prepend([
                 'id'          => null,

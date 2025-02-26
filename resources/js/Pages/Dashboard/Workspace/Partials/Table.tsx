@@ -1,8 +1,7 @@
 import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from "@/types";
-import { Link, router, useRemember } from "@inertiajs/react"
+import { Link, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { groupColumns } from "./Columns";
-import { Input } from "@/Components/ui/input";
+import { environmentVariablesColumns } from "./Columns";
 import { Table, TableBody, TableCell, TableRow } from "@/Components/ui/table";
 import GroupsFilter from "./GroupsFilter";
 import { useState } from "react";
@@ -10,7 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationNext, Paginati
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import GroupSearch from "./GroupsSearch";
 
-export default function GroupsDataTable({
+export default function EnvironmentVariablesDataTable({
     groups,
     variables,
     metadata,
@@ -25,8 +24,6 @@ export default function GroupsDataTable({
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({});
     const [rowSelection, setRowSelection] = useRemember({});
-
-    const [queryString, setQueryString] = useState("");
 
     const perPage = String(metadata.per_page);
     const perPageOptions = metadata.per_page_options;
@@ -46,7 +43,7 @@ export default function GroupsDataTable({
 
     const table = useReactTable({
         data: variables,
-        columns: groupColumns(groups),
+        columns: environmentVariablesColumns(groups),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -100,7 +97,7 @@ export default function GroupsDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={groupColumns.length}
+                                    colSpan={environmentVariablesColumns.length}
                                     className="h-16 text-center"
                                 >
                                     No results.

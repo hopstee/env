@@ -4,7 +4,7 @@ import { FormEventHandler, MouseEventHandler, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
-import { Loader2Icon, PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
 import { Transition } from "@headlessui/react";
 import { defaultEmoji } from "../../constants/emoji";
 import { Input } from "@/Components/ui/input";
@@ -15,16 +15,26 @@ import InputError from "@/Components/InputError";
 type InitialValues = {
     name: string;
     color: ColorKeys;
+    group_id?: string;
 }
 
 export type GroupModalProps = {
     onClose: () => void;
     title: string;
     teamId: string;
+    edit?: boolean;
     initialValues?: InitialValues;
 }
 
 export default function GroupModal(props: GroupModalProps) {
+    const {
+        onClose,
+        title,
+        teamId,
+        edit = false,
+        initialValues,
+    } = props;
+
     const projectNameInput = useRef<HTMLInputElement>(null);
 
     const {
@@ -36,26 +46,31 @@ export default function GroupModal(props: GroupModalProps) {
         processing,
         recentlySuccessful,
     } = useForm({
-        name: props.initialValues?.name || '',
-        color: props.initialValues?.color || "RED_500",
-        team_id: props.teamId,
+        name: initialValues?.name || '',
+        color: initialValues?.color || "RED_500",
+        team_id: teamId,
     });
 
     const addGroup: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('group.create'), {
-            preserveScroll: true,
-            onSuccess: () => {
-                handleOpenState()
-            },
-            onError: (errors) => {
-                if (errors.name) {
-                    reset('name');
-                    projectNameInput.current?.focus();
-                }
-            },
-        });
+        post(
+            edit
+                ? route('group.update', { group: initialValues?.group_id })
+                : route('group.create'),
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    handleOpenState()
+                },
+                onError: (errors) => {
+                    if (errors.name) {
+                        reset('name');
+                        projectNameInput.current?.focus();
+                    }
+                },
+            }
+        );
     };
 
     const selectColor = (color: ColorKeys) => {
@@ -64,14 +79,14 @@ export default function GroupModal(props: GroupModalProps) {
 
     const handleOpenState = () => {
         reset()
-        props.onClose()
+        onClose()
     }
 
     return (
         <Dialog open={true} onOpenChange={handleOpenState}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{props.title}</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={addGroup} className="space-y-6">
@@ -136,9 +151,9 @@ export default function GroupModal(props: GroupModalProps) {
                         <Button disabled={processing}>
                             {processing
                                 ? <Loader2Icon className="animate-spin" />
-                                : <PlusIcon />
+                                : edit ? <SaveIcon /> : <PlusIcon />
                             }
-                            Add
+                            {edit ? "Update" : "Add"}
                         </Button>
                     </DialogFooter>
                 </form>

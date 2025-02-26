@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
         Route::prefix('{team}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.active');
 
+            Route::get('/groups', [GroupsController::class, 'show'])->name('t.groups');
+
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
 
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
@@ -54,6 +56,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('group')->group(function () {
         Route::post('/', [GroupsController::class, 'store'])->name('group.create');
+        Route::post('/{group}', [GroupsController::class, 'update'])->name('group.update');
         Route::delete('/{group_id}', [GroupsController::class, 'destroy'])->name('group.destroy');
         // Route::delete('/', [ProjectsController::class, 'destroyMany'])->name('project.destroy-many');
         // Route::post('/projects/{project}/archiveToggle', [ProjectsController::class, 'archiveToggle'])->name('project.archiveToggle');

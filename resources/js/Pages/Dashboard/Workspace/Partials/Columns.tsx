@@ -1,59 +1,24 @@
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
-import { Checkbox } from "@/Components/ui/checkbox"
 import CopyTooltip from "@/Components/ui/copy-tooltip"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { COLORS } from "@/constants/colors"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
 import { EvironmentVariableType, GroupType } from "@/types"
-import { Link, router, useForm, usePage } from "@inertiajs/react"
+import { useForm } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { ArchiveIcon, ArchiveRestoreIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, EyeIcon, EyeOffIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
+import { ArrowUpDownIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
-export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
+export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
     return [
-        // {
-        //     id: "select",
-        //     header: ({ table }) => (
-        //         <Checkbox
-        //             checked={
-        //                 table.getIsAllPageRowsSelected() ||
-        //                 (table.getIsSomePageRowsSelected() && "indeterminate")
-        //             }
-        //             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        //             aria-label="Select all"
-        //         />
-        //     ),
-        //     cell: ({ row }) => (
-        //         <Checkbox
-        //             checked={row.getIsSelected()}
-        //             onCheckedChange={(value) => row.toggleSelected(!!value)}
-        //             aria-label="Select row"
-        //         />
-        //     ),
-        //     enableSorting: false,
-        //     enableHiding: false,
-        // },
         {
             accessorKey: "key",
             enableColumnFilter: true,
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Key
-                        <ArrowUpDownIcon />
-                    </Button>
-                )
-            },
             cell: ({ row }) => {
                 return (
                     <div className="max-w-[200px] w-fit">
@@ -71,7 +36,6 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
             accessorKey: "value",
             enableColumnFilter: false,
             enableResizing: true,
-            header: ({ column }) => <div className="text-left">Value</div>,
             cell: ({ row }) => {
                 const [showValue, setShowValue] = useState(false);
 
@@ -111,7 +75,6 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
         },
         {
             accessorKey: "group_name",
-            header: () => <div className="text-left">Group</div>,
             cell: ({ row }) => {
                 const colorKey = row.original.group_color;
                 const defaultColor = COLORS[colorKey].default;
@@ -129,7 +92,6 @@ export const groupColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableT
         },
         {
             accessorKey: "updated_at",
-            header: () => <div className="text-left">Last updated</div>,
             cell: ({ row }) => {
                 const date = format(row.getValue("updated_at"), 'dd-MM-yyyy')
 

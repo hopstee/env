@@ -1,4 +1,4 @@
-import { BookOpenIcon, LayoutDashboardIcon, LifeBuoyIcon, SendIcon, SettingsIcon, UsersIcon } from "lucide-react"
+import { BookOpenIcon, LayoutDashboardIcon, LifeBuoyIcon, ListIcon, SendIcon, SettingsIcon, UsersIcon } from "lucide-react"
 
 import {
     Sidebar,
@@ -20,10 +20,10 @@ const navMain = (teamId: string): NavItemType[] => [
         route: "t.active",
     },
     {
-        title: "Readme",
-        url: `/t/${teamId}/readme`,
-        icon: BookOpenIcon,
-        route: "t.readme",
+        title: "Groups",
+        url: `/t/${teamId}/groups`,
+        icon: ListIcon,
+        route: "t.groups",
     },
     {
         title: "Members",

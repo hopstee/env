@@ -1,27 +1,30 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import EnvironmentVariablesDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
 import { PlusCircleIcon } from 'lucide-react';
 import useModalStore from '@/modalsStore/useModalStore';
 import { ModalTypes } from '@/constants/modals';
+import GroupsDataTable from './Partials/Table';
 
-export default function Dashboard({
+export default function Groups({
     groups,
-    variablesData,
-    filters,
 }: {
     groups: GroupType[];
-    variablesData: VariablesPaginatedDataType;
-    filters: EvironmentVariableFiltersType;
 }) {
+    const {
+        selectedTeamId,
+    }: {
+        selectedTeamId: string,
+    } = usePage().props;
+
     const { openModal } = useModalStore();
 
     const handleOpenCreateDialog = () => {
-        openModal(ModalTypes.ENVIRONMENT_VARIABLE_MODAL, {
-            title: "Add environment variable",
-            groups,
+        openModal(ModalTypes.GROUP_MODAL, {
+            title: "Add group",
+            teamId: selectedTeamId
         })
     }
 
@@ -31,7 +34,7 @@ export default function Dashboard({
 
             <div className="w-full flex items-center justify-between">
                 <span>
-                    Environmet variables
+                    Groups
                 </span>
                 <Button
                     size="sm"
@@ -43,11 +46,9 @@ export default function Dashboard({
                 </Button>
             </div>
 
-            <EnvironmentVariablesDataTable
+            <GroupsDataTable
                 groups={groups}
-                variables={variablesData.data}
-                metadata={variablesData}
-                filters={filters}
+                teamId={selectedTeamId}
             />
         </AuthenticatedLayout>
     );
