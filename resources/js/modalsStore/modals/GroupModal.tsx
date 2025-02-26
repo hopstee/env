@@ -1,16 +1,14 @@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
 import { useForm } from "@inertiajs/react";
-import { FormEventHandler, MouseEventHandler, useRef } from "react";
+import { FormEventHandler, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { Label } from "@/Components/ui/label";
 import { Button } from "@/Components/ui/button";
 import { Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
-import { Transition } from "@headlessui/react";
-import { defaultEmoji } from "../../constants/emoji";
 import { Input } from "@/Components/ui/input";
-import { Textarea } from "@/Components/ui/textarea";
 import { COLORS, ColorKeys } from "@/constants/colors";
 import InputError from "@/Components/InputError";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type InitialValues = {
     name: string;
@@ -27,13 +25,41 @@ export type GroupModalProps = {
 }
 
 export default function GroupModal(props: GroupModalProps) {
-    const {
-        onClose,
-        title,
-        teamId,
-        edit = false,
-        initialValues,
-    } = props;
+    const { onClose, title } = props;
+
+    const isMobile = useIsMobile()
+
+    if (isMobile) {
+        return (
+            <Drawer open={true} onOpenChange={onClose}>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>{title}</DrawerTitle>
+                    </DrawerHeader>
+
+                    <div className="p-4">
+                        <GroupForm {...props}/>
+                    </div>
+                </DrawerContent>
+            </Drawer>
+        )
+    }
+
+    return (
+        <Dialog open={true} onOpenChange={onClose}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                </DialogHeader>
+
+                <GroupForm {...props}/>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+function GroupForm(props: GroupModalProps) {
+    const { onClose, teamId, edit = false, initialValues } = props;
 
     const projectNameInput = useRef<HTMLInputElement>(null);
 
@@ -61,7 +87,8 @@ export default function GroupModal(props: GroupModalProps) {
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    handleOpenState()
+                    reset()
+                    onClose()
                 },
                 onError: (errors) => {
                     if (errors.name) {
@@ -77,87 +104,62 @@ export default function GroupModal(props: GroupModalProps) {
         setData('color', color);
     }
 
-    const handleOpenState = () => {
-        reset()
-        onClose()
-    }
-
     return (
-        <Dialog open={true} onOpenChange={handleOpenState}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                </DialogHeader>
-
-                <form onSubmit={addGroup} className="space-y-6">
-                    <div className="w-full">
-                        <div className="grid grid-cols-5 gap-1">
-                            {(Object.keys(COLORS) as ColorKeys[]).map((color: ColorKeys, index: number) => (
-                                <div
-                                    key={index}
-                                    onClick={() => selectColor(color)}
-                                    className={cn(
-                                        "h-6 rounded-md bg-background hover:bg-muted cursor-pointer p-2",
-                                        data.color === color && "bg-muted"
-                                    )}
-                                >
-                                    <div className={cn(
-                                        "h-full w-full rounded",
-                                        `bg-${COLORS[color].default}`,
-                                    )}></div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="w-full flex">
-                        <div className="size-10 p-3">
+        <form onSubmit={addGroup} className="space-y-6">
+            <div className="w-full">
+                <div className="grid grid-cols-5 gap-1">
+                    {(Object.keys(COLORS) as ColorKeys[]).map((color: ColorKeys, index: number) => (
+                        <div
+                            key={index}
+                            onClick={() => selectColor(color)}
+                            className={cn(
+                                "h-6 rounded-md bg-background hover:bg-muted cursor-pointer p-2",
+                                data.color === color && "bg-muted"
+                            )}
+                        >
                             <div className={cn(
-                                'size-4 rounded-full',
-                                `bg-${COLORS[data.color].default}`,
+                                "h-full w-full rounded",
+                                `bg-${COLORS[color].default}`,
                             )}></div>
                         </div>
-                        <div className="w-full">
-                            <Input
-                                id="name"
-                                placeholder="Dev, Prod, ..."
-                                ref={projectNameInput}
-                                value={data.name}
-                                onChange={(e) =>
-                                    setData('name', e.target.value)
-                                }
-                                type="text"
-                                className="block w-full"
-                                autoComplete="name"
-                            />
+                    ))}
+                </div>
+            </div>
 
-                            <InputError message={errors.name} className="mt-1" />
-                        </div>
-                    </div>
+            <div className="w-full flex">
+                <div className="size-10 p-3">
+                    <div className={cn(
+                        'size-4 rounded-full',
+                        `bg-${COLORS[data.color].default}`,
+                    )}></div>
+                </div>
+                <div className="w-full">
+                    <Input
+                        id="name"
+                        placeholder="Dev, Prod, ..."
+                        ref={projectNameInput}
+                        value={data.name}
+                        onChange={(e) =>
+                            setData('name', e.target.value)
+                        }
+                        type="text"
+                        className="block w-full"
+                        autoComplete="name"
+                    />
 
-                    <DialogFooter>
-                        <Transition
-                            show={recentlySuccessful}
-                            enter="transition ease-in-out"
-                            enterFrom="opacity-0"
-                            leave="transition ease-in-out"
-                            leaveTo="opacity-0"
-                        >
-                            <p className="text-sm text-gray-600">
-                                👌 Done
-                            </p>
-                        </Transition>
+                    <InputError message={errors.name} className="mt-1" />
+                </div>
+            </div>
 
-                        <Button disabled={processing}>
-                            {processing
-                                ? <Loader2Icon className="animate-spin" />
-                                : edit ? <SaveIcon /> : <PlusIcon />
-                            }
-                            {edit ? "Update" : "Add"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+            <DialogFooter>
+                <Button disabled={processing}>
+                    {processing
+                        ? <Loader2Icon className="animate-spin" />
+                        : edit ? <SaveIcon /> : <PlusIcon />
+                    }
+                    {edit ? "Update" : "Add"}
+                </Button>
+            </DialogFooter>
+        </form>
     )
 }

@@ -1,13 +1,14 @@
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { useForm } from "@inertiajs/react";
-import { FormEventHandler, useRef } from "react";
+import { FormEventHandler } from "react";
 import { Button } from "@/Components/ui/button";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
 import { Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
-import { Transition } from "@headlessui/react";
 import { Input } from "@/Components/ui/input";
 import { GroupType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type InitialValues = {
     key: string;
@@ -28,10 +29,41 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
     const {
         onClose,
         title,
-        groups,
-        edit = false,
-        initialValues,
     } = props;
+
+    const isMobile = useIsMobile()
+
+    if (isMobile) {
+        return (
+            <Drawer open={true} onOpenChange={onClose}>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>{title}</DrawerTitle>
+                    </DrawerHeader>
+
+                    <div className="p-4">
+                        <EnvironmentVariableForm {...props}/>
+                    </div>
+                </DrawerContent>
+            </Drawer>
+        )
+    }
+
+    return (
+        <Dialog open={true} onOpenChange={onClose}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{title}</DialogTitle>
+                </DialogHeader>
+
+                <EnvironmentVariableForm {...props}/>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
+    const { onClose, groups, edit = false, initialValues } = props;
 
     const {
         data,
@@ -54,7 +86,7 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
 
         post(
             edit
-                ? route('environmebt_variables.update', {'variable': initialValues?.env_id})
+                ? route('environmebt_variables.update', { 'variable': initialValues?.env_id })
                 : route('environmebt_variables.create'),
             {
                 preserveScroll: true,
@@ -79,94 +111,69 @@ export default function EnvironmentVariableModal(props: EnvironmentVariableModal
         );
     };
 
-    const handleOpenState = () => {
-        reset()
-        onClose()
-    }
-
     return (
-        <Dialog open={true} onOpenChange={handleOpenState}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-                </DialogHeader>
+        <form onSubmit={createEnv} className="space-y-3">
+            <div className="w-full flex space-x-3">
+                <div className="w-full">
+                    <Input
+                        id="name"
+                        placeholder="key"
+                        value={data.key}
+                        onChange={(e) =>
+                            setData('key', e.target.value)
+                        }
+                        type="text"
+                        className="block w-full"
+                        autoComplete="name"
+                    />
 
-                <form onSubmit={createEnv} className="space-y-3">
-                    <div className="w-full flex space-x-3">
-                        <div className="w-full">
-                            <Input
-                                id="name"
-                                placeholder="key"
-                                value={data.key}
-                                onChange={(e) =>
-                                    setData('key', e.target.value)
-                                }
-                                type="text"
-                                className="block w-full"
-                                autoComplete="name"
-                            />
+                    <InputError message={errors.key} className="mt-1" />
+                </div>
 
-                            <InputError message={errors.key} className="mt-1" />
-                        </div>
+                <div className="w-full">
+                    <Input
+                        id="name"
+                        placeholder="value"
+                        value={data.value}
+                        onChange={(e) =>
+                            setData('value', e.target.value)
+                        }
+                        type="text"
+                        className="block w-full"
+                        autoComplete="name"
+                    />
 
-                        <div className="w-full">
-                            <Input
-                                id="name"
-                                placeholder="value"
-                                value={data.value}
-                                onChange={(e) =>
-                                    setData('value', e.target.value)
-                                }
-                                type="text"
-                                className="block w-full"
-                                autoComplete="name"
-                            />
+                    <InputError message={errors.value} className="mt-1" />
+                </div>
+            </div>
 
-                            <InputError message={errors.value} className="mt-1" />
-                        </div>
-                    </div>
+            <div className="w-full">
+                <Select
+                    value={data.group_id}
+                    onValueChange={(group) => setData('group_id', group)}
+                >
+                    <SelectTrigger className="w-full text-base md:text-sm">
+                        <SelectValue placeholder={selectedGroup} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {groups?.map((group: GroupType, index: number) => (
+                            <SelectItem key={index} value={group.id}>{group.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
 
-                    <div className="w-full">
-                        <Select
-                            value={data.group_id}
-                            onValueChange={(group) => setData('group_id', group)}
-                        >
-                            <SelectTrigger className="w-full text-base md:text-sm">
-                                <SelectValue placeholder={selectedGroup} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {groups?.map((group: GroupType, index: number) => (
-                                    <SelectItem key={index} value={group.id}>{group.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                <InputError message={errors.group_id} className="mt-1" />
+            </div>
 
-                        <InputError message={errors.group_id} className="mt-1" />
-                    </div>
-
-                    <DialogFooter>
-                        <Transition
-                            show={recentlySuccessful}
-                            enter="transition ease-in-out"
-                            enterFrom="opacity-0"
-                            leave="transition ease-in-out"
-                            leaveTo="opacity-0"
-                        >
-                            <p className="text-sm text-gray-600">
-                                👌 Done
-                            </p>
-                        </Transition>
-
-                        <Button disabled={processing}>
-                            {processing
-                                ? <Loader2Icon className="animate-spin" />
-                                : edit ? <SaveIcon /> : <PlusIcon />
-                            }
-                            {edit ? "Update" : "Add"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+            <DialogFooter>
+                <Button disabled={processing}>
+                    {processing
+                        ? <Loader2Icon className="animate-spin" />
+                        : edit ? <SaveIcon /> : <PlusIcon />
+                    }
+                    {edit ? "Update" : "Add"}
+                </Button>
+            </DialogFooter>
+        </form>
     )
 }
