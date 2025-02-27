@@ -4,7 +4,6 @@ import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { cn } from '@/lib/utils';
-import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { Loader2Icon, SaveIcon } from 'lucide-react';
 import { FormEventHandler, useRef } from 'react';
@@ -140,18 +139,6 @@ export default function UpdatePasswordForm({
                             }
                             Save
                         </Button>
-
-                        <Transition
-                            show={recentlySuccessful}
-                            enter="transition ease-in-out"
-                            enterFrom="opacity-0"
-                            leave="transition ease-in-out"
-                            leaveTo="opacity-0"
-                        >
-                            <p className="text-sm text-gray-600">
-                                Saved.
-                            </p>
-                        </Transition>
                     </div>
                 </form>
             </CardContent>

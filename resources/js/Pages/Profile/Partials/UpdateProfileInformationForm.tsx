@@ -4,7 +4,6 @@ import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { cn } from '@/lib/utils';
-import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Loader2Icon, SaveIcon } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -115,18 +114,6 @@ export default function UpdateProfileInformation({
                             }
                             Save
                         </Button>
-
-                        <Transition
-                            show={recentlySuccessful}
-                            enter="transition ease-in-out"
-                            enterFrom="opacity-0"
-                            leave="transition ease-in-out"
-                            leaveTo="opacity-0"
-                        >
-                            <p className="text-sm text-gray-600">
-                                Saved.
-                            </p>
-                        </Transition>
                     </div>
                 </form>
             </CardContent>

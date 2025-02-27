@@ -2,18 +2,16 @@ import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { Label } from "@/Components/ui/label";
 import { cn } from "@/lib/utils";
-import { Transition } from "@headlessui/react";
 import { useForm } from "@inertiajs/react";
 import { Loader2Icon, UserPlusIcon } from "lucide-react";
 import { FormEventHandler } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { RoleType, RolesType, TeamType, GroupType } from "@/types";
+import { RoleType, RolesType, TeamType } from "@/types";
 import TagInput from "@/Components/ui/tag-input";
 import InputError from "@/Components/InputError";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
-import { ScrollArea } from "@/Components/ui/scroll-area";
 
 type FormData = {
     team: string;

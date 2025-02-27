@@ -44,7 +44,6 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
             size: 50,
             enableHiding: false,
             cell: ({ row }) => {
-                console.log(row.original)
                 const handleOpenCreateDialog = () => {
                     openModal(ModalTypes.GROUP_MODAL, {
                         title: "Add group",
@@ -59,7 +58,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                 }
 
                 const handleChangeFavoriteStatus = () => {
-                    router.post(route('group.favorite', { group: row.original.id, favorite: !row.original.is_favorite }), {
+                    router.post(route('group.toggle-favorite', { group: row.original.id }), {
                         preserveScroll: true,
                     });
                 }
@@ -88,7 +87,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                         >
                             {row.original.is_favorite
                                 ? <HeartIcon className="size-4" />
-                                : <HeartOffIcon className="size-4 stroke-2" />
+                                : <HeartOffIcon className="size-4" />
                             }
                         </Button>
                         <Button
