@@ -44,7 +44,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
             size: 50,
             enableHiding: false,
             cell: ({ row }) => {
-                const handleOpenCreateDialog = () => {
+                const handleOpenEditDialog = () => {
                     openModal(ModalTypes.GROUP_MODAL, {
                         title: "Add group",
                         teamId,
@@ -79,33 +79,41 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                 }
 
                 return (
-                    <div>
-                        <Button
-                            variant="ghost"
-                            size="sm-icon"
-                            onClick={handleChangeFavoriteStatus}
-                        >
-                            {row.original.is_favorite
-                                ? <HeartIcon className="size-4" />
-                                : <HeartOffIcon className="size-4" />
-                            }
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm-icon"
-                            onClick={handleOpenCreateDialog}
-                        >
-                            <EditIcon className="size-4" />
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm-icon"
-                            onClick={handleDelete}
-                            className="text-red-600 hover:text-red-600"
-                        >
-                            <Trash2Icon className="size-4" />
-                        </Button>
-                    </div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontalIcon />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem
+                                onClick={handleChangeFavoriteStatus}
+                            >
+                                {row.original.is_favorite
+                                    ? <HeartOffIcon className="size-4" />
+                                    : <HeartIcon className="size-4" />
+                                }
+                                {row.original.is_favorite
+                                    ? "Remove from favorite"
+                                    : "Add to favorite"
+                                }
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={handleOpenEditDialog}
+                            >
+                                <EditIcon className="size-4" />
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                                onClick={handleDelete}
+                            >
+                                <Trash2Icon />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )
             },
         },

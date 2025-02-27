@@ -35,16 +35,10 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('{team}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.active');
-
             Route::get('/groups', [GroupsController::class, 'show'])->name('t.groups');
-
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
-
+            Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
-
-            Route::prefix('invitations')->group(function () {
-               
-            });
         });
     });
 
@@ -66,6 +60,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{variable}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt_variables.destroy');
     });
 
+    Route::prefix('members')->group(function () {
+        Route::delete('/{user}', [MembersController::class, 'destroy'])->name('members.destroy');
+    });
+
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
@@ -73,12 +71,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('invitations')->group(function () {
-        Route::get('/accept/{token}', [InvitationsController::class, 'show'])->name('invitations.show');
-
+        Route::get('/accept/{token}', [InvitationsController::class, 'accept'])->name('invitations.accept');
+        
         Route::post('/send', [InvitationsController::class, 'send'])->name('invitations.send');
         
         Route::post('/confirm/{token}', [InvitationsController::class, 'confirm'])->name('invitations.confirm');
         Route::post('/decline/{token}', [InvitationsController::class, 'decline'])->name('invitations.decline');
+        
+        Route::post('/revoked/{invitation}', [InvitationsController::class, 'revoke'])->name('invitations.revoke');
     });
 });
 

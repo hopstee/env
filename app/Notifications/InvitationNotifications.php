@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Invitation;
+use App\Models\Team;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -13,13 +14,15 @@ class InvitationNotifications extends Notification
     use Queueable;
 
     protected $invitation;
+    protected $team;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Invitation $invitation)
+    public function __construct(Invitation $invitation, Team $team)
     {
         $this->invitation = $invitation;
+        $this->team = $team;
     }
 
     /**

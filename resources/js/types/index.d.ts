@@ -48,41 +48,55 @@ export type EvironmentVariableType = {
     updated_at: string;
 }
 
-type RoleType = {
+export type RoleType = {
     id: number;
     name: string;
     value: string;
 }
 
-export type RolesType = {
-    'team': RoleType[];
-    'project': RoleType[];
-    'env': RoleType[];
-}
-
-export type InvitationType = {
+export type InvitationsDataType = {
+    id: number;
+    email: string;
+    status: string;
+    team_id: string;
     token: string;
-    role_id: number;
-    accessable: {
+    invited_by: {
+        id: number;
         name: string;
+        email: string;
+        email_verified_at: string | null;
+        updated_at: string;
+        created_at: string;
     }
+    role_id: number;
+    role: {
+        id: number
+        name: string;
+        value: string;
+        updated_at: string;
+        created_at: string;
+    }
+    expires_at: string;
+    updated_at: string;
+    created_at: string;
 }
 
 export type MembersDataType = {
-    id: number
-    team_id: string
-    user_id: number
-    name: string
-    email: string
-    email_verified_at: string
-    created_at: string
-    updated_at: string
-    role: string
+    id: number;
+    team_id: string;
+    user_id: number;
+    name: string;
+    email: string;
+    email_verified_at: string;
+    created_at: string;
+    updated_at: string;
+    role_id: number;
+    role_name: string;
     pivot: {
-        created_at: string
-        team_id: string
-        updated_at: string
-        user_id: number
+        created_at: string;
+        team_id: string;
+        updated_at: string;
+        user_id: number;
     }
 }
 
@@ -123,12 +137,11 @@ export type PageProps<
     auth: {
         user: User;
     };
+    success: string;
     selectedTeamId: string;
     teams: TeamType[];
     groups: GroupType[];
     favoriteGroups: GroupType[];
     envs: EnvType[];
-    roles: RolesType;
-    invitation: InvitationType;
-    selectedGroupIds: string[];
+    roles: RoleType[];
 };

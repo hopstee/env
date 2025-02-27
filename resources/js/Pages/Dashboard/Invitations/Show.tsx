@@ -1,27 +1,18 @@
 import { Button } from '@/Components/ui/button';
-import { router, usePage } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head, router, usePage } from '@inertiajs/react';
+import InvitationsDataTable from './Partials/Table';
 
-const AcceptInvitation = () => {
-    const { invitation } = usePage().props;
-
-    const handleConfirm = () => {
-        router.post(route('invitations.confirm', invitation.token));
-    };
-
-    const handleDecline = () => {
-        router.post(route('invitations.decline', invitation.token));
-    };
+export default function Invitations({invitations}: {invitations: any}) {
+    console.log(invitations)
 
     return (
-        <div>
-            <h1>Invitation</h1>
-            <p>You have been invited to {invitation.accessable.name} team as a {invitation.role_id}.</p>
-            <div>
-                <Button onClick={handleConfirm}>Accepr</Button>
-                <Button onClick={handleDecline}>Decline</Button>
-            </div>
-        </div>
+        <AuthenticatedLayout>
+            <Head title="Team Invitations" />
+
+            <InvitationsDataTable
+                invitationsData={invitations}
+            />
+        </AuthenticatedLayout>
     );
 };
-
-export default AcceptInvitation;

@@ -7,7 +7,7 @@
 <body>
     <h1>You have been invited!</h1>
     <p>
-        You have been invited to the {{ $invitation->accessable->name }} team in {{ $invitation->role->name }} role.
+        You have been invited to the {{ $team->name }} team in {{ $invitation->role->name }} role.
     </p>
     <p>
         Follow the link to confirm invitation:

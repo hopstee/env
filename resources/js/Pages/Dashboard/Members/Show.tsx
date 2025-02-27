@@ -15,7 +15,7 @@ export default function Members({
         auth,
         roles,
     } = usePage().props
-    console.log(members)
+
     return (
         <AuthenticatedLayout>
             <Head title="Team Members" />

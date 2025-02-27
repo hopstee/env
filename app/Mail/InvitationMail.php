@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Invitation;
+use App\Models\Team;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -15,13 +16,15 @@ class InvitationMail extends Mailable
     use Queueable, SerializesModels;
 
     public $invitation;
+    public $team;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Invitation $invitation)
+    public function __construct(Invitation $invitation, Team $team)
     {
         $this->invitation = $invitation;
+        $this->team = $team;
     }
 
     /**

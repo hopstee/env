@@ -1,4 +1,4 @@
-import { MembersDataType, RolesType, TeamType, User } from "@/types";
+import { MembersDataType, RoleType, User } from "@/types";
 import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { memberColumns } from "./Columns";
@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 interface MemberTypesDataTable {
     membersData: MembersDataType[];
-    roles: RolesType;
+    roles: RoleType[];
     user: User;
 }
 

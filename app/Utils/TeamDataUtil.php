@@ -19,41 +19,13 @@ class TeamDataUtil
 
         $favoriteGroups = $user->getAccessibleGroups($teamId, true)->get();
 
-        $roles = json_decode(Role::all(), true);
-        $groupedRoles = [
-            'team'    => [],
-            'project' => [],
-            'env'     => [],
-        ];
-
-        foreach ($roles as $role) {
-            switch ($role['value']) {
-                case 'team_admin':
-                    $groupedRoles['team'][] = self::filterRoleFields($role);
-                    break;
-
-                case 'project_admin':
-                    $groupedRoles['project'][] = self::filterRoleFields($role);
-                    break;
-
-                case 'env_admin':
-                    $groupedRoles['env'][] = self::filterRoleFields($role);
-                    break;
-
-                case 'viewer':
-                    $filteredViewer = self::filterRoleFields($role);
-                    $groupedRoles['team'][] = $filteredViewer;
-                    $groupedRoles['project'][] = $filteredViewer;
-                    $groupedRoles['env'][] = $filteredViewer;
-                    break;
-            }
-        }
+        $roles = Role::all();
 
         Inertia::share([
             'selectedTeamId'    => $teamId,
             'teams'             => $teams,
             'favoriteGroups'    => $favoriteGroups,
-            'roles'             => $groupedRoles,
+            'roles'             => $roles,
         ]);
     }
 

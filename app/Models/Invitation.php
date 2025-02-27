@@ -9,17 +9,21 @@ class Invitation extends Model
     protected $fillable = [
         'email',
         'token',
-        'accessable_id',
-        'accessable_type',
+        'team_id',
         'role_id',
         'status',
         'invited_by',
         'expires_at',
     ];
 
-    public function accessable()
+    public function team()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Team::class, 'team_id');
+    }
+
+    public function invitedBy()
+    {
+        return $this->belongsTo(User::class, 'invited_by');
     }
 
     public function role()

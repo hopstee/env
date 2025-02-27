@@ -2,14 +2,18 @@ import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { MembersDataType, RoleType, RolesType, User } from "@/types"
+import { MembersDataType, RoleType, User } from "@/types"
 import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
+import useModalStore from "@/modalsStore/useModalStore"
+import { ModalTypes } from "@/constants/modals"
+import { IconTypes } from "@/lib/infoIcons"
 
-export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDataType>[] => {
+export const memberColumns = (user: User, roles: RoleType[]): ColumnDef<MembersDataType>[] => {
+    const { openModal } = useModalStore();
 
     return [
         {
@@ -86,7 +90,7 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            {roles['team'].map((role: RoleType, index: number) => {
+                            {roles.map((role: RoleType, index: number) => {
                                 return <SelectItem key={index} value={String(role.id)}>{role.name}</SelectItem>
                             })}
                         </SelectContent>
@@ -105,20 +109,32 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
                     selectedTeamId: string,
                 } = usePage().props;
 
-                // const project = row.original
+                const handleConfirmDelete = () => {
+                    router.delete(route('members.destroy', { user: row.original.user_id }), {
+                        preserveScroll: true,
+                    });
+                }
+
+                const handleDelete = () => {
+                    openModal(ModalTypes.CONFIRM_ALERT, {
+                        title: "Are you sure?",
+                        description: "This action cannot be undone. This will permanently delete member and remove it data from our servers.",
+                        onConfirm: handleConfirmDelete,
+                        type: IconTypes.ERROR
+                    });
+                }
 
                 return (
-                    <div className="space-x-1">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreHorizontalIcon />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
-                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                {/* <DropdownMenuItem
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontalIcon />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem
                                     onClick={() => navigator.clipboard.writeText(project.id)}
                                 >
                                     <CopyIcon className="text-muted-foreground" />
@@ -145,17 +161,18 @@ export const memberColumns = (user: User, roles: RolesType): ColumnDef<MembersDa
                                     )}
                                     {project.is_fav ? 'Remove from fav' : 'Add to fav'}
                                 </DropdownMenuItem>
-                                <DropdownMenuSeparator />
+                                <DropdownMenuSeparator /> */}
+                            {row.original.role_id !== 1 && (
                                 <DropdownMenuItem
                                     className="text-red-600 focus:text-red-600 focus:bg-red-50"
                                     onClick={handleDelete}
                                 >
                                     <Trash2Icon />
                                     Delete
-                                </DropdownMenuItem> */}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )
             },
         },

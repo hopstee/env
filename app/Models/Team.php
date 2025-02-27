@@ -33,12 +33,11 @@ class Team extends Model
 
     public function users(): BelongsToMany
     {
-        // TODO: пофиксить получение пользователей
         return $this->belongsToMany(User::class, 'team_users')
             ->withPivot('*')
             ->withTimestamps()
             ->join('roles', 'team_users.role_id', '=', 'roles.id')
-            ->addSelect('roles.name as role_name');
+            ->addSelect('users.*', 'roles.name as role_name');
     }
 
     public function groups(): HasMany
@@ -61,8 +60,13 @@ class Team extends Model
         $this->users()->attach($userId, ['role_id' => $roleId]);
     }
 
-    public function invitations(): BelongsToMany
+    public function invitations(bool $withForeignData = false): HasMany
     {
-        return $this->belongsToMany(Invitation::class);
+        if ($withForeignData) {
+            return $this->hasMany(Invitation::class, 'team_id')
+                ->with(['invitedBy', 'role']);
+        }
+
+        return $this->hasMany(Invitation::class, 'team_id');
     }
 }

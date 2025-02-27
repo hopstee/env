@@ -4,19 +4,21 @@ import { Label } from "@/Components/ui/label";
 import { cn } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
 import { Loader2Icon, UserPlusIcon } from "lucide-react";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { RoleType, RolesType, TeamType } from "@/types";
+import { RoleType, TeamType } from "@/types";
 import TagInput from "@/Components/ui/tag-input";
 import InputError from "@/Components/InputError";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
+import { Input } from "@/Components/ui/input";
 
 type FormData = {
-    team: string;
+    team_id: string;
     role: string;
-    emails: string[];
+    // emails: string[];
+    email: string;
 }
 
 export type AddMemberModalProps = {
@@ -24,7 +26,7 @@ export type AddMemberModalProps = {
     title: string;
     selectedTeamId: string,
     teams: TeamType[],
-    roles: RolesType,
+    roles: RoleType[],
 }
 
 export default function AddMemberModal(props: AddMemberModalProps) {
@@ -64,6 +66,8 @@ export default function AddMemberModal(props: AddMemberModalProps) {
 function AddMemberForm(props: AddMemberModalProps) {
     const { onClose, selectedTeamId, teams, roles } = props;
 
+    const [emailValid, setEmailValid] = useState(false);
+
     const {
         data,
         setData,
@@ -73,9 +77,10 @@ function AddMemberForm(props: AddMemberModalProps) {
         reset,
         processing,
     } = useForm<FormData>({
-        team: selectedTeamId,
-        role: roles['team'][1]?.value,
-        emails: [],
+        team_id: selectedTeamId,
+        role: String(roles[1]?.value),
+        // emails: [],
+        email: ""
     });
 
     const sendInvitations: FormEventHandler = (e) => {
@@ -88,22 +93,38 @@ function AddMemberForm(props: AddMemberModalProps) {
                 onClose()
             },
             onError: (errors) => {
-                toast.error('Errors')
+                toast.error('Errors', {
+                    description: JSON.stringify(errors)
+                })
             },
         });
     };
+
+    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+
+        if (isValidEmail(value)) {
+            setError('email', "")
+            setEmailValid(true);
+        } else {
+            setError('email', 'Email is not valid')
+            setEmailValid(false);
+        }
+        
+        setData('email', value);
+    }
 
     return (
         <form onSubmit={sendInvitations} className="space-y-2">
             <div className="flex flex-col sm:flex-row gap-2">
                 <div className="w-full">
                     <Label
-                        className={cn(errors.team && "text-destructive")}
+                        className={cn(errors.team_id && "text-destructive")}
                     >
                         Team
                     </Label>
 
-                    <Select defaultValue={data.team} onValueChange={(teamId) => setData('team', teamId)}>
+                    <Select defaultValue={data.team_id} onValueChange={(teamId) => setData('team_id', teamId)}>
                         <SelectTrigger className="w-full">
                             <SelectValue />
                         </SelectTrigger>
@@ -127,8 +148,8 @@ function AddMemberForm(props: AddMemberModalProps) {
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            {roles['team'].map((role: RoleType, index: number) => (
-                                <SelectItem key={index} value={role.value}>{role.name}</SelectItem>
+                            {roles.map((role: RoleType, index: number) => (
+                                <SelectItem key={index} value={String(role.value)}>{role.name}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
@@ -140,12 +161,23 @@ function AddMemberForm(props: AddMemberModalProps) {
             <div>
                 <Label
                     htmlFor="email"
-                    className={cn(errors.emails && "text-destructive")}
+                    className={cn(errors.email && "text-destructive")}
                 >
-                    Members
+                    Member
                 </Label>
 
-                <TagInput
+                <Input
+                    id="email"
+                    value={data.email}
+                    onChange={handleChangeEmail}
+                    type="email"
+                    placeholder="Member Email"
+                    className="mt-1 w-full"
+                    autoComplete="email"
+                    autoFocus={true}
+                />
+
+                {/* <TagInput
                     id="email"
                     tags={data.emails}
                     onChange={(emails) => setData("emails", emails)}
@@ -157,13 +189,13 @@ function AddMemberForm(props: AddMemberModalProps) {
                     setError={(msg: string) => setError("emails", msg)}
                     validationCallback={isValidEmail}
                     autoFocus={true}
-                />
+                /> */}
 
-                <InputError message={errors.emails} className="mt-1" />
+                <InputError message={errors.email} className="mt-1" />
             </div>
 
             <div className="flex items-center justify-end gap-4">
-                <Button disabled={processing || errors.emails !== "" || data.emails.length === 0}>
+                <Button disabled={processing || errors.email !== "" || !emailValid}>
                     {processing
                         ? <Loader2Icon className="animate-spin" />
                         : <UserPlusIcon />

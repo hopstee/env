@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('token', 64);
             $table->string('team_id');
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->enum('status', ['pending', 'accepted', 'expired', 'revoked'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'expired', 'revoked', 'declined'])->default('pending');
             $table->foreignId('invited_by')->constrained('users')->onDelete('cascade');
             $table->timestamp('expires_at');
             $table->timestamps();
-            $table->unique('token', 'token_unique');
+            $table->unique('token');
         });
     }
 

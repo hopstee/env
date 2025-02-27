@@ -6,10 +6,11 @@ import { Button } from '@/Components/ui/button';
 import { SidebarProvider } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
 import useModalStore from '@/modalsStore/useModalStore';
-import { GroupType, RolesType, TeamType } from '@/types';
+import { GroupType, RoleType, TeamType } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
+import { toast } from 'sonner';
 
 export default function Authenticated({
     header,
@@ -20,12 +21,18 @@ export default function Authenticated({
         teams,
         groups,
         roles,
+        success,
     }: {
         selectedTeamId: string,
         teams: TeamType[],
         groups: GroupType[],
-        roles: RolesType,
+        roles: RoleType[],
+        success: string;
     } = usePage().props
+
+    if (success) {
+        toast.success('Success', { description: success });
+    }
 
     const { openModal } = useModalStore()
 
@@ -34,7 +41,6 @@ export default function Authenticated({
             title: "Invite members to team",
             selectedTeamId,
             teams,
-            groups,
             roles,
         });
     }

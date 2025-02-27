@@ -8,13 +8,15 @@ import { IconTypes } from "@/lib/infoIcons"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
 import { EvironmentVariableType, GroupType } from "@/types"
-import { useForm } from "@inertiajs/react"
+import { router, useForm } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { ArrowUpDownIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
 export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
+    const { openModal } = useModalStore();
+    
     return [
         {
             accessorKey: "key",
@@ -109,9 +111,6 @@ export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<Evir
             size: 50,
             enableHiding: false,
             cell: ({ row }) => {
-                const { openModal } = useModalStore();
-                const { delete: destroy } = useForm();
-
                 const originalData = row.original;
 
                 const handleOpenEditModal = () => {
@@ -129,7 +128,7 @@ export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<Evir
                 };
 
                 const handleConfirmDelete = () => {
-                    destroy(route('environmebt_variables.destroy', { env_id: originalData.id }), {
+                    router.delete(route('environmebt_variables.destroy', { variable: originalData.id }), {
                         preserveScroll: true,
                     });
                 }
