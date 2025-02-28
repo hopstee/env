@@ -6,6 +6,9 @@ export type User = {
     name: string;
     email: string;
     email_verified_at?: string;
+    is_admin: boolean;
+    created_at: string;
+    updated_at: string;
 }
 
 export type TeamType = {
@@ -82,21 +85,20 @@ export type InvitationsDataType = {
 }
 
 export type MembersDataType = {
-    id: number;
-    team_id: string;
-    user_id: number;
-    name: string;
-    email: string;
-    email_verified_at: string;
-    created_at: string;
-    updated_at: string;
+    is_owner: boolean;
+    is_admin: boolean;
     role_id: number;
     role_name: string;
+    team_owner_id: number;
+    user_email: string;
+    user_id: number;
+    user_name: string;
+    created_at: string;
     pivot: {
         created_at: string;
         team_id: string;
-        updated_at: string;
         user_id: number;
+        role_id: number;
     }
 }
 
@@ -137,6 +139,9 @@ export type PageProps<
     auth: {
         user: User;
     };
+    flash: {
+        success: string;
+    }
     success: string;
     selectedTeamId: string;
     teams: TeamType[];

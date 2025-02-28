@@ -19,20 +19,12 @@ export default function Authenticated({
     const {
         selectedTeamId,
         teams,
-        groups,
         roles,
-        success,
-    }: {
-        selectedTeamId: string,
-        teams: TeamType[],
-        groups: GroupType[],
-        roles: RoleType[],
-        success: string;
     } = usePage().props
 
-    if (success) {
-        toast.success('Success', { description: success });
-    }
+    // if (success) {
+    //     toast.success('Success', { description: success });
+    // }
 
     const { openModal } = useModalStore()
 

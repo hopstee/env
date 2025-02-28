@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 class GroupsController extends Controller
 {
-    public function show(Request $request, Team $team)
+    public function show(Team $team)
     {
         $groups = $this->getGroups($team->id);
 

@@ -14,6 +14,7 @@ export default function Members({
     const {
         auth,
         roles,
+        selectedTeamId,
     } = usePage().props
 
     return (
@@ -24,6 +25,7 @@ export default function Members({
                 membersData={members}
                 roles={roles}
                 user={auth.user}
+                selectedTeamId={selectedTeamId}
             />
         </AuthenticatedLayout>
     );

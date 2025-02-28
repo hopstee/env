@@ -36,7 +36,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'teams',
     ];
+    
+    protected $appends = ['is_admin'];
 
     /**
      * Get the attributes that should be cast.
@@ -59,6 +62,20 @@ class User extends Authenticatable
     public function hasAccessToTeam(string $teamId): bool
     {
         return $this->teams()->where('teams.id', $teamId)->exists();
+    }
+
+    public function getIsAdminAttribute(): bool {
+        $teamId = session('selected_team_id');
+
+        if (!$teamId) {
+            return false;
+        }
+
+        return TeamUser::leftJoin('roles', 'team_users.role_id', '=', 'roles.id')
+            ->where('team_users.team_id', $teamId)
+            ->where('team_users.user_id', $this->id)
+            ->where('roles.value', 'admin')
+            ->exists();
     }
 
     public function getAccessibleGroups(string $teamId, bool $isFavorite = false)

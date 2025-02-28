@@ -9,12 +9,14 @@ interface MemberTypesDataTable {
     membersData: MembersDataType[];
     roles: RoleType[];
     user: User;
+    selectedTeamId: string;
 }
 
 export default function MembersDataTable({
     membersData,
     roles,
     user,
+    selectedTeamId,
 }: MemberTypesDataTable) {
     const [sorting, setSorting] = useRemember<SortingState>([])
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
@@ -23,7 +25,7 @@ export default function MembersDataTable({
 
     const table = useReactTable({
         data: membersData,
-        columns: memberColumns(user, roles),
+        columns: memberColumns(user, roles, selectedTeamId),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),

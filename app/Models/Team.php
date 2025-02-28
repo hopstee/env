@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Team extends Model
 {
@@ -32,18 +34,27 @@ class Team extends Model
         });
     }
 
+    public function scopeCurrent(Builder $query): Team
+    {
+        return $query->where('id', session('selected_team_id'))->first();
+    }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_users')
-            // // ->withPivot('*')
-            // ->withTimestamps()
-            // ->leftJoin('users', 'team_users.user_id', '=', 'users.id')
-            // ->leftJoin('roles', 'team_users.role_id', '=', 'roles.id')
-            // ->addSelect('users.*', 'roles.*');
-            ->withPivot('*') // Если нужны поля из team_users
-            ->withTimestamps()
+            ->withPivot('created_at')
             ->leftJoin('roles', 'team_users.role_id', '=', 'roles.id')
-            ->select('users.*', 'roles.name as role_name', 'team_users.role_id');
+            ->leftJoin('teams', 'team_users.team_id', '=', 'teams.id')
+            ->select(
+                'users.id as user_id',
+                'users.name as user_name',
+                'users.email as user_email',
+                'roles.id as role_id',
+                'roles.name as role_name',
+                'team_users.role_id as pivot_role_id',
+                'teams.owner_id as team_owner_id',
+                DB::raw('CASE WHEN teams.owner_id = users.id THEN true ELSE false END as is_owner'),
+            );
     }
 
     public function groups(): HasMany

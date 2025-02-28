@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Models\User;
+use App\Utils\TeamDataUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +27,8 @@ class TeamsController extends Controller
 
         $filters = $request->only(['g', 'page', 'perPage', 'query']);
         $variablesData = $user->getEnvironmentVariables($teamId, $filters);
+
+        TeamDataUtil::shareSelectedTeamData($request);
 
         return Inertia::render(
             'Dashboard/Workspace/Show',

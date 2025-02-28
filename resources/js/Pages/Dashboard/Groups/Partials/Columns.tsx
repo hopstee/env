@@ -106,7 +106,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                                 Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                className="text-red-600 focus:text-red-600 focus:bg-red-50"
+                                className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
                                 onClick={handleDelete}
                             >
                                 <Trash2Icon />

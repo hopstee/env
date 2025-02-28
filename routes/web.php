@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('members')->group(function () {
+        Route::put('/role/{user}', [MembersController::class, 'updateRole'])->name('members.update-role');
         Route::delete('/{user}', [MembersController::class, 'destroy'])->name('members.destroy');
     });
 

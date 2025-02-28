@@ -123,7 +123,7 @@ export default function FavoriteGroups({
                                             Remove from favorite
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                            className="text-red-600 focus:text-red-600 focus:bg-red-600/10"
+                                            className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
                                             onClick={() => confirmDelete(item.id)}
                                         >
                                             <Trash2Icon />

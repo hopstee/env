@@ -105,7 +105,7 @@ class InvitationsController extends Controller
             'role_id'   => $invitation->role_id,
         ]);
 
-        return redirect()->route('t')
+        return redirect()->route('t.active', $invitation->team_id)
             ->with('success', 'Invitation has been accepted.');
     }
 
