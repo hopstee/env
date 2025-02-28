@@ -44,7 +44,7 @@ class TeamsController extends Controller
             'type' => 'required',
         ]);
 
-        $team = self::createTeam(
+        self::createTeam(
             $request->name,
             $request->type,
             'cookie',
@@ -85,10 +85,12 @@ class TeamsController extends Controller
             'name'          => $name,
             'type'          => $type,
             'icon'          => $icon,
+            'owner_id'      => $userId,
             'personal_team' => $personalTeam,
         ]);
 
         $team->addUser($userId, $roleId);
+        session(["selected_tea_id" => $team->id]);
 
         return $team;
     }

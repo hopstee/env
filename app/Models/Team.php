@@ -17,6 +17,7 @@ class Team extends Model
         'name',
         'type',
         'icon',
+        'owner_id',
         'personal_team',
     ];
 
@@ -34,10 +35,15 @@ class Team extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'team_users')
-            ->withPivot('*')
+            // // ->withPivot('*')
+            // ->withTimestamps()
+            // ->leftJoin('users', 'team_users.user_id', '=', 'users.id')
+            // ->leftJoin('roles', 'team_users.role_id', '=', 'roles.id')
+            // ->addSelect('users.*', 'roles.*');
+            ->withPivot('*') // Если нужны поля из team_users
             ->withTimestamps()
-            ->join('roles', 'team_users.role_id', '=', 'roles.id')
-            ->addSelect('users.*', 'roles.name as role_name');
+            ->leftJoin('roles', 'team_users.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.name as role_name', 'team_users.role_id');
     }
 
     public function groups(): HasMany

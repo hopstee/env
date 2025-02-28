@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 50);
             $table->string('type', 50);
             $table->string('icon', 30);
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->boolean('personal_team')->default(false);
             $table->timestamps();
         });

@@ -106,7 +106,6 @@ function GroupsList({
                             onSelect={() => {
                                 handleSelect(item)
                             }}
-                            className="cursor-pointer"
                         >
                             <GroupItem
                                 name={item.name}
