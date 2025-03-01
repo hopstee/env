@@ -16,7 +16,7 @@ export default function GroupItem(
     return (
         <Badge
             className={cn(
-                "transition-all duration-500",
+                "transition-all duration-500 block w-fit",
                 `bg-${COLORS[color].default} hover:bg-${COLORS[color].default} text-${COLORS[color].foreground}`,
                 compact && "px-0 h-4"
             )}

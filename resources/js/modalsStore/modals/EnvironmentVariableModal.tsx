@@ -157,7 +157,10 @@ function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
                     </SelectTrigger>
                     <SelectContent>
                         {groups?.filter(group => group.id).map((group: GroupType, index: number) => (
-                            <SelectItem key={index} value={group.id}>
+                            <SelectItem
+                                key={index}
+                                value={group.id}
+                            >
                                 <GroupItem
                                     name={group.name}
                                     color={group.color}

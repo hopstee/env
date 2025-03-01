@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import EnvironmentVariablesDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
 import { PlusCircleIcon } from 'lucide-react';
@@ -16,6 +16,10 @@ export default function Dashboard({
     variablesData: VariablesPaginatedDataType;
     filters: EvironmentVariableFiltersType;
 }) {
+    const {
+        auth,
+    } = usePage().props;
+
     const { openModal } = useModalStore();
 
     const handleOpenCreateDialog = () => {
@@ -33,14 +37,16 @@ export default function Dashboard({
                 <span>
                     Environmet variables
                 </span>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleOpenCreateDialog}
-                >
-                    <PlusCircleIcon className="size-4 mr-1" />
-                    Add
-                </Button>
+                {auth.user.is_admin && (
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleOpenCreateDialog}
+                    >
+                        <PlusCircleIcon className="size-4 mr-1" />
+                        Add
+                    </Button>
+                )}
             </div>
 
             <EnvironmentVariablesDataTable

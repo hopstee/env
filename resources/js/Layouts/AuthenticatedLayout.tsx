@@ -20,6 +20,7 @@ export default function Authenticated({
         selectedTeamId,
         teams,
         roles,
+        auth,
     } = usePage().props
 
     // if (success) {
@@ -53,13 +54,15 @@ export default function Authenticated({
 
                             <div className="ms-6 flex items-center gap-3">
                                 <ThemeSwitcher />
-                                <Button
-                                    variant="ghost"
-                                    size="sm-icon"
-                                    onClick={handleOpenModal}
-                                >
-                                    <UserPlusIcon />
-                                </Button>
+                                {auth.user.is_admin && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm-icon"
+                                        onClick={handleOpenModal}
+                                    >
+                                        <UserPlusIcon />
+                                    </Button>
+                                )}
                                 <ProfileMenu />
                             </div>
                         </div>

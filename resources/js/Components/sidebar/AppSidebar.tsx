@@ -12,7 +12,7 @@ import FavoriteGroups from "./partials/FavoriteGroups"
 import { NavItemType, GroupType, TeamType } from "@/types"
 import BottomNav from "./partials/BottomNav"
 
-const navMain = (teamId: string): NavItemType[] => [
+const baseMainNav = (teamId: string): NavItemType[] => [
     {
         title: "Workspace",
         url: `/t/${teamId}`,
@@ -25,6 +25,9 @@ const navMain = (teamId: string): NavItemType[] => [
         icon: ListIcon,
         route: "t.groups",
     },
+];
+
+const adminMainNav = (teamId: string): NavItemType[] => [
     {
         title: "Members",
         url: `/t/${teamId}/members`,
@@ -65,11 +68,14 @@ export default function AppSidebar() {
         selectedTeamId,
         teams,
         favoriteGroups,
-    }: {
-        selectedTeamId: string,
-        teams: TeamType[],
-        favoriteGroups: GroupType[],
+        auth,
     } = usePage().props;
+
+    let nav = baseMainNav(selectedTeamId);
+
+    if (auth.user.is_admin) {
+        nav = [...nav, ...adminMainNav(selectedTeamId)];
+    }
 
     return (
         <Sidebar
@@ -78,10 +84,10 @@ export default function AppSidebar() {
         >
             <SidebarHeader>
                 <TeamSwitcher teams={teams} selectedTeamId={selectedTeamId} />
-                <MainNav items={navMain(selectedTeamId)} />
+                <MainNav items={nav} />
             </SidebarHeader>
             <SidebarContent>
-                <FavoriteGroups items={favoriteGroups} selectedTeamId={selectedTeamId} />
+                <FavoriteGroups items={favoriteGroups} selectedTeamId={selectedTeamId} isAdmin={auth.user.is_admin} />
                 <BottomNav items={secondaryItems(selectedTeamId)} className="mt-auto" />
             </SidebarContent>
         </Sidebar>

@@ -15,8 +15,7 @@ export default function Groups({
 }) {
     const {
         selectedTeamId,
-    }: {
-        selectedTeamId: string,
+        auth,
     } = usePage().props;
 
     const { openModal } = useModalStore();
@@ -36,14 +35,16 @@ export default function Groups({
                 <span>
                     Groups
                 </span>
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleOpenCreateDialog}
-                >
-                    <PlusCircleIcon className="size-4 mr-1" />
-                    Add
-                </Button>
+                {auth.user.is_admin && (
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleOpenCreateDialog}
+                    >
+                        <PlusCircleIcon className="size-4 mr-1" />
+                        Add
+                    </Button>
+                )}
             </div>
 
             <GroupsDataTable

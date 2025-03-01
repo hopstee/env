@@ -1,6 +1,6 @@
 "use client"
 
-import { CopyIcon, HeartOffIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
+import { CopyIcon, HeartOffIcon, InfoIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -20,13 +20,16 @@ import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import GroupItem from "@/Components/GroupItem"
 import { motion } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
 
 export default function FavoriteGroups({
     items,
     selectedTeamId,
+    isAdmin,
 }: {
-    items: GroupType[]
-    selectedTeamId: string,
+    items: GroupType[];
+    selectedTeamId: string;
+    isAdmin: boolean;
 }) {
     const { isMobile, open } = useSidebar()
     const { openModal } = useModalStore()
@@ -64,46 +67,54 @@ export default function FavoriteGroups({
     return (
         <SidebarGroup>
             <SidebarGroupLabel>Favourite Groups</SidebarGroupLabel>
-            <SidebarGroupAction
-                title="Add Group"
-                onClick={openCreateGroup}
-            >
-                <Plus /> <span className="sr-only">Add Group</span>
-            </SidebarGroupAction>
+            {isAdmin && (
+                <SidebarGroupAction
+                    title="Add Group"
+                    onClick={openCreateGroup}
+                >
+                    <Plus /> <span className="sr-only">Add Group</span>
+                </SidebarGroupAction>
+            )}
             <SidebarGroupContent>
-                <SidebarMenu>
-                    {items?.map((item: GroupType, index: number) => (
-
-                        <SidebarMenuItem>
-                            <SidebarMenuButton
-                                asChild
-                                isActive={route().current('t.active', { 'team': selectedTeamId, 'g': item.id })}
-                                tooltip={item.name}
-                            >
-                                <Link
-                                    href={
-                                        route('t.active', {
-                                            preserveState: true,
-                                            preserveScroll: true,
-                                            ...route().params,
-                                            'g': item.id,
-                                        })
-                                    }
+                {!items.length && (
+                    <div className="w-full flex items-center justify-center gap-2 px-2 py-2 text-xs text-muted-foreground">
+                        <span>No favorite groups</span>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <InfoIcon className="size-4" />
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="w-40">
+                                You can add groups to favorite on groups page
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                )}
+                {!!items.length && (
+                    <SidebarMenu>
+                        {items?.map((item: GroupType, index: number) => (
+                            <SidebarMenuItem key={index}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={route().current('t.active', { 'team': selectedTeamId, 'g': item.id })}
+                                    tooltip={item.name}
                                 >
-                                    <GroupItem
-                                        name={item.name}
-                                        color={item.color}
-                                        compact={!open}
-                                    />
-                                </Link>
-                            </SidebarMenuButton>
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <SidebarMenuAction showOnHover>
-                                        <MoreHorizontalIcon />
-                                        <span className="sr-only">More</span>
-                                    </SidebarMenuAction>
-                                </DropdownMenuTrigger>
+                                    <Link
+                                        href={
+                                            route('t.active', {
+                                                preserveState: true,
+                                                preserveScroll: true,
+                                                ...route().params,
+                                                'g': item.id,
+                                            })
+                                        }
+                                    >
+                                        <GroupItem
+                                            name={item.name}
+                                            color={item.color}
+                                            compact={!open}
+                                        />
+                                    </Link>
+                                </SidebarMenuButton>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <SidebarMenuAction showOnHover>
@@ -111,30 +122,38 @@ export default function FavoriteGroups({
                                             <span className="sr-only">More</span>
                                         </SidebarMenuAction>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent
-                                        className="w-48"
-                                        side={isMobile ? "bottom" : "right"}
-                                        align={isMobile ? "end" : "start"}
-                                    >
-                                        <DropdownMenuItem
-                                            onClick={() => handleRemoveFromFavorite(item.id)}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <SidebarMenuAction showOnHover>
+                                                <MoreHorizontalIcon />
+                                                <span className="sr-only">More</span>
+                                            </SidebarMenuAction>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent
+                                            className="w-48"
+                                            side={isMobile ? "bottom" : "right"}
+                                            align={isMobile ? "end" : "start"}
                                         >
-                                            <HeartOffIcon className="text-muted-foreground" />
-                                            Remove from favorite
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                            onClick={() => confirmDelete(item.id)}
-                                        >
-                                            <Trash2Icon />
-                                            <span>Delete</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
+                                            <DropdownMenuItem
+                                                onClick={() => handleRemoveFromFavorite(item.id)}
+                                            >
+                                                <HeartOffIcon className="text-muted-foreground" />
+                                                Remove from favorite
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
+                                                onClick={() => confirmDelete(item.id)}
+                                            >
+                                                <Trash2Icon />
+                                                <span>Delete</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </DropdownMenu>
-                            </DropdownMenu>
-                        </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                )}
             </SidebarGroupContent>
         </SidebarGroup>
     )
