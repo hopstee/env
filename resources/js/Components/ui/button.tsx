@@ -19,12 +19,12 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
 
-        "soft-error": "bg-red-300/10 hover:bg-red-300/20 text-red-600",
-        "soft-warning": "bg-amber-300/10 hover:bg-amber-300/20 text-amber-600",
-        "soft-success": "bg-green-300/10 hover:bg-green-300/20 text-green-600",
-        "soft-info": "bg-blue-300/10 hover:bg-blue-300/20 text-blue-600",
+        "soft-error": "bg-red-500/10 hover:bg-red-500/20 text-red-600",
+        "soft-warning": "bg-amber-500/10 hover:bg-amber-500/20 text-amber-600",
+        "soft-success": "bg-green-500/10 hover:bg-green-500/20 text-green-600",
+        "soft-info": "bg-blue-500/10 hover:bg-blue-500/20 text-blue-600",
 
-        "soft-error-ghost": "hover:bg-red-300/20 text-red-600",
+        "soft-error-ghost": "hover:bg-red-500/20 text-red-600",
         "soft-warning-ghost": "hover:bg-amber-300/20 text-amber-600",
         "soft-success-ghost": "hover:bg-green-300/20 text-green-600",
         "soft-info-ghost": "hover:bg-blue-300/20 text-blue-600",

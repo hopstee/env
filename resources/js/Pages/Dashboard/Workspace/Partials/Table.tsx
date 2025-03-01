@@ -1,4 +1,4 @@
-import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from "@/types";
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, User, VariablesPaginatedDataType } from "@/types";
 import { Link, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { environmentVariablesColumns } from "./Columns";
@@ -14,11 +14,13 @@ export default function EnvironmentVariablesDataTable({
     variables,
     metadata,
     filters,
+    user,
 }: {
     groups: GroupType[];
     variables: EvironmentVariableType[];
     metadata: VariablesPaginatedDataType;
     filters: EvironmentVariableFiltersType;
+    user: User;
 }) {
     const [sorting, setSorting] = useRemember<SortingState>([]);
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([]);
@@ -43,7 +45,7 @@ export default function EnvironmentVariablesDataTable({
 
     const table = useReactTable({
         data: variables,
-        columns: environmentVariablesColumns(groups),
+        columns: environmentVariablesColumns(user, groups),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),

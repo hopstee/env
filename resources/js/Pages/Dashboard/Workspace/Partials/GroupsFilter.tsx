@@ -94,7 +94,7 @@ function GroupsList({
         <Command>
             <CommandInput
                 placeholder="Group"
-                className="border-none h-8"
+                className="border-none"
             />
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>

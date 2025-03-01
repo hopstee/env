@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [GroupsController::class, 'store'])->name('group.create');
         Route::post('/{group}', [GroupsController::class, 'update'])->name('group.update');
         Route::post('/{group}/toggle-favorite', [GroupsController::class, 'toggleFavorite'])->name('group.toggle-favorite');
+        Route::post('/{group}/update-users', [GroupsController::class, 'updateGroupUsers'])->name('group.update-users');
         Route::delete('/{group}', [GroupsController::class, 'destroy'])->name('group.destroy');
     });
 

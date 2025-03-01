@@ -54,6 +54,7 @@ export default function Dashboard({
                 variables={variablesData.data}
                 metadata={variablesData}
                 filters={filters}
+                user={auth.user}
             />
         </AuthenticatedLayout>
     );

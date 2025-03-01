@@ -35,14 +35,7 @@ import {
 } from "@/Components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Link, usePage } from "@inertiajs/react";
-
-const getInitials = (name: string) => {
-    const dividedName = name.split(' ')
-    const firstLetter = dividedName[0]?.slice(0, 1)?.toUpperCase() || ''
-    const secondLetter = dividedName[1]?.slice(0, 1)?.toUpperCase() || ''
-
-    return firstLetter + secondLetter
-}
+import { getInitials } from "@/lib/utils";
 
 export default function ProfileMenu() {
     const user = usePage().props.auth.user;

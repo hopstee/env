@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType } from '@/types';
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, MembersDataType, User, VariablesPaginatedDataType } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import EnvironmentVariablesDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
@@ -10,8 +10,10 @@ import GroupsDataTable from './Partials/Table';
 
 export default function Groups({
     groups,
+    teamUsers,
 }: {
     groups: GroupType[];
+    teamUsers: MembersDataType[];
 }) {
     const {
         selectedTeamId,
@@ -24,7 +26,7 @@ export default function Groups({
         openModal(ModalTypes.GROUP_MODAL, {
             title: "Add group",
             teamId: selectedTeamId
-        })
+        });
     }
 
     return (
@@ -49,7 +51,9 @@ export default function Groups({
 
             <GroupsDataTable
                 groups={groups}
+                teamUsers={teamUsers}
                 teamId={selectedTeamId}
+                user={auth.user}
             />
         </AuthenticatedLayout>
     );

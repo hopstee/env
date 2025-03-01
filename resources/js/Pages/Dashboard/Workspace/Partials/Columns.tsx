@@ -7,14 +7,14 @@ import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
-import { EvironmentVariableType, GroupType } from "@/types"
+import { EvironmentVariableType, GroupType, User } from "@/types"
 import { router, useForm } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { ArrowUpDownIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
-export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
+export const environmentVariablesColumns = (user: User, groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
     const { openModal } = useModalStore();
     
     return [
@@ -142,7 +142,7 @@ export const environmentVariablesColumns = (groups: GroupType[]): ColumnDef<Evir
                     });
                 }
 
-                return (
+                return user.is_admin && (
                     <div className="space-x-1">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

@@ -25,12 +25,21 @@ export type NavItemType = {
     route: string;
 }
 
+export type GroupUserType = {
+    id: number;
+    name: string;
+    email: string;
+    can_read: boolean;
+    can_write: boolean;
+}
+
 export type GroupType = {
     id: string;
     name: string;
     color: ColorKeys;
     is_favorite: boolean;
     link: string;
+    users?: GroupUserType[];
 }
 
 export type EnvType = {

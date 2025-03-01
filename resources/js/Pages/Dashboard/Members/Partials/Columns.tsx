@@ -124,7 +124,7 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
 
                     return (
                         <Select
-                            defaultValue={String(row.getValue("role_id"))}
+                            value={String(row.getValue("role_id"))}
                             onValueChange={(roleId) => handleChangeRole(row.original.user_id, roleId)}
                         >
                             <SelectTrigger
@@ -151,7 +151,17 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                 cell: ({ row }) => {
                     return (
                         <div className="w-8">
-                            <DropdownMenu>
+                            {(row.original.user_id !== user.id) && (
+                                <Button
+                                    size="sm-icon"
+                                    variant="soft-error"
+                                    // className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
+                                    onClick={() => handleDelete(row.original.user_id)}
+                                >
+                                    <Trash2Icon />
+                                </Button>
+                            )}
+                            {/* <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="h-8 w-8 p-0">
                                         <span className="sr-only">Open menu</span>
@@ -169,7 +179,7 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>
-                            </DropdownMenu>
+                            </DropdownMenu> */}
                         </div>
                     )
                 },

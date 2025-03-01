@@ -1,24 +1,66 @@
 import GroupItem from "@/Components/GroupItem"
+import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { Checkbox } from "@/Components/ui/checkbox"
 import CopyTooltip from "@/Components/ui/copy-tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
-import { COLORS } from "@/constants/colors"
+import { COLORS, ColorKeys } from "@/constants/colors"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
-import { cn } from "@/lib/utils"
+import { cn, getInitials } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
-import { EvironmentVariableType, GroupType } from "@/types"
+import { EvironmentVariableType, GroupType, MembersDataType, User } from "@/types"
 import { Link, router, useForm, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { ArchiveIcon, ArchiveRestoreIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, EditIcon, EyeIcon, EyeOffIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
 import { useState } from "react"
 
-export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
+export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataType[]): ColumnDef<GroupType>[] => {
     const { openModal } = useModalStore();
+
+    const handleOpenEditDialog = (name: string, color: ColorKeys, groupId: string) => {
+        openModal(ModalTypes.GROUP_MODAL, {
+            title: "Add group",
+            teamId,
+            edit: true,
+            initialValues: {
+                name,
+                color,
+                group_id: groupId,
+            }
+        })
+    }
+
+    const handleChangeFavoriteStatus = (groupId: string) => {
+        router.post(route('group.toggle-favorite', { group: groupId }), {
+            preserveScroll: true,
+        });
+    }
+
+    const handleDelete = (groupId: string) => {
+        openModal(ModalTypes.CONFIRM_ALERT, {
+            title: "Are you sure?",
+            description: "This action cannot be undone. This will permanently delete group and remove it data from our servers.",
+            onConfirm: () => {
+                router.delete(route('group.destroy', { group: groupId }), {
+                    preserveScroll: true,
+                });
+            },
+            type: IconTypes.ERROR
+        })
+    }
+
+    const handelOpenManageGroupUsersDialog = (groupData: GroupType) => {
+        openModal(ModalTypes.MANAGE_GROUP_USERS, {
+            group: groupData,
+            teamUsers: teamUsers,
+            groupUsers: groupData.users || [],
+            userData: user,
+        })
+    }
 
     return [
         {
@@ -40,42 +82,56 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
             },
         },
         {
+            id: "users",
+            cell: ({ row }) => {
+                // handelOpenManageGroupUsersDialog
+                const groupUsers = row.original.users?.slice(0, 3);
+                console.log(groupUsers)
+                return (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div
+                                className="cursor-pointer flex"
+                                onClick={() => handelOpenManageGroupUsersDialog(row.original)}
+                            >
+                                <div className="flex mx-auto">
+                                    {groupUsers?.map((user, index) => (
+                                        <Avatar
+                                            className={cn(
+                                                "border-2 border-background",
+                                                index > 0 && "-ml-4"
+                                            )}
+                                        >
+                                            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                                        </Avatar>
+                                    ))}
+                                </div>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="w-40">
+                            Manage group users
+                        </TooltipContent>
+                    </Tooltip>
+                )
+            }
+        },
+        {
             id: "actions",
-            size: 50,
             enableHiding: false,
             cell: ({ row }) => {
-                const handleOpenEditDialog = () => {
-                    openModal(ModalTypes.GROUP_MODAL, {
-                        title: "Add group",
-                        teamId,
-                        edit: true,
-                        initialValues: {
-                            name: row.original.name,
-                            color: row.original.color,
-                            group_id: row.original.id,
-                        }
-                    })
-                }
-
-                const handleChangeFavoriteStatus = () => {
-                    router.post(route('group.toggle-favorite', { group: row.original.id }), {
-                        preserveScroll: true,
-                    });
-                }
-
-                const handleDelete = () => {
-                    openModal(ModalTypes.CONFIRM_ALERT, {
-                        title: "Are you sure?",
-                        description: "This action cannot be undone. This will permanently delete group and remove it data from our servers.",
-                        onConfirm: handleConfirmDelete,
-                        type: IconTypes.ERROR
-                    })
-                }
-
-                const handleConfirmDelete = () => {
-                    router.delete(route('group.destroy', { group: row.original.id }), {
-                        preserveScroll: true,
-                    });
+                if (!user.is_admin) {
+                    return (
+                        <Button
+                            size="sm-icon"
+                            variant="ghost"
+                            onClick={() => handleChangeFavoriteStatus(row.original.id)}
+                        >
+                            {row.original.is_favorite
+                                ? <HeartOffIcon className="size-4" />
+                                : <HeartIcon className="size-4" />
+                            }
+                        </Button>
+                    )
                 }
 
                 return (
@@ -88,7 +144,7 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
                             <DropdownMenuItem
-                                onClick={handleChangeFavoriteStatus}
+                                onClick={() => handleChangeFavoriteStatus(row.original.id)}
                             >
                                 {row.original.is_favorite
                                     ? <HeartOffIcon className="size-4" />
@@ -100,14 +156,14 @@ export const groupColumns = (teamId: string): ColumnDef<GroupType>[] => {
                                 }
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={handleOpenEditDialog}
+                                onClick={() => handleOpenEditDialog(row.original.name, row.original.color, row.original.id)}
                             >
                                 <EditIcon className="size-4" />
                                 Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                onClick={handleDelete}
+                                onClick={() => handleDelete(row.original.id)}
                             >
                                 <Trash2Icon />
                                 Delete

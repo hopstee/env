@@ -21,6 +21,7 @@ import { ModalTypes } from "@/constants/modals"
 import GroupItem from "@/Components/GroupItem"
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
+import { Button } from "@/Components/ui/button"
 
 export default function FavoriteGroups({
     items,
@@ -31,7 +32,7 @@ export default function FavoriteGroups({
     selectedTeamId: string;
     isAdmin: boolean;
 }) {
-    const { isMobile, open } = useSidebar()
+    const { isMobile, open, openMobile } = useSidebar()
     const { openModal } = useModalStore()
 
     const { delete: destroy } = useForm()
@@ -78,12 +79,12 @@ export default function FavoriteGroups({
             <SidebarGroupContent>
                 {!items.length && (
                     <div className="w-full flex items-center justify-center gap-2 px-2 py-2 text-xs text-muted-foreground">
-                        <span>No favorite groups</span>
+                        {(open || openMobile) && <span>No favorite groups</span>}
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <InfoIcon className="size-4" />
                             </TooltipTrigger>
-                            <TooltipContent side="bottom" className="w-40">
+                            <TooltipContent side={open ? "bottom" : "right"} className="w-40">
                                 You can add groups to favorite on groups page
                             </TooltipContent>
                         </Tooltip>
@@ -111,17 +112,11 @@ export default function FavoriteGroups({
                                         <GroupItem
                                             name={item.name}
                                             color={item.color}
-                                            compact={!open}
+                                            compact={isMobile ? !openMobile : !open}
                                         />
                                     </Link>
                                 </SidebarMenuButton>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <SidebarMenuAction showOnHover>
-                                            <MoreHorizontalIcon />
-                                            <span className="sr-only">More</span>
-                                        </SidebarMenuAction>
-                                    </DropdownMenuTrigger>
+                                {isAdmin ? (
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <SidebarMenuAction showOnHover>
@@ -129,27 +124,43 @@ export default function FavoriteGroups({
                                                 <span className="sr-only">More</span>
                                             </SidebarMenuAction>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            className="w-48"
-                                            side={isMobile ? "bottom" : "right"}
-                                            align={isMobile ? "end" : "start"}
-                                        >
-                                            <DropdownMenuItem
-                                                onClick={() => handleRemoveFromFavorite(item.id)}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <SidebarMenuAction showOnHover>
+                                                    <MoreHorizontalIcon />
+                                                    <span className="sr-only">More</span>
+                                                </SidebarMenuAction>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                className="w-48"
+                                                side={isMobile ? "bottom" : "right"}
+                                                align={isMobile ? "end" : "start"}
                                             >
-                                                <HeartOffIcon className="text-muted-foreground" />
-                                                Remove from favorite
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                                onClick={() => confirmDelete(item.id)}
-                                            >
-                                                <Trash2Icon />
-                                                <span>Delete</span>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
+                                                <DropdownMenuItem
+                                                    onClick={() => handleRemoveFromFavorite(item.id)}
+                                                >
+                                                    <HeartOffIcon className="text-muted-foreground" />
+                                                    Remove from favorite
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
+                                                    onClick={() => confirmDelete(item.id)}
+                                                >
+                                                    <Trash2Icon />
+                                                    <span>Delete</span>
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </DropdownMenu>
-                                </DropdownMenu>
+                                ) : (
+                                    <SidebarMenuAction
+                                        showOnHover
+                                        onClick={() => handleRemoveFromFavorite(item.id)}
+                                    >
+                                        <HeartOffIcon />
+                                        <span className="sr-only">Remove from favorite</span>
+                                    </SidebarMenuAction>
+                                )}
                             </SidebarMenuItem>
                         ))}
                     </SidebarMenu>

@@ -83,7 +83,6 @@ class User extends Authenticatable
         $query = $this->belongsToMany(Group::class, 'permissions')
             ->withPivot('can_read', 'can_write')
             ->where('groups.team_id', $teamId)
-            ->where('permissions.can_read', true)
             ->withExists(['favoritedByUsers as is_favorite' => function ($query) {
                 $query->where('user_id', $this->id);
             }]);

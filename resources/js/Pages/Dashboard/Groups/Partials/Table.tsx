@@ -2,14 +2,18 @@ import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { groupColumns } from "./Columns";
 import { Table, TableBody, TableCell, TableRow } from "@/Components/ui/table";
-import { GroupType } from "@/types";
+import { GroupType, MembersDataType, User } from "@/types";
 
 export default function GroupsDataTable({
     groups,
+    teamUsers,
     teamId,
+    user,
 }: {
     groups: GroupType[];
+    teamUsers: MembersDataType[];
     teamId: string;
+    user: User;
 }) {
     const [sorting, setSorting] = useRemember<SortingState>([]);
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([]);
@@ -18,7 +22,7 @@ export default function GroupsDataTable({
 
     const table = useReactTable({
         data: groups,
-        columns: groupColumns(teamId),
+        columns: groupColumns(user, teamId, teamUsers),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),

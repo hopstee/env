@@ -14,7 +14,7 @@ export default function GroupSearch(props: GroupSearchProps) {
         useLoading = true,
         queryParam,
     } = props;
-    console.log(queryParam)
+
     const [query, setQuery] = useState(queryParam);
     const [tempQuery, setTempQuery] = useState(queryParam);
     const [loading, setLoading] = useState(false);
@@ -24,15 +24,15 @@ export default function GroupSearch(props: GroupSearchProps) {
         if (!hasChanged) return;
 
         setLoading(true);
-        router.get(route('t.active', {...route().params}),
-        { 
-            query: tempQuery
-        },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onFinish: () => setLoading(false),
-        });
+        router.get(route('t.active', { ...route().params }),
+            {
+                query: tempQuery
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onFinish: () => setLoading(false),
+            });
 
         setQuery(tempQuery);
         setHasChanged(false);
@@ -56,16 +56,16 @@ export default function GroupSearch(props: GroupSearchProps) {
                 <ArrowRightIcon className="size-4" />
             </Button>
         )
-        
+
     return (
-        <div className="relative">
+        <div className="relative w-full md:max-w-sm">
             <Input
                 type="text"
                 placeholder="Filter variables..."
                 value={tempQuery}
                 onChange={handleChange}
                 onKeyDown={handleKeyPress}
-                className="w-full md:max-w-sm"
+                className="w-full"
                 startIcon={<SearchIcon className="size-4" />}
                 endIcon={endIcon}
             />

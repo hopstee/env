@@ -12,4 +12,9 @@ class Permission extends Model
         'can_read',
         'can_write',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
