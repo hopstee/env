@@ -1,7 +1,7 @@
 import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { Label } from "@/Components/ui/label";
-import { cn, getInitials } from "@/lib/utils";
+import { cn, deepClone, deepEqual, getInitials } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
 import { CheckIcon, ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, Trash2Icon, UserPlusIcon } from "lucide-react";
 import { FormEventHandler, useState } from "react";
@@ -75,7 +75,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 300);
     const [confirmDelete, setConfirmDelete] = useState(null);
-    console.log(groupUsers)
+
     const {
         data,
         setData,
@@ -85,12 +85,12 @@ function GroupUsers(props: ManageGroupUsersProps) {
         reset,
         processing,
     } = useForm({
-        users: groupUsers,
+        users: deepClone(groupUsers),
     });
 
     const excludeSet = new Set(data.users?.map(item => item.id));
     const searchList = teamUsers.filter(item => !excludeSet.has(item.user_id));
-    const canUpdate = data.users !== groupUsers;
+    const canUpdate = !deepEqual<GroupUserType[]>(data.users, groupUsers);
 
     const filteredUsers = searchList.filter(user =>
         user.user_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
@@ -120,7 +120,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                 if (user.id === userId) {
                     user.can_write = value;
                 }
-    
+
                 return user;
             }));
         }
@@ -132,7 +132,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                 if (user.id === userId) {
                     user.can_read = value;
                 }
-    
+
                 return user;
             }));
         }
@@ -141,18 +141,20 @@ function GroupUsers(props: ManageGroupUsersProps) {
     const handleUpdateGroupUsers: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('group.update-users', { group: group.id }), {
-            preserveScroll: true,
-            onSuccess: () => {
-                reset()
-                onClose()
-            },
-            onError: (errors) => {
-                toast.error('Errors', {
-                    description: JSON.stringify(errors)
-                })
-            },
-        });
+        if (canUpdate) {
+            post(route('group.update-users', { group: group.id }), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset()
+                    onClose()
+                },
+                onError: (errors) => {
+                    toast.error('Errors', {
+                        description: JSON.stringify(errors)
+                    })
+                },
+            });
+        }
     }
 
     return (
@@ -277,3 +279,5 @@ function GroupUsers(props: ManageGroupUsersProps) {
         </form>
     )
 }
+
+const sortUsers = (users: GroupUserType[]) => [...users].sort((a, b) => a.id - b.id);

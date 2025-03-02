@@ -12,6 +12,8 @@ import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { useMemo } from "react"
+import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
+import { getInitials } from "@/lib/utils"
 
 export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: string): ColumnDef<MembersDataType>[] => {
     const { openModal } = useModalStore();
@@ -55,38 +57,22 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                             variant="ghost"
                             onClick={() => column.toggleSorting(column.getIsSorted() === "asc", true)}
                         >
-                            Username
+                            User
                             <ArrowUpDownIcon />
                         </Button>
                     )
                 },
                 cell: ({ row }) => {
                     return (
-                        <span className="px-4">
-                            {row.getValue("user_name")}
-                        </span>
-                    )
-                },
-            },
-            {
-                accessorKey: "user_email",
-                enableColumnFilter: true,
-                header: ({ column }) => {
-                    return (
-                        <Button
-                            variant="ghost"
-                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc", true)}
-                        >
-                            Email
-                            <ArrowUpDownIcon />
-                        </Button>
-                    )
-                },
-                cell: ({ row }) => {
-                    return (
-                        <span className="px-4">
-                            {row.getValue("user_email")}
-                        </span>
+                        <div className="flex items-center gap-2 px-4">
+                            <Avatar>
+                                <AvatarFallback>{getInitials(row.getValue("user_name"))}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                                <span className="leading-5">{row.getValue("user_name")}</span>
+                                <span className="text-sm text-muted-foreground">{row.original.user_email}</span>
+                            </div>
+                        </div>
                     )
                 },
             },
@@ -100,12 +86,12 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
             {
                 accessorKey: "role_id",
                 enableHiding: false,
-                header: () => <div className="text-left">Team Role</div>,
+                header: () => <div className="text-left px-3">Team Role</div>,
                 cell: ({ row }) => {
                     if (row.original.is_owner) {
                         return (
                             <span
-                                className="text-muted-foreground"
+                                className="text-muted-foreground px-3"
                             >
                                 Owner
                             </span>
@@ -115,7 +101,7 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                     if (!user.is_admin || user.id === row.original.user_id) {
                         return (
                             <span
-                                className="text-muted-foreground"
+                                className="text-muted-foreground px-3"
                             >
                                 {row.original.role_name}
                             </span>
@@ -128,7 +114,7 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                             onValueChange={(roleId) => handleChangeRole(row.original.user_id, roleId)}
                         >
                             <SelectTrigger
-                                className="w-40"
+                                className="w-40 border-0 bg-transparent"
                             >
                                 <SelectValue />
                             </SelectTrigger>
