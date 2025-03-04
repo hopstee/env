@@ -155,13 +155,10 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                                 <DropdownMenuItem
                                     onClick={handleOpenEditModal}
                                 >
-                                    <PenSquareIcon className="text-muted-foreground" />
+                                    <PenSquareIcon />
                                     Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                    onClick={handleDelete}
-                                >
+                                <DropdownMenuItem onClick={handleDelete}>
                                     <Trash2Icon />
                                     Delete
                                 </DropdownMenuItem>

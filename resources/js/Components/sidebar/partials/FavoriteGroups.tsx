@@ -136,16 +136,11 @@ export default function FavoriteGroups({
                                                 side={isMobile ? "bottom" : "right"}
                                                 align={isMobile ? "end" : "start"}
                                             >
-                                                <DropdownMenuItem
-                                                    onClick={() => handleRemoveFromFavorite(item.id)}
-                                                >
-                                                    <HeartOffIcon className="text-muted-foreground" />
+                                                <DropdownMenuItem onClick={() => handleRemoveFromFavorite(item.id)}>
+                                                    <HeartOffIcon />
                                                     Remove from favorite
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                                    onClick={() => confirmDelete(item.id)}
-                                                >
+                                                <DropdownMenuItem onClick={() => confirmDelete(item.id)}>
                                                     <Trash2Icon />
                                                     <span>Delete</span>
                                                 </DropdownMenuItem>

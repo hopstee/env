@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { InvitationsDataType, MembersDataType, RoleType, User } from "@/types"
 import { Link, router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, RotateCwIcon, Trash2Icon, UsersIcon, XCircleIcon } from "lucide-react"
+import { AlertCircleIcon, ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, BanIcon, CheckCircle2Icon, ClockIcon, CopyIcon, HeartIcon, HeartOffIcon, InfoIcon, MoreHorizontalIcon, PenSquareIcon, RotateCwIcon, Trash2Icon, UsersIcon, XCircleIcon } from "lucide-react"
 import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
 import useModalStore from "@/modalsStore/useModalStore"
@@ -20,12 +20,9 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         {
             accessorKey: "email",
             enableColumnFilter: true,
+            header: () => <div className="text-left">Email</div>,
             cell: ({ row }) => {
-                return (
-                    <span className="px-4">
-                        {row.getValue("email")}
-                    </span>
-                )
+                return row.getValue("email");
             },
         },
         {
@@ -43,6 +40,7 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         {
             accessorKey: "expires_at",
             enableColumnFilter: true,
+            header: () => <div className="text-left">Expires At</div>,
             cell: ({ row }) => {
                 return (
                     <div className="flex">
@@ -58,22 +56,27 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
             header: () => <div className="text-left">Status</div>,
             cell: ({ row }) => {
                 let color;
+                let Icon = CheckCircle2Icon;
 
                 switch (row.getValue('status')) {
                     case 'pending':
                         color = COLORS['YELLOW_300'];
+                        Icon = AlertCircleIcon
                         break;
 
                     case 'expired':
                         color = COLORS['ORANGE_500'];
+                        Icon = ClockIcon
                         break;
 
                     case 'declined':
                         color = COLORS['RED_500'];
+                        Icon = XCircleIcon
                         break;
 
                     case 'revoked':
                         color = COLORS['STONE_300'];
+                        Icon = BanIcon
                         break;
 
                     default:
@@ -83,7 +86,8 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
 
                 return (
                     <div className="flex">
-                        <Badge className={`bg-${color.default} hover:bg-${color.default} text-${color.foreground}`}>
+                        <Badge className={`flex gap-1 ps-0.5 pr-2 bg-${color.default} hover:bg-${color.default} text-${color.foreground}`}>
+                            <Icon className="size-4" />
                             {row.getValue('status')}
                         </Badge>
                     </div>

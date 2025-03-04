@@ -147,8 +147,8 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
                                 onClick={() => handleChangeFavoriteStatus(row.original.id)}
                             >
                                 {row.original.is_favorite
-                                    ? <HeartOffIcon className="size-4" />
-                                    : <HeartIcon className="size-4" />
+                                    ? <HeartOffIcon className="size-4 text-muted-foreground" />
+                                    : <HeartIcon className="size-4 text-muted-foreground" />
                                 }
                                 {row.original.is_favorite
                                     ? "Remove from favorite"
@@ -158,13 +158,10 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
                             <DropdownMenuItem
                                 onClick={() => handleOpenEditDialog(row.original.name, row.original.color, row.original.id)}
                             >
-                                <EditIcon className="size-4" />
+                                <EditIcon />
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                onClick={() => handleDelete(row.original.id)}
-                            >
+                            <DropdownMenuItem onClick={() => handleDelete(row.original.id)}>
                                 <Trash2Icon />
                                 Delete
                             </DropdownMenuItem>

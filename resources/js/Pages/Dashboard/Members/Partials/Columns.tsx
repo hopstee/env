@@ -14,6 +14,7 @@ import { IconTypes } from "@/lib/infoIcons"
 import { useMemo } from "react"
 import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
 import { getInitials } from "@/lib/utils"
+import UserListItem from "@/Components/UserListItem"
 
 export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: string): ColumnDef<MembersDataType>[] => {
     const { openModal } = useModalStore();
@@ -51,28 +52,13 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
             {
                 accessorKey: "user_name",
                 enableColumnFilter: true,
-                header: ({ column }) => {
-                    return (
-                        <Button
-                            variant="ghost"
-                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc", true)}
-                        >
-                            User
-                            <ArrowUpDownIcon />
-                        </Button>
-                    )
-                },
+                header: () => <div className="text-left">User</div>,
                 cell: ({ row }) => {
                     return (
-                        <div className="flex items-center gap-2 px-4">
-                            <Avatar>
-                                <AvatarFallback>{getInitials(row.getValue("user_name"))}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <span className="leading-5">{row.getValue("user_name")}</span>
-                                <span className="text-sm text-muted-foreground">{row.original.user_email}</span>
-                            </div>
-                        </div>
+                        <UserListItem
+                            name={row.getValue("user_name")}
+                            email={row.original.user_email}
+                        />
                     )
                 },
             },
@@ -136,11 +122,11 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                 enableHiding: false,
                 cell: ({ row }) => {
                     return (
-                        <div className="w-8">
+                        <div className="w-9">
                             {(row.original.user_id !== user.id) && (
                                 <Button
                                     size="sm-icon"
-                                    variant="soft-error"
+                                    variant="ghost"
                                     // className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
                                     onClick={() => handleDelete(row.original.user_id)}
                                 >

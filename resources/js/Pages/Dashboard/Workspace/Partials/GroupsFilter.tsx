@@ -70,7 +70,7 @@ export default function GroupsFilter(
                     )} />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" align="start">
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                 <GroupsList
                     items={items}
                     selectedItem={selectedItem}

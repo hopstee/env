@@ -19,6 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/Components/ui/avatar";
 import { Checkbox } from "@/Components/ui/checkbox";
+import UserListItem from "@/Components/UserListItem";
 
 export type ManageGroupUsersProps = {
     onClose: () => void;
@@ -172,7 +173,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                             <ChevronsUpDownIcon className="opacity-50" />
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
+                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput placeholder="Search user..." className="h-9" onValueChange={setSearch} />
                             <CommandList>
@@ -188,7 +189,10 @@ function GroupUsers(props: ManageGroupUsersProps) {
                                             }}
                                             className="group flex justify-between"
                                         >
-                                            {user.user_name}
+                                            <UserListItem
+                                                name={user.user_name}
+                                                email={user.user_email}
+                                            />
                                             <div className={cn(
                                                 "flex items-center text-xs text-muted-foreground gap-1",
                                                 "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
@@ -207,11 +211,11 @@ function GroupUsers(props: ManageGroupUsersProps) {
 
             <ScrollArea className="h-48 my-4">
                 {data.users?.map(user => (
-                    <div className="flex justify-between items-center cursor-default p-2 hover:bg-muted rounded-md transition-colors">
+                    <div className="flex justify-between items-center cursor-default py-2 rounded-md transition-colors">
                         <div className="flex items-center gap-2">
                             {userData.is_admin && (
                                 <Button
-                                    variant="soft-error"
+                                    variant="ghost"
                                     size="sm-icon"
                                     onClick={() => {
                                         if (userData.id !== user.id) {
@@ -223,13 +227,10 @@ function GroupUsers(props: ManageGroupUsersProps) {
                                     <Trash2Icon className="size-4" />
                                 </Button>
                             )}
-                            <Avatar>
-                                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <span className="leading-5">{user.name}</span>
-                                <span className="text-sm text-muted-foreground">{user.email}</span>
-                            </div>
+                            <UserListItem
+                                name={user.name}
+                                email={user.email}
+                            />
                         </div>
                         <div className="flex gap-2">
                             <div className="flex items-center gap-1">
