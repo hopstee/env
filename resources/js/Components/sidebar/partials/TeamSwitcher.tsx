@@ -15,7 +15,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/Components/ui/sidebar"
-import { Link } from "@inertiajs/react"
+import { Link, router } from "@inertiajs/react"
 import { TeamType } from "@/types"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
@@ -94,14 +94,12 @@ export default function TeamSwitcher({
 }
 
 function TeamItem({ team }: { team: TeamType }) {
+    const currentRoute = route().current() || "t.active";
+
     return (
-        <Link href={route('t.active', team.id)}>
+        <Link href={route(currentRoute, { ...route().params, team: team.id })}>
             <DropdownMenuItem className="gap-2 p-2">
-                {/* <div className="flex size-6 items-center justify-center rounded-sm border">
-                                            <team.logo className="size-4 shrink-0" />
-                                        </div> */}
                 {team.name}
-                {/* <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut> */}
             </DropdownMenuItem>
         </Link>
     )
