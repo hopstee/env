@@ -1,19 +1,14 @@
-import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
-import { Checkbox } from "@/Components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { MembersDataType, RoleType, User } from "@/types"
-import { Link, router, usePage } from "@inertiajs/react"
-import { Column, ColumnDef } from "@tanstack/react-table"
-import { ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
+import { router } from "@inertiajs/react"
+import { ColumnDef } from "@tanstack/react-table"
+import { Trash2Icon } from "lucide-react"
 import { format } from "date-fns"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { useMemo } from "react"
-import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
-import { getInitials } from "@/lib/utils"
 import UserListItem from "@/Components/UserListItem"
 
 export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: string): ColumnDef<MembersDataType>[] => {
@@ -51,7 +46,6 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
         const baseColumns: ColumnDef<MembersDataType>[] = [
             {
                 accessorKey: "user_name",
-                enableColumnFilter: true,
                 header: () => <div className="text-left">User</div>,
                 cell: ({ row }) => {
                     return (
@@ -71,7 +65,6 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
             },
             {
                 accessorKey: "role_id",
-                enableHiding: false,
                 header: () => <div className="text-left px-3">Team Role</div>,
                 cell: ({ row }) => {
                     if (row.original.is_owner) {
@@ -118,8 +111,6 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
         if (user.is_admin) {
             baseColumns.push({
                 id: "actions",
-                size: 50,
-                enableHiding: false,
                 cell: ({ row }) => {
                     return (
                         <div className="w-9">
@@ -127,31 +118,11 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                                 <Button
                                     size="sm-icon"
                                     variant="ghost"
-                                    // className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
                                     onClick={() => handleDelete(row.original.user_id)}
                                 >
                                     <Trash2Icon />
                                 </Button>
                             )}
-                            {/* <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0">
-                                        <span className="sr-only">Open menu</span>
-                                        <MoreHorizontalIcon />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-48">
-                                    {(row.original.user_id !== user.id) && (
-                                        <DropdownMenuItem
-                                            className="text-red-600 focus:text-red-600 focus:bg-red-500/20"
-                                            onClick={() => handleDelete(row.original.user_id)}
-                                        >
-                                            <Trash2Icon />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu> */}
                         </div>
                     )
                 },

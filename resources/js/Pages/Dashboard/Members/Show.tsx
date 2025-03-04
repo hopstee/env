@@ -21,6 +21,12 @@ export default function Members({
         <AuthenticatedLayout>
             <Head title="Team Members" />
 
+            <div className="w-full flex items-center justify-between">
+                <span>
+                    Members
+                </span>
+            </div>
+
             <MembersDataTable
                 membersData={members}
                 roles={roles}

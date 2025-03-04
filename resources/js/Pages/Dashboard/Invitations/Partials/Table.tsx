@@ -1,5 +1,5 @@
 import { InvitationsDataType } from "@/types";
-import { useRemember } from "@inertiajs/react"
+import { usePage, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { invitationColumns } from "./Columns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
@@ -11,6 +11,7 @@ interface InvitationTypesDataTable {
 export default function InvitationsDataTable({
     invitationsData,
 }: InvitationTypesDataTable) {
+
     const [sorting, setSorting] = useRemember<SortingState>([])
     const [columnFilters, setColumnFilters] = useRemember<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useRemember<VisibilityState>({})
@@ -36,17 +37,7 @@ export default function InvitationsDataTable({
     })
 
     return (
-        <div className="space-y-3">
-            <div className="flex items-center justify-between space-x-3">
-                {/* <Input
-                    placeholder="Filter projects..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                /> */}
-            </div>
+        <div className="space-y-3 mt-3">
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -87,8 +78,8 @@ export default function InvitationsDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={invitationColumns.length}
-                                    className="h-24 text-center"
+                                    colSpan={invitationColumns().length}
+                                    className="text-center"
                                 >
                                     No results.
                                 </TableCell>

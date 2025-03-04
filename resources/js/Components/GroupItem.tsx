@@ -16,14 +16,12 @@ export default function GroupItem(
     return (
         <Badge
             className={cn(
-                "transition-all duration-500 block w-fit",
                 `bg-${COLORS[color].default} hover:bg-${COLORS[color].default} text-${COLORS[color].foreground}`,
                 compact && "px-0 h-4"
             )}
         >
             <span
                 className={cn(
-                    "opacity-100 transition-opacity duration-400",
                     compact && "opacity-0"
                 )}
             >

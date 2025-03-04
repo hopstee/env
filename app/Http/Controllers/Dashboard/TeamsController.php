@@ -7,9 +7,6 @@ use App\Models\Team;
 use App\Models\User;
 use App\Utils\TeamDataUtil;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class TeamsController extends Controller
@@ -26,7 +23,6 @@ class TeamsController extends Controller
         $groups = GroupsController::getGroups($teamId, true);
 
         $filters = $request->only(['g', 'page', 'perPage', 'query', 'sort']);
-        Log::info("FILTERS", ["filters" => $filters]);
         $variablesData = $user->getEnvironmentVariables($teamId, $filters);
 
         TeamDataUtil::shareSelectedTeamData($request);

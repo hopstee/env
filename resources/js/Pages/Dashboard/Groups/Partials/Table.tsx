@@ -1,7 +1,7 @@
 import { useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { groupColumns } from "./Columns";
-import { Table, TableBody, TableCell, TableRow } from "@/Components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { GroupType, MembersDataType, User } from "@/types";
 
 export default function GroupsDataTable({
@@ -43,6 +43,24 @@ export default function GroupsDataTable({
         <div className="space-y-3 mt-3">
             <div className="rounded-md border">
                 <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup, index) => (
+                            <TableRow key={index}>
+                                {headerGroup.headers.map((header, index) => {
+                                    return (
+                                        <TableHead key={index}>
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                        </TableHead>
+                                    )
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row, index) => (

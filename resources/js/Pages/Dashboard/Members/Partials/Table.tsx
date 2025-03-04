@@ -43,7 +43,7 @@ export default function MembersDataTable({
     })
 
     return (
-        <div className="space-y-3">
+        <div className="space-y-3 mt-3">
             <div className="flex items-center justify-between space-x-3">
                 {/* <Input
                     placeholder="Filter projects..."

@@ -1,13 +1,10 @@
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
-import { Checkbox } from "@/Components/ui/checkbox"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { InvitationsDataType, MembersDataType, RoleType, User } from "@/types"
-import { Link, router, usePage } from "@inertiajs/react"
+import { InvitationsDataType } from "@/types"
+import { router } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { AlertCircleIcon, ArchiveIcon, ArrowRightIcon, ArrowUpDownIcon, BanIcon, CheckCircle2Icon, ClockIcon, CopyIcon, HeartIcon, HeartOffIcon, InfoIcon, MoreHorizontalIcon, PenSquareIcon, RotateCwIcon, Trash2Icon, UsersIcon, XCircleIcon } from "lucide-react"
+import { AlertCircleIcon, BanIcon, CheckCircle2Icon, ClockIcon, RotateCwIcon, XCircleIcon } from "lucide-react"
 import { format } from "date-fns"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
@@ -19,7 +16,6 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
     return [
         {
             accessorKey: "email",
-            enableColumnFilter: true,
             header: () => <div className="text-left">Email</div>,
             cell: ({ row }) => {
                 return row.getValue("email");
@@ -27,7 +23,6 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         },
         {
             accessorKey: "role",
-            enableHiding: false,
             header: () => <div className="text-left">Team Role</div>,
             cell: ({ row }) => {
                 return (
@@ -39,7 +34,6 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         },
         {
             accessorKey: "expires_at",
-            enableColumnFilter: true,
             header: () => <div className="text-left">Expires At</div>,
             cell: ({ row }) => {
                 return (
@@ -96,8 +90,6 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         },
         {
             id: "actions",
-            size: 50,
-            enableHiding: false,
             cell: ({ row }) => {
                 const handleConfirmRevoke = () => {
                     router.post(route('invitations.revoke', { invitation: row.original.id }), {

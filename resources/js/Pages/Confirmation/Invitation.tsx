@@ -8,7 +8,6 @@ const AcceptInvitation = ({
 }: {
     invitation: any
 }) => {
-    console.log(invitation)
     const handleConfirm = () => {
         router.post(route('invitations.confirm', invitation.token));
     };

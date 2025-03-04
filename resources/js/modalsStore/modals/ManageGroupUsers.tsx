@@ -1,23 +1,17 @@
 import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
-import { Label } from "@/Components/ui/label";
-import { cn, deepClone, deepEqual, getInitials } from "@/lib/utils";
+import { cn, deepClone, deepEqual } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
-import { CheckIcon, ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, Trash2Icon, UserPlusIcon } from "lucide-react";
+import { ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { FormEventHandler, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
-import { GroupType, GroupUserType, MembersDataType, RoleType, TeamType, User } from "@/types";
-import TagInput from "@/Components/ui/tag-input";
-import InputError from "@/Components/InputError";
+import { GroupType, GroupUserType, MembersDataType, User } from "@/types";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
-import { Input } from "@/Components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/Components/ui/command";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
 import { ScrollArea } from "@/Components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/Components/ui/avatar";
 import { Checkbox } from "@/Components/ui/checkbox";
 import UserListItem from "@/Components/UserListItem";
 
@@ -80,8 +74,6 @@ function GroupUsers(props: ManageGroupUsersProps) {
     const {
         data,
         setData,
-        errors,
-        setError,
         post,
         reset,
         processing,
@@ -105,7 +97,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                 id: user.user_id,
                 name: user.user_name,
                 email: user.user_email,
-                can_read: false,
+                can_read: true,
                 can_write: false,
             },
         ]);
@@ -187,7 +179,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                                                 handleAdd(filteredUsers.filter(u => String(u.user_id) === value)[0])
                                                 setOpen(false)
                                             }}
-                                            className="group flex justify-between"
+                                            className="group flex justify-between transition-all"
                                         >
                                             <UserListItem
                                                 name={user.user_name}
@@ -211,7 +203,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
 
             <ScrollArea className="h-48 my-4">
                 {data.users?.map(user => (
-                    <div className="flex justify-between items-center cursor-default py-2 rounded-md transition-colors">
+                    <div className="flex justify-between items-center cursor-default py-2 pr-3 rounded-md transition-colors">
                         <div className="flex items-center gap-2">
                             {userData.is_admin && (
                                 <Button

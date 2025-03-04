@@ -11,7 +11,7 @@ import useModalStore from "@/modalsStore/useModalStore"
 import { GroupType, MembersDataType, User } from "@/types"
 import { router } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDownIcon, EditIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react"
+import { EditIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react"
 
 export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataType[]): ColumnDef<GroupType>[] => {
     const { openModal } = useModalStore();
@@ -60,51 +60,57 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
     return [
         {
             accessorKey: "name",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Name
-                        <ArrowUpDownIcon />
-                    </Button>
-                )
-            },
+            header: () => <div className="text-left">Group</div>,
             cell: ({ row }) => {
                 return <GroupItem name={row.getValue("name")} color={row.original.color} />
             },
         },
         {
             id: "users",
+            header: () => <div className="text-left">Members</div>,
             cell: ({ row }) => {
-                const groupUsers = row.original.users?.slice(0, 3);
-                
+                const showCount = 3;
+                const groupUsers = row.original.users?.slice(0, showCount);
+                const extraCount = row.original.users && row.original.users.length > showCount
+                    ? row.original.users?.length - showCount
+                    : null;
+
                 return (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <div
-                                className="cursor-pointer flex"
-                                onClick={() => handelOpenManageGroupUsersDialog(row.original)}
-                            >
-                                <div className="flex mx-auto">
-                                    {groupUsers?.map((user, index) => (
-                                        <Avatar
-                                            className={cn(
-                                                "border-2 border-background",
-                                                index > 0 && "-ml-4"
-                                            )}
-                                        >
-                                            <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
-                                        </Avatar>
-                                    ))}
+                    <div className="w-28">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div
+                                    className="cursor-pointer flex w-fit"
+                                    onClick={() => handelOpenManageGroupUsersDialog(row.original)}
+                                >
+                                    <div className="flex">
+                                        {groupUsers?.map((user, index) => (
+                                            <Avatar
+                                                className={cn(
+                                                    "border-2 border-background",
+                                                    index > 0 && "-ml-4"
+                                                )}
+                                            >
+                                                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                                            </Avatar>
+                                        ))}
+                                        {extraCount && (
+                                            <Avatar
+                                                className={cn(
+                                                    "border-2 border-background -ml-4",
+                                                )}
+                                            >
+                                                <AvatarFallback className="text-xs text-muted-foreground">{`+${extraCount}`}</AvatarFallback>
+                                            </Avatar>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom" className="w-40">
-                            Manage group users
-                        </TooltipContent>
-                    </Tooltip>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="w-40">
+                                Manage group users
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                 )
             }
         },

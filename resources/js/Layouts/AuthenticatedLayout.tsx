@@ -23,10 +23,6 @@ export default function Authenticated({
         auth,
     } = usePage().props
 
-    // if (success) {
-    //     toast.success('Success', { description: success });
-    // }
-
     const { openModal } = useModalStore()
 
     const handleOpenModal = () => {

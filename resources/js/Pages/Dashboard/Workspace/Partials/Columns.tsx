@@ -142,7 +142,7 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                     });
                 }
 
-                return user.is_admin && (
+                return (user.is_admin || row.original.can_write) && (
                     <div className="space-x-1">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

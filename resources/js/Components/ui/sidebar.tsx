@@ -84,7 +84,6 @@ const SidebarProvider = React.forwardRef<
                 if (setOpenProp) {
                     setOpenProp(openState)
                 } else {
-                    console.log("second variant")
                     _setOpen(openState)
                 }
 
