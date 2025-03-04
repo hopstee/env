@@ -32,7 +32,7 @@ class InvitationNotifications extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -40,13 +40,24 @@ class InvitationNotifications extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $entityName = $this->invitation->accessable->name ?? 'наш сервис';
+        $teamName = $this->invitation->accessable->name ?? 'наш сервис';
         $roleName   = $this->invitation->role->name ?? 'пользователь';
 
         return (new MailMessage)
             ->subject('Invitation to the team!')
-            ->line("=You have been have granted access to the {$entityName} in {$roleName} role.")
+            ->line("You have been granted access to the {$teamName} in {$roleName} role.")
             ->action('Go to team', url('/invitations/accept/' . $this->invitation->token));
+    }
+
+    public function toDatabase($notifiable)
+    {
+        $teamName = $this->invitation->accessable->name ?? 'наш сервис';
+        $roleName   = $this->invitation->role->name ?? 'пользователь';
+
+        return [
+            'team' => $teamName,
+            'role' => $roleName,
+        ];
     }
 
     /**

@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal 
 import { cn } from "@/lib/utils"
 import { Button, ButtonProps, buttonVariants } from "@/Components/ui/button"
 import { InertiaLinkProps, Link } from "@inertiajs/react"
+import { VariantProps } from "class-variance-authority"
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
     <nav
@@ -39,9 +40,8 @@ type PaginationLinkProps = {
     isActive?: boolean
     href?: string | null
 }
-    // & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "onClick">
-    & Omit<InertiaLinkProps, "onProgress" | "onSuccess" | "onError" | "data" | "href">
-    & Pick<ButtonProps, "size">
+    & Omit<InertiaLinkProps, "onProgress" | "onSuccess" | "onError" | "data" | "href" | "size">
+    & Pick<VariantProps<typeof buttonVariants>, "size">
 
 const PaginationLink = ({
     className,

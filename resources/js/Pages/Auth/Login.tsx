@@ -8,6 +8,12 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { Loader2Icon } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
+type FormData = {
+    email: string;
+    password: string;
+    remember: boolean;
+}
+
 export default function Login({
     status,
     canResetPassword,
@@ -15,7 +21,7 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm<FormData>({
         email: '',
         password: '',
         remember: false,
