@@ -159,7 +159,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                             variant="outline"
                             role="combobox"
                             aria-expanded={open}
-                            className="w-full justify-between"
+                            className="w-full justify-between mb-4"
                         >
                             Search user...
                             <ChevronsUpDownIcon className="opacity-50" />
@@ -201,9 +201,9 @@ function GroupUsers(props: ManageGroupUsersProps) {
                 </Popover>
             )}
 
-            <ScrollArea className="h-48 my-4">
+            <ScrollArea className="h-60 mb-4">
                 {data.users?.map(user => (
-                    <div className="flex justify-between items-center cursor-default py-2 pr-3 rounded-md transition-colors">
+                    <div className="flex justify-between items-center cursor-default py-2 pr-3 pl-1 rounded-md transition-colors">
                         <div className="flex items-center gap-2">
                             {userData.is_admin && (
                                 <Button
