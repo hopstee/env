@@ -116,6 +116,7 @@ export type EvironmentVariableFiltersType = {
     page: number;
     perPage: number;
     query: string;
+    sortType: string;
 }
 
 export type VariablesPaginatedDataType = {

@@ -1,8 +1,8 @@
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { router } from "@inertiajs/react";
-import { ArrowRightIcon, LoaderIcon, LoaderPinwheelIcon, SearchIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowRightIcon, LoaderIcon, SearchIcon, XIcon } from "lucide-react";
+import { useState } from "react";
 
 type GroupSearchProps = {
     useLoading?: boolean,
@@ -20,13 +20,11 @@ export default function GroupSearch(props: GroupSearchProps) {
     const [loading, setLoading] = useState(false);
     const [hasChanged, setHasChanged] = useState(false);
 
-    const handleSearch = () => {
-        if (!hasChanged) return;
-
+    const makeQuery = (queryString: string) => {
         setLoading(true);
         router.get(route('t.active', { ...route().params }),
             {
-                query: tempQuery
+                query: queryString
             },
             {
                 preserveState: true,
@@ -34,9 +32,21 @@ export default function GroupSearch(props: GroupSearchProps) {
                 onFinish: () => setLoading(false),
             });
 
-        setQuery(tempQuery);
+        setQuery(queryString);
         setHasChanged(false);
+    }
+
+    const handleSearch = () => {
+        if (!hasChanged) return;
+        makeQuery(tempQuery || "");
     };
+
+    const clearSearch = () => {
+        setTempQuery("");
+        setHasChanged(false);
+        setQuery("");
+        makeQuery("");
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTempQuery(e.target.value);
@@ -51,11 +61,17 @@ export default function GroupSearch(props: GroupSearchProps) {
 
     const endIcon = (useLoading && loading)
         ? <LoaderIcon className="size-4 animate-spin" />
-        : hasChanged && (
-            <Button variant="ghost" size="sm-icon" onClick={handleSearch}>
-                <ArrowRightIcon className="size-4" />
-            </Button>
-        )
+        : hasChanged
+            ? (
+                <Button variant="ghost" size="sm-icon" onClick={handleSearch}>
+                    <ArrowRightIcon className="size-4" />
+                </Button>
+            )
+            : tempQuery && tempQuery?.length > 0 && (
+                <Button variant="ghost" size="sm-icon" onClick={clearSearch}>
+                    <XIcon className="size-4" />
+                </Button>
+            )
 
     return (
         <div className="relative w-full md:max-w-sm">

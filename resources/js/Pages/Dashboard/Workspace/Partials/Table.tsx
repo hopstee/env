@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import GroupSearch from "./GroupsSearch";
+import GroupsUpdatedAtOrder from "./GroupsUpdatedAtOrder";
 
 export default function EnvironmentVariablesDataTable({
     groups,
@@ -75,6 +76,9 @@ export default function EnvironmentVariablesDataTable({
                 <GroupsFilter
                     items={groups}
                     selected={groups.filter(group => group.id === filters.g)[0]}
+                />
+                <GroupsUpdatedAtOrder
+                    selected={filters.sortType}
                 />
             </div>
             <div className="rounded-md border">

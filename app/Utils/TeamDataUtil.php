@@ -18,7 +18,7 @@ class TeamDataUtil
         $teams = $user->teams;
         $teamId = session('selected_team_id') ?? $teams[0]->id;
 
-        $favoriteGroups = $user->getAccessibleGroups($teamId, true)->get();
+        $favoriteGroups = $user->getAccessibleGroups($teamId, true)->orderBy('added_to_favorites_at', 'asc')->get();
 
         $roles = Role::all();
 
@@ -29,9 +29,5 @@ class TeamDataUtil
             'roles'             => $roles,
             'notifications'     => Auth::user()->unreadNotifications,
         ]);
-    }
-
-    private static function filterRoleFields(array $role): array {
-        return array_intersect_key($role, array_flip(['id', 'name', 'value']));
     }
 }

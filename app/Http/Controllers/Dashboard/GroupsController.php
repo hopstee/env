@@ -72,13 +72,14 @@ class GroupsController extends Controller
     {
         $user = auth()->user();
 
-        $groups = $user->getAccessibleGroups($teamId)->get();
+        $groups = $user->getAccessibleGroups($teamId)->orderBy('group_created_at', 'desc')->get();
         $groups = $groups->map(function ($group) use ($includeUsers) {
             $mappedGroup = [
                 'id'          => $group->id,
                 'name'        => $group->name,
                 'color'       => $group->color,
                 'is_favorite' => $group->is_favorite,
+                'created_at'  => $group->group_created_at,
                 'link'        => request()->fullUrlWithQuery(['g' => $group->id]),
             ];
 

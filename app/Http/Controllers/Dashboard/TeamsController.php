@@ -25,7 +25,8 @@ class TeamsController extends Controller
 
         $groups = GroupsController::getGroups($teamId, true);
 
-        $filters = $request->only(['g', 'page', 'perPage', 'query']);
+        $filters = $request->only(['g', 'page', 'perPage', 'query', 'sort']);
+        Log::info("FILTERS", ["filters" => $filters]);
         $variablesData = $user->getEnvironmentVariables($teamId, $filters);
 
         TeamDataUtil::shareSelectedTeamData($request);

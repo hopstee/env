@@ -115,7 +115,7 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
                 }
 
                 return (
-                    <div className="space-x-1 w-[100px]">
+                    <div className="space-x-1 w-[100px] h-9">
                         {row.original.status === 'pending' && (
                             <Button
                                 variant="soft-warning-ghost"
@@ -134,7 +134,7 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
                                 onClick={handleRevoke}
                             >
                                 <RotateCwIcon className="size-4" />
-                                Revoke
+                                Resend
                             </Button>
                         )}
                     </div>

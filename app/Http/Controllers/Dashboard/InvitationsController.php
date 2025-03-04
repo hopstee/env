@@ -20,7 +20,7 @@ class InvitationsController extends Controller
 {
     public function show(Team $team)
     {
-        $invitations = $team->invitations(true)->get();
+        $invitations = $team->invitations(true)->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Dashboard/Invitations/Show', [
             'invitations' => $invitations,

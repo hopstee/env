@@ -1,22 +1,17 @@
 import GroupItem from "@/Components/GroupItem"
 import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
-import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
-import { Checkbox } from "@/Components/ui/checkbox"
-import CopyTooltip from "@/Components/ui/copy-tooltip"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
-import { COLORS, ColorKeys } from "@/constants/colors"
+import { ColorKeys } from "@/constants/colors"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { cn, getInitials } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
-import { EvironmentVariableType, GroupType, MembersDataType, User } from "@/types"
-import { Link, router, useForm, usePage } from "@inertiajs/react"
+import { GroupType, MembersDataType, User } from "@/types"
+import { router } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
-import { format } from "date-fns"
-import { ArchiveIcon, ArchiveRestoreIcon, ArrowRightIcon, ArrowUpDownIcon, CopyIcon, EditIcon, EyeIcon, EyeOffIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon, UsersIcon } from "lucide-react"
-import { useState } from "react"
+import { ArrowUpDownIcon, EditIcon, HeartIcon, HeartOffIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react"
 
 export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataType[]): ColumnDef<GroupType>[] => {
     const { openModal } = useModalStore();
@@ -65,7 +60,6 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
     return [
         {
             accessorKey: "name",
-            enableColumnFilter: true,
             header: ({ column }) => {
                 return (
                     <Button
@@ -84,9 +78,8 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
         {
             id: "users",
             cell: ({ row }) => {
-                // handelOpenManageGroupUsersDialog
                 const groupUsers = row.original.users?.slice(0, 3);
-                console.log(groupUsers)
+                
                 return (
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -117,7 +110,6 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
         },
         {
             id: "actions",
-            enableHiding: false,
             cell: ({ row }) => {
                 if (!user.is_admin) {
                     return (
@@ -147,8 +139,8 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
                                 onClick={() => handleChangeFavoriteStatus(row.original.id)}
                             >
                                 {row.original.is_favorite
-                                    ? <HeartOffIcon className="size-4 text-muted-foreground" />
-                                    : <HeartIcon className="size-4 text-muted-foreground" />
+                                    ? <HeartOffIcon className="size-4" />
+                                    : <HeartIcon className="size-4" />
                                 }
                                 {row.original.is_favorite
                                     ? "Remove from favorite"

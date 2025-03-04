@@ -8,38 +8,52 @@ import { cn } from "@/lib/utils";
 import { GroupType } from "@/types";
 import { router } from "@inertiajs/react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, LoaderIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, Loader2Icon, LoaderIcon, SortAscIcon, SortDescIcon } from "lucide-react";
 import { useState } from "react";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"]
+enum OrderTypesEnum {
+    ACS = "asc",
+    DESC = "desc",
+};
 
-export default function GroupsFilter(
+const OrderTypes = [
     {
-        items,
+        type: OrderTypesEnum.ACS,
+        label: "Sort ascendent",
+    },
+    {
+        type: OrderTypesEnum.DESC,
+        label: "Sort descendent",
+    },
+];
+
+export default function GroupsUpdatedAtOrder(
+    {
         selected,
     }: {
-        items: GroupType[];
-        selected?: GroupType;
+        selected?: string;
     }
 ) {
     const [open, setOpen] = useState(false)
     const isMobile = useIsMobile()
 
     const [loading, setLoading] = useState(false);
-    const [selectedItem, setSelectedItem] = useState(selected || items[0])
+    const [selectedItem, setSelectedItem] = useState<string>(selected ?? OrderTypes[0].type);
 
-    const onValueChanged = (group: GroupType) => {
+    const onValueChanged = (type: string) => {
         setLoading(true);
-        router.get(group.link, {},
+        router.get(route('t.active', { ...route().params }),
+            {
+                sort: type
+            },
             {
                 preserveState: true,
                 preserveScroll: true,
                 onFinish: () => setLoading(false),
-            }
-        );
+            });
     }
 
-    const handleSelectItem = (value: GroupType) => {
+    const handleSelectItem = (value: string) => {
         setOpen(false);
         setSelectedItem(value);
         onValueChanged(value);
@@ -50,21 +64,14 @@ export default function GroupsFilter(
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerTrigger asChild>
                     <Button variant="outline" className="w-full justify-between">
-                        {selectedItem.name}
-                        {loading && (
-                            <LoaderIcon className="size-4 animate-spin" />
-                        )}
-                        {!loading && (
-                            <ChevronsUpDownIcon className="size-4" />
-                        )}
+                        <GroupsUpdatedAtOrderTrigger item={selectedItem} loading={loading} />
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent>
                     <div className="mt-4 border-t">
-                        <GroupsList
-                            items={items}
+                        <OrderTypesList
                             selectedItem={selectedItem}
-                            handleSelect={handleSelectItem}
+                            handleChangeOrder={handleSelectItem}
                         />
                     </div>
                 </DrawerContent>
@@ -76,67 +83,67 @@ export default function GroupsFilter(
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="outline" className="w-48 justify-between">
-                    {selectedItem.name}
-                    {loading && (
-                        <LoaderIcon className="size-4 animate-spin" />
-                    )}
-                    {!loading && (
-                        <ChevronDownIcon className={cn(
-                            "size-4 transition-all duration-200",
-                            open && "rotate-180"
-                        )} />
-                    )}
+                    <GroupsUpdatedAtOrderTrigger item={selectedItem} loading={loading} />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                <GroupsList
-                    items={items}
+                <OrderTypesList
                     selectedItem={selectedItem}
-                    handleSelect={handleSelectItem}
+                    handleChangeOrder={handleSelectItem}
                 />
             </PopoverContent>
         </Popover>
     )
 }
 
-function GroupsList({
-    items,
+function GroupsUpdatedAtOrderTrigger({ item, loading }: { item: string, loading: boolean }) {
+    return [
+        <span>Last Updated</span>,
+        item === "asc" && !loading && (
+            <SortAscIcon className="size-4" />
+        ),
+        item === "desc" && !loading && (
+            <SortDescIcon className="size-4" />
+        ),
+        loading && (
+            <LoaderIcon className="size-4 animate-spin" />
+        ),
+    ];
+}
+
+function OrderTypesList({
     selectedItem,
-    handleSelect,
+    handleChangeOrder,
 }: {
-    items: GroupType[];
-    selectedItem: GroupType;
-    handleSelect: (item: GroupType) => void;
+    selectedItem: string;
+    handleChangeOrder: (item: string) => void;
 }) {
     return (
         <Command>
-            <CommandInput
-                placeholder="Group"
-                className="border-none"
-            />
             <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup>
-                    {items.map((item, index) => (
+                    {OrderTypes.map((order, index) => (
                         <CommandItem
                             key={index}
-                            value={item.name}
+                            value={order.type}
                             onSelect={() => {
-                                handleSelect(item)
+                                handleChangeOrder(order.type)
                             }}
                         >
-                            <GroupItem
-                                name={item.name}
-                                color={item.color}
-                            />
+                            {order.type === OrderTypesEnum.ACS && (
+                                <SortAscIcon className="size-4" />
+                            )}
+                            {order.type === OrderTypesEnum.DESC && (
+                                <SortDescIcon className="size-4" />
+                            )}
+                            {order.label}
                             <CommandShortcut>
-                                {item.id == selectedItem.id && (
+                                {order.type == selectedItem && (
                                     <CheckIcon className="size-4" />
                                 )}
                             </CommandShortcut>
                         </CommandItem>
-                    )
-                    )}
+                    ))}
                 </CommandGroup>
             </CommandList>
         </Command>

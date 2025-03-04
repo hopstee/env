@@ -38,7 +38,7 @@ class User extends Authenticatable
         'remember_token',
         'teams',
     ];
-    
+
     protected $appends = ['is_admin'];
 
     /**
@@ -64,7 +64,8 @@ class User extends Authenticatable
         return $this->teams()->where('teams.id', $teamId)->exists();
     }
 
-    public function getIsAdminAttribute(): bool {
+    public function getIsAdminAttribute(): bool
+    {
         $teamId = session('selected_team_id');
 
         if (!$teamId) {
@@ -85,12 +86,16 @@ class User extends Authenticatable
             ->where('groups.team_id', $teamId)
             ->withExists(['favoritedByUsers as is_favorite' => function ($query) {
                 $query->where('user_id', $this->id);
-            }]);
+            }])
+            ->addSelect('groups.*', 'groups.created_at as group_created_at');
 
         if ($isFavorite) {
-            $query->whereHas('favoritedByUsers', function ($q) {
-                $q->where('user_id', $this->id);
-            });
+            $query->leftJoin('favorite_groups', function ($join) {
+                $join->on('favorite_groups.group_id', '=', 'groups.id')
+                    ->where('favorite_groups.user_id', $this->id);
+            })
+                ->addSelect('favorite_groups.created_at as added_to_favorites_at')
+                ->whereNotNull('favorite_groups.created_at');
         }
 
         return $query;
@@ -127,12 +132,17 @@ class User extends Authenticatable
 
         $selectedGroupId = array_key_exists('g', $filters) ? $filters['g'] : '';
         $environmentVariableNameQuery = array_key_exists('query', $filters) ? $filters['query'] : '';
+        $sortDirection = array_key_exists('sort', $filters) && in_array(strtolower($filters['sort']), ['asc', 'desc'])
+            ? strtolower($filters['sort'])
+            : 'desc';
 
-        $groupsQuery = $this->getAccessibleGroups($teamId)->with(['environmentVariables' => function ($query) use ($environmentVariableNameQuery) {
-            if (!empty($environmentVariableNameQuery)) {
-                $query->where('environment_variables.key', 'ILIKE', "%{$environmentVariableNameQuery}%"); // Используем ILIKE для нечувствительного к регистру поиска в PostgreSQL
-            }
-        }]);
+        $groupsQuery = $this->getAccessibleGroups($teamId)
+            ->with(['environmentVariables' => function ($query) use ($environmentVariableNameQuery, $sortDirection) {
+                if (!empty($environmentVariableNameQuery)) {
+                    $query->where('environment_variables.key', 'ILIKE', "%{$environmentVariableNameQuery}%");
+                }
+                $query->orderBy('environment_variables.updated_at', $sortDirection);
+            }]);
 
         if (!empty($selectedGroupId)) {
             $groupsQuery->where('groups.id', $selectedGroupId);
