@@ -52,6 +52,7 @@ export const memberColumns = (user: User, roles: RoleType[], selectedTeamId: str
                         <UserListItem
                             name={row.getValue("user_name")}
                             email={row.original.user_email}
+                            avatar={row.original.user_avatar}
                         />
                     )
                 },

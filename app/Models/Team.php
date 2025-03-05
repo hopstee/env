@@ -49,6 +49,7 @@ class Team extends Model
                 'users.id as user_id',
                 'users.name as user_name',
                 'users.email as user_email',
+                'users.avatar as user_avatar',
                 'roles.id as role_id',
                 'roles.name as role_name',
                 'team_users.role_id as pivot_role_id',

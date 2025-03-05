@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Dashboard\TeamsController;
 use App\Models\User;
+use App\Utils\UserDataUtil;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,15 +34,23 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'password'  => ['required', 'confirmed', Rules\Password::defaults()],
+            'gender'    => 'required|in:male,female',
         ]);
 
+        $userData = UserDataUtil::generateUserData($request->name, $request->email);
+
+        Log::info($userData);
+        Log::info($userData['avatar']);
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password),
+            'gender'    => $request->gender,
+            'avatar'    => $userData ? $userData['avatar'] : null,
         ]);
 
         $team = TeamsController::createInitialTeam($user->name, $user->id);

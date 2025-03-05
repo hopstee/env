@@ -12,6 +12,7 @@ use App\Http\Middleware\RedirectToTeam;
 use App\Http\Middleware\ShareTeamsData;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -21,6 +22,10 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::get('/avatars/{filename}', function ($filename) {
+    return response()->file(Storage::disk('public')->path('avatars/' . $filename));
 });
 
 Route::middleware('auth')->group(function () {

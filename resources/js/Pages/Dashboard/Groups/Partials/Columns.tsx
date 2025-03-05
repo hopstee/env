@@ -1,5 +1,5 @@
 import GroupItem from "@/Components/GroupItem"
-import { Avatar, AvatarFallback } from "@/Components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Button } from "@/Components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
@@ -74,7 +74,7 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
                 const extraCount = row.original.users && row.original.users.length > showCount
                     ? row.original.users?.length - showCount
                     : null;
-
+                console.log(groupUsers)
                 return (
                     <div className="w-28">
                         <Tooltip>
@@ -91,6 +91,7 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
                                                     index > 0 && "-ml-4"
                                                 )}
                                             >
+                                                <AvatarImage src={`/${user.avatar}`}></AvatarImage>
                                                 <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                                             </Avatar>
                                         ))}

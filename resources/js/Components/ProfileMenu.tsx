@@ -39,12 +39,12 @@ import { getInitials } from "@/lib/utils";
 
 export default function ProfileMenu() {
     const user = usePage().props.auth.user;
-
+    console.log(user)
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer">
-                    {/* <AvatarImage></AvatarImage> */}
+                    <AvatarImage src={`/${user.avatar}`}></AvatarImage>
                     <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>

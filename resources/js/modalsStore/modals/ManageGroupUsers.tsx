@@ -2,7 +2,7 @@ import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 import { cn, deepClone, deepEqual } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
-import { ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, Trash2Icon } from "lucide-react";
+import { ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { FormEventHandler, useState } from "react";
 import { GroupType, GroupUserType, MembersDataType, User } from "@/types";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Checkbox } from "@/Components/ui/checkbox";
 import UserListItem from "@/Components/UserListItem";
+import { Input } from "@/Components/ui/input";
 
 export type ManageGroupUsersProps = {
     onClose: () => void;
@@ -85,9 +86,19 @@ function GroupUsers(props: ManageGroupUsersProps) {
     const searchList = teamUsers.filter(item => !excludeSet.has(item.user_id));
     const canUpdate = !deepEqual<GroupUserType[]>(data.users, groupUsers);
 
-    const filteredUsers = searchList.filter(user =>
+    // const filteredUsers = searchList.filter(user =>
+    //     user.user_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+    //     user.user_email?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    // );
+
+    const filteredTeamUsers = searchList.filter(user =>
         user.user_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
         user.user_email?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+
+    const filteredGroupUsers = data.users.filter(user =>
+        user.name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        user.email?.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
 
     const handleAdd = (user: MembersDataType) => {
@@ -97,6 +108,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                 id: user.user_id,
                 name: user.user_name,
                 email: user.user_email,
+                avatar: user.user_avatar,
                 can_read: true,
                 can_write: false,
             },
@@ -153,63 +165,72 @@ function GroupUsers(props: ManageGroupUsersProps) {
     return (
         <form>
             {userData.is_admin && (
-                <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={open}
-                            className="w-full justify-between mb-4"
-                        >
-                            Search user...
-                            <ChevronsUpDownIcon className="opacity-50" />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                        <Command>
-                            <CommandInput placeholder="Search user..." className="h-9" onValueChange={setSearch} />
-                            <CommandList>
-                                <CommandEmpty>No user found.</CommandEmpty>
-                                <CommandGroup>
-                                    {filteredUsers.map((user, index) => (
-                                        <CommandItem
-                                            key={index}
-                                            value={String(user.user_id)}
-                                            onSelect={(value) => {
-                                                handleAdd(filteredUsers.filter(u => String(u.user_id) === value)[0])
-                                                setOpen(false)
-                                            }}
-                                            className="group flex justify-between transition-all"
-                                        >
-                                            <UserListItem
-                                                name={user.user_name}
-                                                email={user.user_email}
-                                            />
-                                            <div className={cn(
-                                                "flex items-center text-xs text-muted-foreground gap-1",
-                                                "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
-                                            )}>
-                                                <PlusIcon className="size-3" />
-                                                Add to group
-                                            </div>
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </CommandList>
-                        </Command>
-                    </PopoverContent>
-                </Popover>
+                <Input
+                    startIcon={<SearchIcon className="size-4" />}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search user..."
+                    className="mb-4"
+                />
+                // <Popover open={open} onOpenChange={setOpen}>
+                //     <PopoverTrigger asChild>
+                //         <Button
+                //             variant="outline"
+                //             role="combobox"
+                //             aria-expanded={open}
+                //             className="w-full justify-between mb-4"
+                //         >
+                //             Search user...
+                //             <ChevronsUpDownIcon className="opacity-50" />
+                //         </Button>
+                //     </PopoverTrigger>
+                //     <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                //         <Command>
+                //             <CommandInput placeholder="Search user..." className="h-9" onValueChange={setSearch} />
+                //             <CommandList>
+                //                 <CommandEmpty>No user found.</CommandEmpty>
+                //                 <CommandGroup>
+                //                     {filteredUsers.map((user, index) => (
+                //                         <CommandItem
+                //                             key={index}
+                //                             value={String(user.user_id)}
+                //                             onSelect={(value) => {
+                //                                 handleAdd(filteredUsers.filter(u => String(u.user_id) === value)[0])
+                //                                 setOpen(false)
+                //                             }}
+                //                             className="group flex justify-between transition-all"
+                //                         >
+                //                             <UserListItem
+                //                                 name={user.user_name}
+                //                                 email={user.user_email}
+                //                             />
+                //                             <div className={cn(
+                //                                 "flex items-center text-xs text-muted-foreground gap-1",
+                //                                 "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                //                             )}>
+                //                                 <PlusIcon className="size-3" />
+                //                                 Add to group
+                //                             </div>
+                //                         </CommandItem>
+                //                     ))}
+                //                 </CommandGroup>
+                //             </CommandList>
+                //         </Command>
+                //     </PopoverContent>
+                // </Popover>
             )}
 
-            <ScrollArea className="h-60 mb-4">
-                {data.users?.map(user => (
+            <ScrollArea className="h-80 mb-4 border rounded-md">
+                <p className="w-full px-4 py-2 font-semibold">Group members</p>
+                {filteredGroupUsers?.map(user => (
                     <div className="flex justify-between items-center cursor-default py-2 pr-3 pl-1 rounded-md transition-colors">
                         <div className="flex items-center gap-2">
                             {userData.is_admin && (
                                 <Button
                                     variant="ghost"
                                     size="sm-icon"
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.preventDefault();
                                         if (userData.id !== user.id) {
                                             handleRemove(user.id)
                                         }
@@ -222,6 +243,7 @@ function GroupUsers(props: ManageGroupUsersProps) {
                             <UserListItem
                                 name={user.name}
                                 email={user.email}
+                                avatar={user.avatar}
                             />
                         </div>
                         <div className="flex gap-2">
@@ -244,7 +266,44 @@ function GroupUsers(props: ManageGroupUsersProps) {
                         </div>
                     </div>
                 ))}
+
+                <p className="w-full px-4 py-2 font-semibold">Team members</p>
+                {filteredTeamUsers.length === 0 && (
+                    <div className="w-full flex mb-4">
+                        <p className="mx-auto text-xs">No members</p>
+                    </div>
+                )}
+                {filteredTeamUsers?.map(user => (
+                    <div className="flex justify-between items-center cursor-default py-2 pr-3 pl-1 rounded-md transition-colors">
+                        <div className="flex items-center gap-2">
+                            {userData.is_admin && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm-icon"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        if (userData.id !== user.user_id) {
+                                            handleAdd(user)
+                                        }
+                                    }}
+                                    disabled={userData.id === user.user_id}
+                                >
+                                    <PlusIcon className="size-4" />
+                                </Button>
+                            )}
+                            <UserListItem
+                                name={user.user_name}
+                                email={user.user_email}
+                                avatar={user.user_avatar}
+                            />
+                        </div>
+                    </div>
+                ))}
             </ScrollArea>
+
+            {/* <ScrollArea className="h-48 mb-4">
+                
+            </ScrollArea> */}
 
             <div className="flex gap-2">
                 <Button

@@ -12,7 +12,7 @@ export default function UserListItem({ name, email, avatar }: UserListItemType) 
         <div className="flex items-center gap-2">
             <Avatar>
                 {avatar && (
-                    <AvatarImage src={avatar} alt={`${name}'s avatar`} />
+                    <AvatarImage src={`/${avatar}`} alt={`${name}'s avatar`} />
                 )}
                 <AvatarFallback>{getInitials(name)}</AvatarFallback>
             </Avatar>

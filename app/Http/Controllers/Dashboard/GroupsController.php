@@ -89,6 +89,7 @@ class GroupsController extends Controller
                         'id'        => $permission->user->id,
                         'name'      => $permission->user->name,
                         'email'     => $permission->user->email,
+                        'avatar'    => $permission->user->avatar,
                         'can_read'  => (bool) $permission->can_read,
                         'can_write' => (bool) $permission->can_write,
                     ];

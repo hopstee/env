@@ -7,6 +7,8 @@ export type User = {
     email: string;
     email_verified_at?: string;
     is_admin: boolean;
+    gender: string;
+    avatar?: string;
     created_at: string;
     updated_at: string;
 }
@@ -29,6 +31,7 @@ export type GroupUserType = {
     id: number;
     name: string;
     email: string;
+    avatar?: string;
     can_read: boolean;
     can_write: boolean;
 }
@@ -102,6 +105,7 @@ export type MembersDataType = {
     user_email: string;
     user_id: number;
     user_name: string;
+    user_avatar?: string;
     created_at: string;
     pivot: {
         created_at: string;
