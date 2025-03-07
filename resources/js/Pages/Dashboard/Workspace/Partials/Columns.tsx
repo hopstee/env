@@ -2,6 +2,7 @@ import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import CopyTooltip from "@/Components/ui/copy-tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
 import { COLORS } from "@/constants/colors"
 import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
@@ -11,16 +12,45 @@ import { EvironmentVariableType, GroupType, User } from "@/types"
 import { router, useForm } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { ArrowUpDownIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from "lucide-react"
+import { ArrowUpDownIcon, CheckIcon, CopyIcon, CopyPlusIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
 export const environmentVariablesColumns = (user: User, groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
     const { openModal } = useModalStore();
-    
+
     return [
         {
+            id: "full_copy",
+            cell: ({ row }) => {
+                const [copied, setCopied] = useState(false);
+
+                const handleCopy = (valueToCopy: string) => {
+                    navigator.clipboard.writeText(valueToCopy);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                };
+
+                return (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm-icon"
+                                onClick={() => handleCopy(`${row.original.key}=${row.original.value}`)}
+                            >
+                                {copied && <CheckIcon />}
+                                {!copied && <CopyIcon />}
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top">
+                            {copied ? "Copied" : "Copy 'key=value'"}
+                        </TooltipContent>
+                    </Tooltip>
+                )
+            },
+        },
+        {
             accessorKey: "key",
-            enableColumnFilter: true,
             cell: ({ row }) => {
                 return (
                     <div className="w-[200px]">
@@ -36,8 +66,6 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
         },
         {
             accessorKey: "value",
-            enableColumnFilter: false,
-            enableResizing: true,
             cell: ({ row }) => {
                 const [showValue, setShowValue] = useState(false);
 
@@ -108,8 +136,6 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
         },
         {
             id: "actions",
-            size: 50,
-            enableHiding: false,
             cell: ({ row }) => {
                 const originalData = row.original;
 
@@ -142,6 +168,17 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                     });
                 }
 
+                const handleDublicate = () => {
+                    openModal(ModalTypes.ENVIRONMENT_VARIABLE_MODAL, {
+                        title: "Dublicate environment variable",
+                        groups,
+                        initialValues: {
+                            key: originalData.key,
+                            value: originalData.value,
+                        }
+                    })
+                }
+
                 return (user.is_admin || row.original.can_write) && (
                     <div className="space-x-1">
                         <DropdownMenu>
@@ -157,6 +194,10 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                                 >
                                     <PenSquareIcon />
                                     Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleDublicate}>
+                                    <CopyPlusIcon />
+                                    Dublicate
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handleDelete}>
                                     <Trash2Icon />
