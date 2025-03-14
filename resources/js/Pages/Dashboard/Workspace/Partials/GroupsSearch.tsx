@@ -74,7 +74,7 @@ export default function GroupSearch(props: GroupSearchProps) {
             )
 
     return (
-        <div className="relative w-full md:max-w-sm">
+        <div className="relative w-full">
             <Input
                 type="text"
                 placeholder="Filter variables..."

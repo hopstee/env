@@ -16,17 +16,19 @@ export default function GroupItem(
     return (
         <Badge
             className={cn(
+                "flex w-fit",
                 `bg-${COLORS[color].default} hover:bg-${COLORS[color].default} text-${COLORS[color].foreground}`,
                 compact && "px-0 h-4"
             )}
         >
-            <span
+            <p
                 className={cn(
+                    "w-full truncate",
                     compact && "opacity-0"
                 )}
             >
                 {name}
-            </span>
+            </p>
         </Badge>
     )
 

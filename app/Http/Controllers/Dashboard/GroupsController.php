@@ -73,7 +73,7 @@ class GroupsController extends Controller
         $user = auth()->user();
 
         $groups = $user->getAccessibleGroups($teamId)->orderBy('group_created_at', 'desc')->get();
-        $groups = $groups->map(function ($group) use ($includeUsers) {
+        $groups = $groups->map(function ($group) use ($includeUsers, $user) {
             $mappedGroup = [
                 'id'          => $group->id,
                 'name'        => $group->name,
@@ -81,6 +81,9 @@ class GroupsController extends Controller
                 'is_favorite' => $group->is_favorite,
                 'created_at'  => $group->group_created_at,
                 'link'        => request()->fullUrlWithQuery(['g' => $group->id]),
+                'editable'    => $group->permissions->contains(function ($permission) use ($user) {
+                    return $permission->user->id === $user->id && (bool) $permission->can_write;
+                }),
             ];
 
             if ($includeUsers) {

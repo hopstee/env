@@ -42,6 +42,7 @@ export type GroupType = {
     color: ColorKeys;
     is_favorite: boolean;
     link: string;
+    editable: boolean;
     users?: GroupUserType[];
 }
 

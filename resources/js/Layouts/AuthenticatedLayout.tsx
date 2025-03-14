@@ -3,10 +3,10 @@ import ThemeSwitcher from '@/Components/ThemeSwitcher';
 import AppSidebar from '@/Components/sidebar/AppSidebar';
 import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
-import { SidebarProvider } from '@/Components/ui/sidebar';
+import { SidebarProvider, useSidebar } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
+import { cn } from '@/lib/utils';
 import useModalStore from '@/modalsStore/useModalStore';
-import { GroupType, RoleType, TeamType } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
@@ -38,7 +38,10 @@ export default function Authenticated({
         <SidebarProvider>
             <AppSidebar />
 
-            <div className="min-h-full bg-background w-full">
+            <div className={cn(
+                "flex-1 min-h-full bg-background w-full",
+                "min-w-0",
+            )}>
                 <nav className="bg-card">
                     <div className="px-3">
                         <div className="flex h-16 justify-between">
@@ -66,7 +69,7 @@ export default function Authenticated({
                 </nav>
 
                 <div className="py-3 sm:py-6">
-                    <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-12 space-y-3 sm:space-y-6 lg:space-y-6">
+                    <div className="mx-auto max-w-7xl w-full px-3 sm:px-6 space-y-3 sm:space-y-6 lg:space-y-6">
                         <main>{children}</main>
                     </div>
                 </div>

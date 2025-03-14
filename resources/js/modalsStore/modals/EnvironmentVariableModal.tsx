@@ -156,7 +156,7 @@ function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
                         <SelectValue placeholder={selectedGroup} />
                     </SelectTrigger>
                     <SelectContent>
-                        {groups?.filter(group => group.id).map((group: GroupType, index: number) => (
+                        {groups?.filter(group => group.id && group.editable).map((group: GroupType, index: number) => (
                             <SelectItem
                                 key={index}
                                 value={group.id}

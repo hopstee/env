@@ -69,7 +69,8 @@ export default function EnvironmentVariablesDataTable({
 
     return (
         <div className="space-y-3 mt-3">
-            <div className="flex flex-col md:flex-row items-center gap-3">
+            {/* <div className="flex flex-col md:flex-row items-center gap-3"> */}
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3">
                 <GroupSearch
                     queryParam={filters.query}
                 />

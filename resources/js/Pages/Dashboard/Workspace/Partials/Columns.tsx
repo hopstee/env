@@ -17,7 +17,7 @@ import { useState } from "react"
 
 export const environmentVariablesColumns = (user: User, groups: GroupType[]): ColumnDef<EvironmentVariableType>[] => {
     const { openModal } = useModalStore();
-
+    console.log(groups)
     return [
         {
             id: "full_copy",

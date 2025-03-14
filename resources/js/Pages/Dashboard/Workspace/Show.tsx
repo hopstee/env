@@ -29,6 +29,8 @@ export default function Dashboard({
         })
     }
 
+    const canEditAnyGroup = groups.some(group => group.editable === true)
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
@@ -37,7 +39,7 @@ export default function Dashboard({
                 <span>
                     Environmet variables
                 </span>
-                {auth.user.is_admin && (
+                {(auth.user.is_admin || canEditAnyGroup) && (
                     <Button
                         size="sm"
                         variant="outline"

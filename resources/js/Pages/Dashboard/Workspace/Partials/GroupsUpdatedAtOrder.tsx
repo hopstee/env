@@ -82,7 +82,7 @@ export default function GroupsUpdatedAtOrder(
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" className="w-48 justify-between">
+                <Button variant="outline" className="justify-between">
                     <GroupsUpdatedAtOrderTrigger item={selectedItem} loading={loading} />
                 </Button>
             </PopoverTrigger>

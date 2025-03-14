@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/groups', [GroupsController::class, 'show'])->name('t.groups');
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
             Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
+            Route::get('/api-keys', [InvitationsController::class, 'show'])->name('t.api-keys');
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
         });
     });

@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon, LifeBuoyIcon, ListIcon, SendIcon, SettingsIcon, UserPlusIcon, UsersIcon } from "lucide-react"
+import { KeyRoundIcon, LayoutDashboardIcon, LifeBuoyIcon, ListIcon, SendIcon, SettingsIcon, UserPlusIcon, UsersIcon } from "lucide-react"
 
 import {
     Sidebar,
@@ -39,6 +39,12 @@ const adminMainNav = (teamId: string): NavItemType[] => [
         url: `/t/${teamId}/invitations`,
         icon: UserPlusIcon,
         route: "t.invitations",
+    },
+    {
+        title: "Api Keys",
+        url: `/t/${teamId}/api-keys`,
+        icon: KeyRoundIcon,
+        route: "t.api-keys",
     },
     {
         title: "Settings",
