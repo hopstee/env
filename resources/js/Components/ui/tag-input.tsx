@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/Components/ui/badge";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ScrollArea } from "./scroll-area";
 
 type TagInputProps = Omit<React.ComponentProps<"input">, "value" | "onChange"> & {
     tags: string[];

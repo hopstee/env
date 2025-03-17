@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
@@ -62,5 +63,10 @@ class Group extends Model
             ['user_id' => $userId, 'group_id' => $this->id],
             ['can_read' => $canRead, 'can_write' => $canWrite],
         );
+    }
+
+    public function apiKeys(): HasMany
+    {
+        return $this->hasMany(ApiKey::class);
     }
 }

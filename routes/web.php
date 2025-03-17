@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\ApiKeysController;
 use App\Http\Controllers\Dashboard\EnvironmentVariablesController;
 use App\Http\Controllers\Dashboard\GroupsController;
 use App\Http\Controllers\Dashboard\InvitationsController;
@@ -43,7 +44,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/groups', [GroupsController::class, 'show'])->name('t.groups');
             Route::get('/members', [MembersController::class, 'show'])->name('t.members');
             Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
-            Route::get('/api-keys', [InvitationsController::class, 'show'])->name('t.api-keys');
+            Route::get('/api-keys', [ApiKeysController::class, 'show'])->name('t.api-keys');
             Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
         });
     });
@@ -61,10 +62,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{group}', [GroupsController::class, 'destroy'])->name('group.destroy');
     });
 
-    Route::prefix('environmebt_variables')->group(function () {
-        Route::post('/', [EnvironmentVariablesController::class, 'store'])->name('environmebt_variables.create');
-        Route::post('/{variable}', [EnvironmentVariablesController::class, 'update'])->name('environmebt_variables.update');
-        Route::delete('/{variable}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt_variables.destroy');
+    Route::prefix('environmebt-variables')->group(function () {
+        Route::post('/', [EnvironmentVariablesController::class, 'store'])->name('environmebt-variables.create');
+        Route::post('/{variable}', [EnvironmentVariablesController::class, 'update'])->name('environmebt-variables.update');
+        Route::delete('/{variable}', [EnvironmentVariablesController::class, 'destroy'])->name('environmebt-variables.destroy');
     });
 
     Route::prefix('members')->group(function () {
@@ -87,6 +88,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/decline/{token}', [InvitationsController::class, 'decline'])->name('invitations.decline');
         
         Route::post('/revoked/{invitation}', [InvitationsController::class, 'revoke'])->name('invitations.revoke');
+    });
+
+    Route::prefix('api-keys')->group(function () {
+        Route::post('/', [ApiKeysController::class, 'store'])->name('api-keys.create');
+        Route::post('/{apiKey}', [ApiKeysController::class, 'update'])->name('api-keys.update');
+        Route::post('/{apiKey}/regen', [ApiKeysController::class, 'regenerate'])->name('api-keys.regen');
+        Route::delete('/{apiKey}', [ApiKeysController::class, 'destroy'])->name('api-keys.destroy');
     });
 });
 

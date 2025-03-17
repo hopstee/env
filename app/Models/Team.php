@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class Team extends Model
@@ -86,5 +87,60 @@ class Team extends Model
         }
 
         return $this->hasMany(Invitation::class, 'team_id');
+    }
+
+    public function apiKeys(): HasMany
+    {
+        return $this->hasMany(ApiKey::class);
+    }
+
+    public function apiKeysWithUsers($filters)
+    {
+        $perPageOptions = [10, 25, 50, 100];
+
+        $selectedUserIds = array_key_exists('users', $filters) ? $filters['users'] : '';
+
+        $apiKeysQuery = $this->hasMany(ApiKey::class, 'team_id')
+            ->with('user');
+
+        if (!empty($selectedGroupId)) {
+            $apiKeysQuery->whereIn('groups.user_id', $selectedUserIds);
+        }
+
+        $apiKeys = $apiKeysQuery->get();
+
+        $perPage = array_key_exists('perPage', $filters) ? (int)$filters['perPage'] : $perPageOptions[0];
+        $totalItems = $apiKeys->count();
+        $lastPage = max(1, (int) ceil($totalItems / $perPage));
+
+        $page = array_key_exists('page', $filters) ? (int)$filters['page'] : 1;
+        if ($page > $lastPage) {
+            $page = $lastPage;
+        }
+
+        $paginated = new LengthAwarePaginator(
+            $apiKeys->forPage($page, $perPage)->values()->toArray(),
+            $totalItems,
+            $perPage,
+            $page,
+            [
+                'path'  => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+
+        $paginatedArray = $paginated->toArray();
+        $paginatedArray['links'] = array_values(array_filter($paginatedArray['links'], function ($link) {
+            return isset($link['label']) && !in_array($link['label'], ['&laquo; Previous', 'Next &raquo;']);
+        }));
+
+        $paginatedArray['per_page_options'] = collect($perPageOptions)->map(function ($option) use ($page) {
+            return [
+                'label' => $option,
+                'link' => request()->fullUrlWithQuery(['perPage' => $option]),
+            ];
+        });
+
+        return $paginatedArray;
     }
 }

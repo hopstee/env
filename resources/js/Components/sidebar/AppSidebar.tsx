@@ -4,6 +4,7 @@ import {
     Sidebar,
     SidebarContent,
     SidebarHeader,
+    SidebarRail,
 } from "@/Components/ui/sidebar"
 import { usePage } from "@inertiajs/react"
 import TeamSwitcher from "./partials/TeamSwitcher"
@@ -96,6 +97,7 @@ export default function AppSidebar() {
                 <FavoriteGroups items={favoriteGroups} selectedTeamId={selectedTeamId} isAdmin={auth.user.is_admin} />
                 <BottomNav items={secondaryItems(selectedTeamId)} className="mt-auto" />
             </SidebarContent>
+            <SidebarRail />
         </Sidebar>
     )
 }

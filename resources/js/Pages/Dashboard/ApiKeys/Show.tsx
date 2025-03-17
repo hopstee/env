@@ -1,19 +1,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, MembersDataType, User, VariablesPaginatedDataType } from '@/types';
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType, MembersDataType, ApiKeysPaginatedDataType } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import EnvironmentVariablesDataTable from './Partials/Table';
+import ApiKeysDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
 import { PlusCircleIcon } from 'lucide-react';
 import useModalStore from '@/modalsStore/useModalStore';
 import { ModalTypes } from '@/constants/modals';
-import GroupsDataTable from './Partials/Table';
 
-export default function Groups({
-    groups,
-    teamUsers,
+export default function ApiKeysPage({
+    apiKeys,
+    users,
+    filters,
 }: {
-    groups: GroupType[];
-    teamUsers: MembersDataType[];
+    apiKeys: ApiKeysPaginatedDataType;
+    users:  MembersDataType[];
+    filters: EvironmentVariableFiltersType;
 }) {
     const {
         selectedTeamId,
@@ -23,21 +24,22 @@ export default function Groups({
     const { openModal } = useModalStore();
 
     const handleOpenCreateDialog = () => {
-        openModal(ModalTypes.GROUP_MODAL, {
-            title: "Add group",
-            teamId: selectedTeamId
-        });
+        openModal(ModalTypes.API_KEYS_MODAL, {
+            title: "Add api key",
+            users,
+            team_id: selectedTeamId,
+        })
     }
 
     return (
         <AuthenticatedLayout>
-            <Head title="Groups" />
+            <Head title="Api Keys" />
 
             <div className="w-full flex items-center justify-between">
                 <span>
-                    Groups
+                    Api Keys
                 </span>
-                {auth.user.is_admin && (
+                {(auth.user.is_admin) && (
                     <Button
                         size="sm"
                         variant="outline"
@@ -49,11 +51,10 @@ export default function Groups({
                 )}
             </div>
 
-            <GroupsDataTable
-                groups={groups}
-                teamUsers={teamUsers}
-                teamId={selectedTeamId}
+            <ApiKeysDataTable
+                apiKeys={apiKeys}
                 user={auth.user}
+                users={users}
             />
         </AuthenticatedLayout>
     );

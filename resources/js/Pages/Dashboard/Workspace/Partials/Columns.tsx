@@ -154,7 +154,7 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                 };
 
                 const handleConfirmDelete = () => {
-                    router.delete(route('environmebt_variables.destroy', { variable: originalData.id }), {
+                    router.delete(route('environmebt-variables.destroy', { variable: originalData.id }), {
                         preserveScroll: true,
                     });
                 }

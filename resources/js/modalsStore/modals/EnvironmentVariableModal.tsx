@@ -86,8 +86,8 @@ function EnvironmentVariableForm(props: EnvironmentVariableModalProps) {
 
         post(
             edit
-                ? route('environmebt_variables.update', { 'variable': initialValues?.env_id })
-                : route('environmebt_variables.create'),
+                ? route('environmebt-variables.update', { 'variable': initialValues?.env_id })
+                : route('environmebt-variables.create'),
             {
                 preserveScroll: true,
                 onSuccess: () => {
