@@ -98,13 +98,13 @@ class Team extends Model
     {
         $perPageOptions = [10, 25, 50, 100];
 
-        $selectedUserIds = array_key_exists('users', $filters) ? $filters['users'] : '';
+        $selectedUserId = array_key_exists('u', $filters) ? $filters['u'] : '';
 
         $apiKeysQuery = $this->hasMany(ApiKey::class, 'team_id')
             ->with('user');
 
-        if (!empty($selectedGroupId)) {
-            $apiKeysQuery->whereIn('groups.user_id', $selectedUserIds);
+        if (!empty($selectedUserId)) {
+            $apiKeysQuery->where('api_keys.user_id', $selectedUserId);
         }
 
         $apiKeys = $apiKeysQuery->get();

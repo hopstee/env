@@ -148,9 +148,17 @@ export type VariablesPaginatedDataType = {
     total: number;
 }
 
+export type ApiKeyUserType = {
+    id: number;
+    name: string;
+    email: string;
+    avatar: string;
+    link: string;
+}
+
 export type ApiKeysType = {
     id: number;
-    user: User;
+    user: ApiKeyUserType;
     api_key: string;
     team_id: string;
     is_active: boolean;
@@ -181,6 +189,12 @@ export type ApiKeysPaginatedDataType = {
     prev_page_url: string | null;
     to: number;
     total: number;
+}
+
+export type ApiKeyFiltersType = {
+    u: number;
+    page: number;
+    perPage: number;
 }
 
 export type PageProps<

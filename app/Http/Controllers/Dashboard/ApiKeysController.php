@@ -14,10 +14,27 @@ class ApiKeysController extends Controller
 {
     public function show(Request $request, Team $team)
     {
-        $filters = $request->only(['users', 'page', 'perPage']);
+        $filters = $request->only(['u', 'page', 'perPage']);
         $apiKeysWithUsers = $team->apiKeysWithUsers($filters);
 
         $users = $team->users()->get();
+        $users = $users->map(function ($user) {
+            return [
+                'id'        => $user->user_id,
+                'name'      => $user->user_name,
+                'email'     => $user->user_email,
+                'avatar'    => $user->user_avatar,
+                'link'      => request()->fullUrlWithQuery(['u' => $user->user_id]),
+            ];
+        });
+
+        $users->prepend([
+            'id'        => null,
+            'name'      => 'All users',
+            'email'     => null,
+            'avatar'    => null,
+            'link'      => request()->fullUrlWithQuery(['u' => null]),
+        ]);
 
         return Inertia::render(
             'Dashboard/ApiKeys/Show',
@@ -67,7 +84,7 @@ class ApiKeysController extends Controller
         ApiKey::create([
             'team_id' => $apiKey->team_id,
             'user_id' => $apiKey->user_id,
-            'expires_at' => Carbon::parse($apiKey->expires_at)->addMonth(),
+            'expires_at' => $apiKey->expires_at ? Carbon::parse($apiKey->expires_at)->addMonth() : null,
         ]);
 
         return back();

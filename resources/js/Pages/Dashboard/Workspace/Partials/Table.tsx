@@ -44,9 +44,11 @@ export default function EnvironmentVariablesDataTable({
     const isLastPage = metadata.last_page === currentPage;
     const nextPageUrl = isLastPage ? null : metadata.next_page_url;
 
+    const columns = environmentVariablesColumns(user, groups);
+
     const table = useReactTable({
         data: variables,
-        columns: environmentVariablesColumns(user, groups),
+        columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
@@ -104,7 +106,7 @@ export default function EnvironmentVariablesDataTable({
                         ) : (
                             <TableRow>
                                 <TableCell
-                                    colSpan={environmentVariablesColumns.length}
+                                    colSpan={columns.length}
                                     className="h-16 text-center"
                                 >
                                     No results.

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType, MembersDataType, ApiKeysPaginatedDataType } from '@/types';
+import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, VariablesPaginatedDataType, MembersDataType, ApiKeysPaginatedDataType, ApiKeyFiltersType, ApiKeyUserType } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import ApiKeysDataTable from './Partials/Table';
 import { Button } from '@/Components/ui/button';
@@ -13,8 +13,8 @@ export default function ApiKeysPage({
     filters,
 }: {
     apiKeys: ApiKeysPaginatedDataType;
-    users:  MembersDataType[];
-    filters: EvironmentVariableFiltersType;
+    users:  ApiKeyUserType[];
+    filters: ApiKeyFiltersType;
 }) {
     const {
         selectedTeamId,
@@ -52,8 +52,10 @@ export default function ApiKeysPage({
             </div>
 
             <ApiKeysDataTable
-                apiKeys={apiKeys}
+                apiKeys={apiKeys.data}
                 user={auth.user}
+                metadata={apiKeys}
+                filters={filters}
                 users={users}
             />
         </AuthenticatedLayout>

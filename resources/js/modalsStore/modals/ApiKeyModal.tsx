@@ -5,7 +5,7 @@ import { Button } from "@/Components/ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
 import { CalendarIcon, Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
 import { Input } from "@/Components/ui/input";
-import { GroupType, MembersDataType } from "@/types";
+import { ApiKeyUserType, GroupType, MembersDataType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -15,17 +15,18 @@ import { cn, getInitials } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
 import { addDays, addMonths, format } from "date-fns";
 import { Calendar } from "@/Components/ui/calendar";
+import UserSmallItem from "@/Components/UserSmallItem";
 
 type InitialValues = {
     user_id?: string;
-    expires_at?: string | Date;
+    expires_at?: string | Date | null;
     api_key_id?: number;
 }
 
 export type ApiKeyModalProps = {
     onClose: () => void;
     title: string;
-    users: MembersDataType[];
+    users: ApiKeyUserType[];
     team_id?: string;
     edit?: boolean;
     initialValues?: InitialValues;
@@ -84,7 +85,7 @@ function ApiKeyForm(props: ApiKeyModalProps) {
         team_id,
     });
 
-    const selectedUser = users.find(user => String(user.user_id) === data.user_id)?.user_name || "Select user";
+    const selectedUser = users.find(user => String(user.id) === data.user_id)?.name || "Select user";
 
     const createApiKey: FormEventHandler = (e) => {
         e.preventDefault();
@@ -125,20 +126,15 @@ function ApiKeyForm(props: ApiKeyModalProps) {
                     </SelectTrigger>
                     {!edit && (
                         <SelectContent>
-                            {users?.map((user: MembersDataType, index: number) => (
+                            {users?.map((user: ApiKeyUserType, index: number) => (
                                 <SelectItem
                                     key={index}
-                                    value={String(user.user_id)}
+                                    value={String(user.id)}
                                 >
-                                    <div className="flex items-center gap-2">
-                                        <Avatar className="size-6">
-                                            {user.user_avatar && (
-                                                <AvatarImage src={`/${user.user_avatar}`} alt={`${user.user_name}'s avatar`} />
-                                            )}
-                                            <AvatarFallback>{getInitials(user.user_name)}</AvatarFallback>
-                                        </Avatar>
-                                        <span className="text-sm text-muted-foreground">{user.user_name}</span>
-                                    </div>
+                                    <UserSmallItem
+                                        name={user.name}
+                                        avatar={user.avatar}
+                                    />
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -151,7 +147,7 @@ function ApiKeyForm(props: ApiKeyModalProps) {
             <div className="w-full">
                 <ExpiratesAtPicker
                     data={data.expires_at}
-                    setData={(date) => setData('expires_at', date)}
+                    setData={(date) => setData('expires_at', date as Date)}
                 />
 
                 <InputError message={errors.expires_at} className="mt-1" />
@@ -174,12 +170,12 @@ function ExpiratesAtPicker({
     data,
     setData,
 }: {
-    data?: string | Date;
-    setData: (value: string | Date) => void;
+    data?: string | Date | null;
+    setData: (value: string | Date | null) => void;
 }) {
     const [open, setOpen] = useState(false);
 
-    const selectDate = (date: string | Date) => {
+    const selectDate = (date: string | Date | null) => {
         setData(date);
         setOpen(false);
     }
@@ -195,29 +191,31 @@ function ExpiratesAtPicker({
                     )}
                 >
                     <CalendarIcon />
-                    {data ? format(data, "PPP") : <span>Pick a date</span>}
+                    {data ? format(data, "PPP") : <span>Without expiration</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent
-                align="start"
-                className="flex w-auto flex-col space-y-2 p-2"
+                align="center"
+                // w-[--radix-popover-trigger-width]
+                className="flex  flex-col space-y-2 p-2"
             >
                 <Select
                     onValueChange={(value) =>
-                        setData(addDays(new Date(), parseInt(value)))
+                        setData(value === '-1' ? null : addDays(new Date(), parseInt(value)))
                     }
                 >
                     <SelectTrigger>
                         <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="popper">
-                        <SelectItem value="0">Today</SelectItem>
-                        <SelectItem value="1">Tomorrow</SelectItem>
-                        <SelectItem value="3">In 3 days</SelectItem>
-                        <SelectItem value="7">In a week</SelectItem>
+                        <SelectItem value="7">7 days</SelectItem>
+                        <SelectItem value="30">30 days</SelectItem>
+                        <SelectItem value="60">60 days</SelectItem>
+                        <SelectItem value="90">90 days</SelectItem>
+                        <SelectItem value="-1">No expiration</SelectItem>
                     </SelectContent>
                 </Select>
-                <div className="rounded-md border">
+                <div className="rounded-md border w-full">
                     <Calendar
                         mode="single"
                         selected={data ? new Date(data) : undefined}

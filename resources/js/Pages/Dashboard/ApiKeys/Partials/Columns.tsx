@@ -9,14 +9,14 @@ import { ModalTypes } from "@/constants/modals"
 import { IconTypes } from "@/lib/infoIcons"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
-import { ApiKeysType, EvironmentVariableType, GroupType, MembersDataType, User } from "@/types"
+import { ApiKeyUserType, ApiKeysType, EvironmentVariableType, GroupType, MembersDataType, User } from "@/types"
 import { router, useForm } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { ArrowUpDownIcon, BanIcon, CheckCircle2Icon, CheckIcon, CopyIcon, CopyPlusIcon, EyeIcon, EyeOffIcon, MoreHorizontalIcon, PenSquareIcon, PlugIcon, RotateCcwIcon, Trash2Icon, UnplugIcon } from "lucide-react"
 import { useState } from "react"
 
-export const apiKeysColumns = (user: User, users: MembersDataType[]): ColumnDef<ApiKeysType>[] => {
+export const apiKeysColumns = (user: User): ColumnDef<ApiKeysType>[] => {
     const { openModal } = useModalStore();
 
     return [
@@ -102,7 +102,9 @@ export const apiKeysColumns = (user: User, users: MembersDataType[]): ColumnDef<
             accessorKey: "expires_at",
             header: () => <div className="text-left">Expires at</div>,
             cell: ({ row }) => {
-                return format(row.getValue('expires_at'), 'dd-MM-yyyy');
+                return row.getValue('expires_at')
+                ? format(row.getValue('expires_at'), 'dd-MM-yyyy')
+                : <span className="text-muted-foreground">Without expiration</span>;
             },
         },
         {
