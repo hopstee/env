@@ -180,6 +180,11 @@ function ExpiratesAtPicker({
         setOpen(false);
     }
 
+    const selectPredefined = (value: string) => {
+        setData(value === '-1' ? null : addDays(new Date(), parseInt(value)));
+        setOpen(false);
+    }
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
@@ -199,11 +204,7 @@ function ExpiratesAtPicker({
                 // w-[--radix-popover-trigger-width]
                 className="flex  flex-col space-y-2 p-2"
             >
-                <Select
-                    onValueChange={(value) =>
-                        setData(value === '-1' ? null : addDays(new Date(), parseInt(value)))
-                    }
-                >
+                <Select onValueChange={selectPredefined}>
                     <SelectTrigger>
                         <SelectValue placeholder="Select" />
                     </SelectTrigger>

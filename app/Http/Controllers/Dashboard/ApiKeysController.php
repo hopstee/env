@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiKey;
+use App\Models\EnvironmentVariable;
+use App\Models\Group;
 use App\Models\Team;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -45,7 +48,7 @@ class ApiKeysController extends Controller
             ]
         );
     }
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -93,5 +96,38 @@ class ApiKeysController extends Controller
     public function destroy(ApiKey $apiKey)
     {
         $apiKey->delete();
+    }
+
+    public function getEnvVariables(Request $request, string $group): JsonResponse
+    {
+        $apiKeyValue = $request->header('X-API-KEY');
+
+        if (!$apiKeyValue) {
+            return response()->json(['error' => 'API key is required'], 401);
+        }
+
+        $apiKey = ApiKey::where('api_key', $apiKeyValue)
+            ->where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                      ->orWhere('expires_at', '>', Carbon::now());
+            })
+            ->first();
+
+        if (!$apiKey) {
+            return response()->json(['error' => 'Invalid or expired API key'], 403);
+        }
+
+        $groupModel = Group::where('id', $group)
+            ->where('team_id', $apiKey->team_id)
+            ->first();
+
+        if (!$groupModel) {
+            return response()->json(['error' => 'Group not found or access denied'], 403);
+        }
+
+        $envVariables = EnvironmentVariable::where('group_id', $group)->pluck('value', 'key');
+
+        return response()->json(['env' => $envVariables]);
     }
 }

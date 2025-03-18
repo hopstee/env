@@ -1,6 +1,8 @@
 import GroupItem from "@/Components/GroupItem"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
+import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
+import CopyTooltip from "@/Components/ui/copy-tooltip"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
 import { ColorKeys } from "@/constants/colors"
@@ -58,6 +60,21 @@ export const groupColumns = (user: User, teamId: string, teamUsers: MembersDataT
     }
 
     return [
+        {
+            accessorKey: "id",
+            header: () => <div className="text-left">ID</div>,
+            cell: ({ row }) => {
+                return (
+                    <CopyTooltip
+                        trigger={
+                            <Badge variant="secondary">{row.getValue('id')}</Badge>
+                        }
+                        valueToCopy={row.getValue('id')}
+                    />
+
+                )
+            },
+        },
         {
             accessorKey: "name",
             header: () => <div className="text-left">Group</div>,
