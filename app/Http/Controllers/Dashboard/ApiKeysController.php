@@ -110,7 +110,7 @@ class ApiKeysController extends Controller
             ->where('is_active', true)
             ->where(function ($query) {
                 $query->whereNull('expires_at')
-                      ->orWhere('expires_at', '>', Carbon::now());
+                    ->orWhere('expires_at', '>', Carbon::now());
             })
             ->first();
 
@@ -118,15 +118,24 @@ class ApiKeysController extends Controller
             return response()->json(['error' => 'Invalid or expired API key'], 403);
         }
 
-        $groupModel = Group::where('id', $group)
+        $group = Group::where('id', $group)
             ->where('team_id', $apiKey->team_id)
             ->first();
 
-        if (!$groupModel) {
+        if (!$group) {
             return response()->json(['error' => 'Group not found or access denied'], 403);
         }
 
-        $envVariables = EnvironmentVariable::where('group_id', $group)->pluck('value', 'key');
+        $hasAccess = $group->permissions
+            ->where('user_id', $apiKey->user_id)
+            ->Where('can_read', true)
+            ->first();
+
+        if (!$hasAccess) {
+            return response()->json(['error' => 'You can not read variables from this group'], 403);
+        }
+
+        $envVariables = EnvironmentVariable::where('group_id', $group->id)->pluck('value', 'key');
 
         return response()->json(['env' => $envVariables]);
     }
