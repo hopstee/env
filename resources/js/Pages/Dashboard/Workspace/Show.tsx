@@ -6,6 +6,7 @@ import { Button } from '@/Components/ui/button';
 import { PlusCircleIcon } from 'lucide-react';
 import useModalStore from '@/modalsStore/useModalStore';
 import { ModalTypes } from '@/constants/modals';
+import { useEffect } from 'react';
 
 export default function Dashboard({
     groups,
@@ -29,7 +30,26 @@ export default function Dashboard({
         })
     }
 
-    const canEditAnyGroup = groups.some(group => group.editable === true)
+    const canEditAnyGroup = groups.some(group => group.editable === true);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const isMac = navigator.platform.toUpperCase().includes("MAC");
+            const cmdOrCtrl = isMac ? event.metaKey : event.ctrlKey;
+
+            if (cmdOrCtrl && event.shiftKey) {
+                switch (event.key.toLowerCase()) {
+                    case "v":
+                        event.preventDefault();
+                        handleOpenCreateDialog();
+                        break;
+                }
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
 
     return (
         <AuthenticatedLayout>

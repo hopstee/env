@@ -5,6 +5,7 @@ import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
 import { SidebarProvider, useSidebar } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
+import { useGlobalHotkeys } from '@/hooks/use-hotkeys';
 import { cn } from '@/lib/utils';
 import useModalStore from '@/modalsStore/useModalStore';
 import { usePage } from '@inertiajs/react';
@@ -22,6 +23,8 @@ export default function Authenticated({
         roles,
         auth,
     } = usePage().props
+
+    useGlobalHotkeys();
 
     const { openModal } = useModalStore()
 

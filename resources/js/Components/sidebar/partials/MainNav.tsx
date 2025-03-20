@@ -19,7 +19,7 @@ export default function MainNav({
                 <SidebarMenuItem key={index}>
                     <SidebarMenuButton
                         asChild
-                        isActive={route().current(item.route) && !('g' in route().params)}
+                        isActive={route().current(item.route)}
                         tooltip={item.title}
                     >
                         <Link href={item.url}>
