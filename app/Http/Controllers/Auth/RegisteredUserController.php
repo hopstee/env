@@ -42,9 +42,6 @@ class RegisteredUserController extends Controller
 
         $userData = UserDataUtil::generateUserData($request->name, $request->email);
 
-        Log::info($userData);
-        Log::info($userData['avatar']);
-
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,

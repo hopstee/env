@@ -7,6 +7,7 @@ import EnvironmentVariableModal, { EnvironmentVariableModalProps } from './modal
 import AddMemberModal, { AddMemberModalProps } from './modals/AddMemberModal';
 import ManageGroupUsers, { ManageGroupUsersProps } from './modals/ManageGroupUsers';
 import ApiKeyModal, { ApiKeyModalProps } from './modals/ApiKeyModal';
+import SettingsModal, { SettingsModalProps } from './modals/SettingsModal';
 
 type ModalPropsMapping = {
     [ModalTypes.CONFIRM_ALERT]: ConfirmAlertProps;
@@ -16,6 +17,7 @@ type ModalPropsMapping = {
     [ModalTypes.ADD_MEMBER_MODAL]: AddMemberModalProps;
     [ModalTypes.MANAGE_GROUP_USERS]: ManageGroupUsersProps;
     [ModalTypes.API_KEYS_MODAL]: ApiKeyModalProps;
+    [ModalTypes.SETTINGS_MODAL]: SettingsModalProps;
 };
 
 const registerModals = () => {
@@ -28,6 +30,7 @@ const registerModals = () => {
   registerModal<ModalTypes.ADD_MEMBER_MODAL>(ModalTypes.ADD_MEMBER_MODAL, AddMemberModal);
   registerModal<ModalTypes.MANAGE_GROUP_USERS>(ModalTypes.MANAGE_GROUP_USERS, ManageGroupUsers);
   registerModal<ModalTypes.API_KEYS_MODAL>(ModalTypes.API_KEYS_MODAL, ApiKeyModal);
+  registerModal<ModalTypes.SETTINGS_MODAL>(ModalTypes.SETTINGS_MODAL, SettingsModal);
 };
 
 export default registerModals;

@@ -20,7 +20,6 @@ class UserDataUtil
         $avatarResponse = Http::get($avatarUrl);
 
         if ($avatarResponse->successful()) {
-            Log::info('OK');
             $avatarFileName = 'avatars/' . uniqid() . '.png';
             Storage::disk('public')->put($avatarFileName, $avatarResponse->body());
         }

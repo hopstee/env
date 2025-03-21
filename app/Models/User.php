@@ -5,8 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -55,6 +57,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            Log::info($user);
+            Settings::create([
+                'user_id'   => $user->id,
+                'settings'  => json_encode([
+                    'language'      => 'english',
+                    'notifications' => [
+                        'add_to_team'       => true,
+                        'remove_from_team'  => true,
+                        'add_to_group'      => true,
+                        'remove_from_group' => true,
+                        'variable_modified' => true,
+                        'role_change'       => true,
+                    ],
+                ]),
+            ]);
+        });
     }
 
     public function teams(): BelongsToMany
@@ -206,5 +231,10 @@ class User extends Authenticatable
     public function apiKeys(): HasMany
     {
         return $this->hasMany(ApiKey::class);
+    }
+
+    public function settings(): HasOne
+    {
+        return $this->hasOne(Settings::class);
     }
 }

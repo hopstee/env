@@ -36,10 +36,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Link, usePage } from "@inertiajs/react";
 import { getInitials } from "@/lib/utils";
+import useModalStore from "@/modalsStore/useModalStore";
+import { ModalTypes } from "@/constants/modals";
 
 export default function ProfileMenu() {
     const user = usePage().props.auth.user;
-    console.log(user)
+    
+    const { openModal } = useModalStore();
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -68,7 +72,7 @@ export default function ProfileMenu() {
                         <span>Billing</span>
                         <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openModal(ModalTypes.SETTINGS_MODAL)}>
                         <Settings />
                         <span>Settings</span>
                         <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>

@@ -49,6 +49,16 @@ class ApiKeysController extends Controller
         );
     }
 
+    public function usersApiKeys()
+    {
+        $user = auth()->user();
+        
+        return response()->json([
+            'success'   => true,
+            'data'      => $user->apiKeys()->get(),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

@@ -91,10 +91,16 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('api-keys')->group(function () {
+        Route::get('/', [ApiKeysController::class, 'usersApiKeys'])->name('api-keys.users-api-keys');
         Route::post('/', [ApiKeysController::class, 'store'])->name('api-keys.create');
         Route::post('/{apiKey}', [ApiKeysController::class, 'update'])->name('api-keys.update');
         Route::post('/{apiKey}/regen', [ApiKeysController::class, 'regenerate'])->name('api-keys.regen');
         Route::delete('/{apiKey}', [ApiKeysController::class, 'destroy'])->name('api-keys.destroy');
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsController::class, 'usersSettings'])->name('settings.users-settings');
+        Route::post('/', [SettingsController::class, 'updateNotifications'])->name('settings.update-notifications');
     });
 });
 

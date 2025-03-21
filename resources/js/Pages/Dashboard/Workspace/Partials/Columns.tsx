@@ -1,3 +1,4 @@
+import HiddenValue from "@/Components/HiddenValue"
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import CopyTooltip from "@/Components/ui/copy-tooltip"
@@ -66,42 +67,7 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
         },
         {
             accessorKey: "value",
-            cell: ({ row }) => {
-                const [showValue, setShowValue] = useState(false);
-
-                const value = row.getValue("value") as string;
-                const maskedValue = '•'.repeat(value.length).slice(0, 10);
-
-                return (
-                    <div className="flex items-center w-[200px]">
-                        <Button
-                            variant="ghost"
-                            size="sm-icon"
-                            onClick={() => setShowValue(prevState => !prevState)}
-                            className="mr-2 min-w-9"
-                        >
-                            {showValue
-                                ? <EyeOffIcon className="size-4" />
-                                : <EyeIcon className="size-4" />
-                            }
-                        </Button>
-                        {showValue
-                            ? (
-                                <CopyTooltip
-                                    trigger={
-                                        <Badge variant="secondary" className="max-w-[200px]">
-                                            {value}
-                                        </Badge>
-                                    }
-                                    valueToCopy={value}
-                                />
-                            ) : (
-                                <div className="">{maskedValue}</div>
-                            )
-                        }
-                    </div>
-                )
-            },
+            cell: ({ row }) => <HiddenValue value={row.getValue("value") as string} />,
         },
         {
             accessorKey: "group_name",

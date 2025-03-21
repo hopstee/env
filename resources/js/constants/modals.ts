@@ -6,4 +6,5 @@ export enum ModalTypes {
     ADD_MEMBER_MODAL = "addMemberModal",
     MANAGE_GROUP_USERS = "manageGroupUsers",
     API_KEYS_MODAL="API_KEYS_MODAL",
+    SETTINGS_MODAL="SETTINGS_MODAL",
 }

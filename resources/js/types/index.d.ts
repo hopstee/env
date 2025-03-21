@@ -197,6 +197,20 @@ export type ApiKeyFiltersType = {
     perPage: number;
 }
 
+export type NotificationSettingsType = {
+    add_to_group: boolean
+    add_to_team: boolean
+    remove_from_group: boolean
+    remove_from_team: boolean
+    role_change: boolean
+    variable_modified: boolean
+}
+
+export type SettingsType = {
+    language: string
+    notifications: NotificationSettingsType
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
