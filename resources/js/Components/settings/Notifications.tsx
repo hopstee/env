@@ -11,7 +11,7 @@ import { IconTypes } from "@/lib/infoIcons";
 type NotificationsSettingsProps = {
     notificationSettings: NotificationSettingsType;
     loading: boolean;
-    refreshNotifications: () => void
+    updateNotificationSettings: (settings: NotificationSettingsType) => void
 }
 
 const settingsText: { [key in keyof NotificationSettingsType]: string } = {
@@ -26,20 +26,43 @@ const settingsText: { [key in keyof NotificationSettingsType]: string } = {
 export default function NotificationsSettings({
     notificationSettings,
     loading,
-    refreshNotifications,
+    updateNotificationSettings,
 }: NotificationsSettingsProps) {
     const { openModal } = useModalStore();
 
-    const handleConfirmToggle = (setting: keyof NotificationSettingsType) => {
+    const handleConfirmToggle = async (setting: keyof NotificationSettingsType) => {
         const updatedSettings = { ...notificationSettings, [setting]: !notificationSettings[setting] };
 
-        router.post(route('settings.update-notifications'), {
-            notifications: updatedSettings,
-        }, {
-            preserveScroll: true,
-        });
+        try {
+            router.post(route('settings.update-notifications'), {
+                notifications: updatedSettings,
+            }, {
+                preserveScroll: true,
+            });
 
-        refreshNotifications();
+            updateNotificationSettings(updatedSettings);
+        } catch (error) {
+            console.error("Error with changing notification settings:", error);
+        }
+
+        // try {
+        //     const response = await fetch(route('settings.update-notifications'), {
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: JSON.stringify({
+        //             notifications: updatedSettings
+        //         }),
+        //     });
+        //     const data = await response.json();
+
+        //     if (data.success) {
+        //         updateNotificationSettings(updatedSettings);
+        //     }
+        // } catch (error) {
+        //     console.error("Ошибка загрузки API-ключей:", error);
+        // }
     }
 
     const handleToggle = (setting: keyof NotificationSettingsType) => {

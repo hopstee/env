@@ -7,7 +7,7 @@ import NotificationsSettings from "@/Components/settings/Notifications";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
 import { ScrollArea } from "@/Components/ui/scroll-area";
-import { ApiKeysType, SettingsType } from "@/types";
+import { ApiKeysType, NotificationSettingsType, SettingsType } from "@/types";
 
 export type SettingsModalProps = {
     onClose: () => void;
@@ -69,6 +69,13 @@ function SettingTabs() {
     const [refreshApiKeys, setRefreshApiKeys] = useState(false);
     const [refreshNotifications, setRefreshNotifications] = useState(false);
 
+    const updateNotificationSettings = (settings: NotificationSettingsType) => {
+        setSettings((prevState) => {
+            console.log({ ...prevState, notifications: settings });
+            return { ...prevState, notifications: settings };
+        });
+    }
+
     useEffect(() => {
         const fetchApiKeys = async () => {
             try {
@@ -129,7 +136,11 @@ function SettingTabs() {
                     <ApiKeysSettings apiKeys={apiKeys} loading={loadingApiKeys} refreshApiKeys={() => setRefreshApiKeys(prevState => !prevState)} />
                 </TabsContent>
                 <TabsContent value="notifications">
-                    <NotificationsSettings notificationSettings={settings.notifications} loading={loadingSettings} refreshNotifications={() => setRefreshNotifications(prevState => !prevState)} />
+                    <NotificationsSettings
+                        notificationSettings={settings.notifications}
+                        updateNotificationSettings={updateNotificationSettings}
+                        loading={loadingSettings}
+                    />
                 </TabsContent>
             </ScrollArea>
         </Tabs>
