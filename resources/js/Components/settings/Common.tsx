@@ -17,7 +17,7 @@ export default function CommonSettings() {
                     <SelectTrigger className="w-fit">
                         <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent align="end">
                         <SelectItem value="light">Light</SelectItem>
                         <SelectItem value="dark">Dark</SelectItem>
                         <SelectItem value="system">System</SelectItem>
@@ -34,7 +34,7 @@ export default function CommonSettings() {
                     <SelectTrigger className="w-fit">
                         <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent align="end">
                         <SelectItem value="russian">Russian</SelectItem>
                         <SelectItem value="english">English</SelectItem>
                     </SelectContent>
