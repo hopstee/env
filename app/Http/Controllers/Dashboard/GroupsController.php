@@ -32,9 +32,10 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'      => 'required',
-            'color'     => 'required',
-            'team_id'   => 'required',
+            'name'          => 'required',
+            'color'         => 'required',
+            'team_id'       => 'required',
+            'is_favorite'   => 'boolean',
         ]);
 
         $group = Group::create([
@@ -44,6 +45,10 @@ class GroupsController extends Controller
         ]);
 
         $group->grantPermission($request->user()->id, true, true);
+
+        if ($request->is_favorite) {
+            $request->user()->addFavoriteGroup($group->id, $group->team_id);
+        }
 
         return Redirect::back();
     }

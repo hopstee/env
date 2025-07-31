@@ -1,6 +1,6 @@
 "use client"
 
-import { CopyIcon, HeartOffIcon, InfoIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
+import { HeartOffIcon, InfoIcon, MoreHorizontalIcon, Plus, Trash2Icon } from "lucide-react"
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -19,9 +19,7 @@ import { IconTypes } from "@/lib/infoIcons"
 import useModalStore from "@/modalsStore/useModalStore"
 import { ModalTypes } from "@/constants/modals"
 import GroupItem from "@/Components/GroupItem"
-import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/ui/tooltip"
-import { Button } from "@/Components/ui/button"
 
 export default function FavoriteGroups({
     items,
@@ -56,6 +54,7 @@ export default function FavoriteGroups({
         openModal(ModalTypes.GROUP_MODAL, {
             title: "Create Group",
             teamId: selectedTeamId,
+            isFavorite: true,
         })
     }
 
@@ -124,28 +123,20 @@ export default function FavoriteGroups({
                                                 <span className="sr-only">More</span>
                                             </SidebarMenuAction>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <SidebarMenuAction showOnHover>
-                                                    <MoreHorizontalIcon />
-                                                    <span className="sr-only">More</span>
-                                                </SidebarMenuAction>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent
-                                                className="w-48"
-                                                side={isMobile ? "bottom" : "right"}
-                                                align={isMobile ? "end" : "start"}
-                                            >
-                                                <DropdownMenuItem onClick={() => handleRemoveFromFavorite(item.id)}>
-                                                    <HeartOffIcon />
-                                                    Remove from favorite
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => confirmDelete(item.id)}>
-                                                    <Trash2Icon />
-                                                    <span>Delete</span>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <DropdownMenuContent
+                                            className="w-48"
+                                            side={isMobile ? "bottom" : "right"}
+                                            align={isMobile ? "end" : "start"}
+                                        >
+                                            <DropdownMenuItem onClick={() => handleRemoveFromFavorite(item.id)}>
+                                                <HeartOffIcon />
+                                                Remove from favorite
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => confirmDelete(item.id)}>
+                                                <Trash2Icon />
+                                                <span>Delete</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
                                     </DropdownMenu>
                                 ) : (
                                     <SidebarMenuAction

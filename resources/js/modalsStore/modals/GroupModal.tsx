@@ -20,6 +20,7 @@ export type GroupModalProps = {
     onClose: () => void;
     title: string;
     teamId: string;
+    isFavorite?: boolean;
     edit?: boolean;
     initialValues?: InitialValues;
 }
@@ -59,7 +60,7 @@ export default function GroupModal(props: GroupModalProps) {
 }
 
 function GroupForm(props: GroupModalProps) {
-    const { onClose, teamId, edit = false, initialValues } = props;
+    const { onClose, teamId, isFavorite = false, edit = false, initialValues } = props;
 
     const projectNameInput = useRef<HTMLInputElement>(null);
 
@@ -70,11 +71,11 @@ function GroupForm(props: GroupModalProps) {
         post,
         reset,
         processing,
-        recentlySuccessful,
     } = useForm({
         name: initialValues?.name || '',
         color: initialValues?.color || "RED_500",
         team_id: teamId,
+        is_favorite: isFavorite,
     });
 
     const addGroup: FormEventHandler = (e) => {
