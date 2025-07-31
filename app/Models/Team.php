@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Team extends Model
 {
@@ -66,7 +67,7 @@ class Team extends Model
 
     public function hasAdmin($user)
     {
-        return $this->users()->where('user_id', $user->id)->where('role_id', 'admin')->exists();
+        return $this->users()->where('user_id', $user->id)->where('roles.value', 'admin')->exists();
     }
 
     public function hasUser($user): bool

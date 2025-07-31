@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\TeamsController;
 use App\Http\Controllers\Dashboard\MembersController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Dashboard\SettingsController;
+use App\Http\Middleware\CheckAdminAccess;
 use App\Http\Middleware\CheckTeamAccess;
 use App\Http\Middleware\RedirectToTeam;
 use App\Http\Middleware\ShareTeamsData;
@@ -29,6 +30,12 @@ Route::get('/avatars/{filename}', function ($filename) {
     return response()->file(Storage::disk('public')->path('avatars/' . $filename));
 });
 
+Route::prefix('error')->group(function () {
+    Route::get('admin-access-only', function () {
+        return Inertia::render('Errors/AdminAccessOnly');
+    })->name('adminAccessOnly');
+});
+
 Route::middleware('auth')->group(function () {
     Route::prefix('t')->middleware([
         'verified',
@@ -42,10 +49,15 @@ Route::middleware('auth')->group(function () {
         Route::prefix('{team}')->middleware([CheckTeamAccess::class])->group(function () {
             Route::get('/', [TeamsController::class, 'show'])->name('t.active');
             Route::get('/groups', [GroupsController::class, 'show'])->name('t.groups');
-            Route::get('/members', [MembersController::class, 'show'])->name('t.members');
-            Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
-            Route::get('/api-keys', [ApiKeysController::class, 'show'])->name('t.api-keys');
-            Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
+
+            Route::middleware([
+                CheckAdminAccess::class,
+            ])->group(function () {
+                Route::get('/members', [MembersController::class, 'show'])->name('t.members');
+                Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
+                Route::get('/api-keys', [ApiKeysController::class, 'show'])->name('t.api-keys');
+                Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
+            });
         });
     });
 
