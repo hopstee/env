@@ -58,6 +58,8 @@ class InvitationsController extends Controller
         $email = $validatedData['email'];
         $user = $request->user();
 
+        $team->invitations()->where('email', $email)->update(['status' => 'revoked']);
+
         $token = Str::random(64);
         $invitation = new Invitation([
             'email'         => $email,

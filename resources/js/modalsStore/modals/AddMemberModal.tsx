@@ -4,7 +4,7 @@ import { Label } from "@/Components/ui/label";
 import { cn } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
 import { Loader2Icon, UserPlusIcon } from "lucide-react";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { RoleType, TeamType } from "@/types";
 import InputError from "@/Components/InputError";
@@ -23,6 +23,7 @@ export type AddMemberModalProps = {
     onClose: () => void;
     title: string;
     selectedTeamId: string,
+    email?: string,
     teams: TeamType[],
     roles: RoleType[],
 }
@@ -62,7 +63,7 @@ export default function AddMemberModal(props: AddMemberModalProps) {
 }
 
 function AddMemberForm(props: AddMemberModalProps) {
-    const { onClose, selectedTeamId, teams, roles } = props;
+    const { onClose, selectedTeamId, email, teams, roles } = props;
 
     const [emailValid, setEmailValid] = useState(false);
 
@@ -77,8 +78,15 @@ function AddMemberForm(props: AddMemberModalProps) {
     } = useForm<FormData>({
         team_id: selectedTeamId,
         role: String(roles[1]?.value),
-        email: ""
+        email: email ?? "",
     });
+
+    useEffect(() => {
+        if (email && isValidEmail(email)) {
+            setError('email', "")
+            setEmailValid(true);
+        }
+    }, []);
 
     const sendInvitations: FormEventHandler = (e) => {
         e.preventDefault();

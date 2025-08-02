@@ -1,7 +1,7 @@
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { InvitationsDataType } from "@/types"
-import { router } from "@inertiajs/react"
+import { router, usePage } from "@inertiajs/react"
 import { ColumnDef } from "@tanstack/react-table"
 import { AlertCircleIcon, BanIcon, CheckCircle2Icon, ClockIcon, RotateCwIcon, XCircleIcon } from "lucide-react"
 import { format } from "date-fns"
@@ -91,6 +91,12 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
         {
             id: "actions",
             cell: ({ row }) => {
+                const {
+                    selectedTeamId,
+                    teams,
+                    roles,
+                } = usePage().props
+                
                 const handleConfirmRevoke = () => {
                     router.post(route('invitations.revoke', { invitation: row.original.id }), {
                         preserveScroll: true,
@@ -103,6 +109,16 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
                         description: "This action cannot be undone. This will revoke invitation.",
                         onConfirm: handleConfirmRevoke,
                         type: IconTypes.WARNING
+                    });
+                }
+
+                const handleResend = () => {
+                    openModal(ModalTypes.ADD_MEMBER_MODAL, {
+                        title: `Resend initation to ${row.original.email}`,
+                        selectedTeamId,
+                        teams,
+                        roles,
+                        email: row.original.email,
                     });
                 }
 
@@ -123,7 +139,7 @@ export const invitationColumns = (): ColumnDef<InvitationsDataType>[] => {
                             <Button
                                 variant="soft-success-ghost"
                                 size="sm"
-                                onClick={handleRevoke}
+                                onClick={handleResend}
                             >
                                 <RotateCwIcon className="size-4" />
                                 Resend
