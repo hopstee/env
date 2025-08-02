@@ -53,7 +53,7 @@ export default function Dashboard({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Dashboard" />
+            <Head title="Workspace" />
 
             <div className="w-full flex items-center justify-between">
                 <span>

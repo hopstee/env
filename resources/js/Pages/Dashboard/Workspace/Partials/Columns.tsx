@@ -134,9 +134,9 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                     });
                 }
 
-                const handleDublicate = () => {
+                const handleDuplicate = () => {
                     openModal(ModalTypes.ENVIRONMENT_VARIABLE_MODAL, {
-                        title: "Dublicate environment variable",
+                        title: "Duplicate environment variable",
                         groups,
                         initialValues: {
                             key: originalData.key,
@@ -161,9 +161,9 @@ export const environmentVariablesColumns = (user: User, groups: GroupType[]): Co
                                     <PenSquareIcon />
                                     Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDublicate}>
+                                <DropdownMenuItem onClick={handleDuplicate}>
                                     <CopyPlusIcon />
-                                    Dublicate
+                                    Duplicate
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handleDelete}>
                                     <Trash2Icon />
