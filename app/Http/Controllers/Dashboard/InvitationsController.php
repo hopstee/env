@@ -58,7 +58,17 @@ class InvitationsController extends Controller
         $email = $validatedData['email'];
         $user = $request->user();
 
-        $team->invitations()->where('email', $email)->update(['status' => 'revoked']);
+        if (
+            $team->invitations()->where('email', $email)->where('status', 'accepted')->exists() &&
+            $team->users()->where('email', $email)->exists()
+        ) {
+            return back();
+        }
+
+        $team->invitations()
+            ->whereNotIn('status', ['declined', 'accepted'])
+            ->where('email', $email)
+            ->update(['status' => 'revoked']);
 
         $token = Str::random(64);
         $invitation = new Invitation([
