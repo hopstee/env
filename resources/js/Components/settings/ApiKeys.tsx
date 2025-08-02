@@ -50,13 +50,15 @@ export default function ApiKeysSettings({
     }
 
     return (
-        <div className="h-full space-y-4">
+        <div className="space-y-2">
             {apiKeys.length === 0 && (
                 <div className="h-full w-full flex items-center justify-center">
                     <p className="w-full text-center text-muted-foreground text-sm">You have no api keys. Ask admin to generate it for you.</p>
                 </div>
             )}
             {apiKeys.map((apiKey: ApiKeysType, index: number) => {
+                console.log(apiKey);
+
                 const expiration = apiKey.expires_at
                     ? "Expires at " + format(apiKey.expires_at, 'dd-MM-yyyy')
                     : <span className="text-muted-foreground">Without expiration</span>;
@@ -75,15 +77,20 @@ export default function ApiKeysSettings({
                                     onClick={() => handleDeactivate(apiKey.id)}
                                 >
                                     <UnplugIcon />
-                                    Revoke
+                                    Deactivate
                                 </Button>
                             ) : (
                                 <p className="text-xs font-bold text-muted-foreground px-3">Inactive</p>
                             )}
                         </div>
 
-                        <div className="text-xs text-right px-3">
-                            {expiration}
+                        <div className="flex items-center justify-between mt-1">
+                            <div className="text-xs text-muted-foreground px-3">
+                                {apiKey.team.name}
+                            </div>
+                            <div className="text-xs text-right px-3">
+                                {expiration}
+                            </div>
                         </div>
                         {(index + 1) !== apiKeys.length && (
                             <Separator className="mt-4" />

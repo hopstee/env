@@ -230,7 +230,7 @@ class User extends Authenticatable
 
     public function apiKeys(): HasMany
     {
-        return $this->hasMany(ApiKey::class);
+        return $this->hasMany(ApiKey::class)->with('team');
     }
 
     public function settings(): HasOne

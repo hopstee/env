@@ -161,6 +161,7 @@ export type ApiKeysType = {
     user: ApiKeyUserType;
     api_key: string;
     team_id: string;
+    team: TeamType;
     is_active: boolean;
     expires_at: string;
     created_at: string;
