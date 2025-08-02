@@ -50,9 +50,11 @@ export default function ApiKeysSettings({
     }
 
     return (
-        <div className="space-y-4">
+        <div className="h-full space-y-4">
             {apiKeys.length === 0 && (
-                <p className="text-muted-foreground">You have no api keys. Ask admin to generate it for you.</p>
+                <div className="h-full w-full flex items-center justify-center">
+                    <p className="w-full text-center text-muted-foreground text-sm">You have no api keys. Ask admin to generate it for you.</p>
+                </div>
             )}
             {apiKeys.map((apiKey: ApiKeysType, index: number) => {
                 const expiration = apiKey.expires_at
