@@ -10,7 +10,7 @@ import { usePage } from "@inertiajs/react"
 import TeamSwitcher from "./partials/TeamSwitcher"
 import MainNav from "./partials/MainNav"
 import FavoriteGroups from "./partials/FavoriteGroups"
-import { NavItemType, GroupType, TeamType } from "@/types"
+import { NavItemType } from "@/types"
 import BottomNav from "./partials/BottomNav"
 
 const baseMainNav = (teamId: string): NavItemType[] => [

@@ -1,15 +1,12 @@
-import GroupItem from "@/Components/GroupItem";
 import UserSmallItem from "@/Components/UserSmallItem";
 import { Button } from "@/Components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from "@/Components/ui/command";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/Components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { ApiKeyUserType, GroupType } from "@/types";
+import { ApiKeyUserType } from "@/types";
 import { router } from "@inertiajs/react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon, LoaderIcon } from "lucide-react";
 import { forwardRef, useState } from "react";
 
@@ -22,7 +19,6 @@ export default function UsersFilter(
         selected?: ApiKeyUserType;
     }
 ) {
-    console.log(items)
     const [open, setOpen] = useState(false)
     const isMobile = useIsMobile()
 
@@ -134,7 +130,6 @@ function GroupsList({
     selectedItem: ApiKeyUserType;
     handleSelect: (item: ApiKeyUserType) => void;
 }) {
-    console.log(items)
     return (
         <Command>
             <CommandInput

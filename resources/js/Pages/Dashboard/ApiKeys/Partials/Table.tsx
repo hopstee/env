@@ -1,9 +1,8 @@
-import { EvironmentVariableFiltersType, EvironmentVariableType, GroupType, User, VariablesPaginatedDataType, ApiKeysPaginatedDataType, MembersDataType, ApiKeyFiltersType, ApiKeysType, ApiKeyUserType } from "@/types";
+import { User, ApiKeysPaginatedDataType, ApiKeyFiltersType, ApiKeysType, ApiKeyUserType } from "@/types";
 import { Link, useRemember } from "@inertiajs/react"
 import { ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { apiKeysColumns } from "./Columns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
-import { useState } from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import UsersFilter from "./UsersFilter";
@@ -175,13 +174,4 @@ export default function ApiKeysDataTable({
             </div>
         </div>
     )
-}
-
-function useVirtualizer(arg0: {
-    count: any; estimateSize: () => number; //estimate row height for accurate scrollbar dragging
-    getScrollElement: () => any;
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
-    measureElement: ((element: any) => any) | undefined; overscan: number;
-}) {
-    throw new Error("Function not implemented.");
 }

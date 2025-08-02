@@ -7,7 +7,6 @@ import { Loader2Icon, UserPlusIcon } from "lucide-react";
 import { FormEventHandler, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { RoleType, TeamType } from "@/types";
-import TagInput from "@/Components/ui/tag-input";
 import InputError from "@/Components/InputError";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -17,7 +16,6 @@ import { Input } from "@/Components/ui/input";
 type FormData = {
     team_id: string;
     role: string;
-    // emails: string[];
     email: string;
 }
 
@@ -79,7 +77,6 @@ function AddMemberForm(props: AddMemberModalProps) {
     } = useForm<FormData>({
         team_id: selectedTeamId,
         role: String(roles[1]?.value),
-        // emails: [],
         email: ""
     });
 
@@ -145,7 +142,7 @@ function AddMemberForm(props: AddMemberModalProps) {
 
                     <Select defaultValue={data.role} onValueChange={(role) => setData('role', role)}>
                         <SelectTrigger className="w-full">
-                            <SelectValue />
+                            <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                         <SelectContent>
                             {roles.map((role: RoleType, index: number) => (

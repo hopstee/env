@@ -6,7 +6,7 @@ import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Loader2Icon } from 'lucide-react';
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler } from 'react';
 
 type FormData = {
     email: string;
@@ -56,7 +56,7 @@ export default function Login({
                     <div>
                         <Input
                             id="email"
-                            type="email"
+                            type="text"
                             placeholder="Email"
                             name="email"
                             value={data.email}

@@ -4,14 +4,11 @@ import { FormEventHandler, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
 import { CalendarIcon, Loader2Icon, PlusIcon, SaveIcon } from "lucide-react";
-import { Input } from "@/Components/ui/input";
-import { ApiKeyUserType, GroupType, MembersDataType } from "@/types";
+import { ApiKeyUserType } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import InputError from "@/Components/InputError";
 import { useIsMobile } from "@/hooks/use-mobile";
-import GroupItem from "@/Components/GroupItem";
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
-import { cn, getInitials } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
 import { addDays, addMonths, format } from "date-fns";
 import { Calendar } from "@/Components/ui/calendar";
@@ -76,6 +73,7 @@ function ApiKeyForm(props: ApiKeyModalProps) {
         data,
         setData,
         errors,
+        setError,
         post,
         reset,
         processing,
@@ -103,10 +101,12 @@ function ApiKeyForm(props: ApiKeyModalProps) {
                 onError: (errors) => {
                     if (errors.user_id) {
                         reset('user_id');
+                        setError('user_id', 'Wrong user');
                     }
 
                     if (errors.expires_at) {
                         reset('expires_at');
+                        setError('expires_at', 'Wrong expiration date');
                     }
                 },
             }

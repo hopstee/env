@@ -44,25 +44,6 @@ export default function NotificationsSettings({
         } catch (error) {
             console.error("Error with changing notification settings:", error);
         }
-
-        // try {
-        //     const response = await fetch(route('settings.update-notifications'), {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         body: JSON.stringify({
-        //             notifications: updatedSettings
-        //         }),
-        //     });
-        //     const data = await response.json();
-
-        //     if (data.success) {
-        //         updateNotificationSettings(updatedSettings);
-        //     }
-        // } catch (error) {
-        //     console.error("Ошибка загрузки API-ключей:", error);
-        // }
     }
 
     const handleToggle = (setting: keyof NotificationSettingsType) => {

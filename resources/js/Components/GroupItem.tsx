@@ -31,18 +31,4 @@ export default function GroupItem(
             </p>
         </Badge>
     )
-
-    // return (
-    //     <div className="flex items-center gap-2">
-    //         <div className="w-4 h-4 p-1">
-    //             <div
-    //                 className={cn(
-    //                     "w-2 h-2 rounded-full",
-    //                     `bg-${COLORS[color].default}`
-    //                 )}
-    //             ></div>
-    //         </div>
-    //         <span>{name}</span>
-    //     </div>
-    // )
 }

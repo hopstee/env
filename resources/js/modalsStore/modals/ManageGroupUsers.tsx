@@ -1,16 +1,14 @@
 import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
-import { cn, deepClone, deepEqual } from "@/lib/utils";
+import { deepClone, deepEqual } from "@/lib/utils";
 import { useForm } from "@inertiajs/react";
-import { ChevronsUpDownIcon, Loader2Icon, PlusIcon, SaveIcon, SearchIcon, Trash2Icon } from "lucide-react";
+import { Loader2Icon, PlusIcon, SaveIcon, SearchIcon, Trash2Icon } from "lucide-react";
 import { FormEventHandler, useState } from "react";
 import { GroupType, GroupUserType, MembersDataType, User } from "@/types";
 import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/Components/ui/drawer";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/Components/ui/command";
 import { useDebounce } from "@/hooks/use-debounce";
-import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { Checkbox } from "@/Components/ui/checkbox";
 import UserListItem from "@/Components/UserListItem";
@@ -67,10 +65,8 @@ function GroupUsers(props: ManageGroupUsersProps) {
         userData,
     } = props;
 
-    const [open, setOpen] = useState(false)
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 300);
-    const [confirmDelete, setConfirmDelete] = useState(null);
 
     const {
         data,
@@ -85,11 +81,6 @@ function GroupUsers(props: ManageGroupUsersProps) {
     const excludeSet = new Set(data.users?.map(item => item.id));
     const searchList = teamUsers.filter(item => !excludeSet.has(item.user_id));
     const canUpdate = !deepEqual<GroupUserType[]>(data.users, groupUsers);
-
-    // const filteredUsers = searchList.filter(user =>
-    //     user.user_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-    //     user.user_email?.toLowerCase().includes(debouncedSearch.toLowerCase())
-    // );
 
     const filteredTeamUsers = searchList.filter(user =>
         user.user_name?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
@@ -172,52 +163,6 @@ function GroupUsers(props: ManageGroupUsersProps) {
                     placeholder="Search user..."
                     className="mb-4"
                 />
-                // <Popover open={open} onOpenChange={setOpen}>
-                //     <PopoverTrigger asChild>
-                //         <Button
-                //             variant="outline"
-                //             role="combobox"
-                //             aria-expanded={open}
-                //             className="w-full justify-between mb-4"
-                //         >
-                //             Search user...
-                //             <ChevronsUpDownIcon className="opacity-50" />
-                //         </Button>
-                //     </PopoverTrigger>
-                //     <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                //         <Command>
-                //             <CommandInput placeholder="Search user..." className="h-9" onValueChange={setSearch} />
-                //             <CommandList>
-                //                 <CommandEmpty>No user found.</CommandEmpty>
-                //                 <CommandGroup>
-                //                     {filteredUsers.map((user, index) => (
-                //                         <CommandItem
-                //                             key={index}
-                //                             value={String(user.user_id)}
-                //                             onSelect={(value) => {
-                //                                 handleAdd(filteredUsers.filter(u => String(u.user_id) === value)[0])
-                //                                 setOpen(false)
-                //                             }}
-                //                             className="group flex justify-between transition-all"
-                //                         >
-                //                             <UserListItem
-                //                                 name={user.user_name}
-                //                                 email={user.user_email}
-                //                             />
-                //                             <div className={cn(
-                //                                 "flex items-center text-xs text-muted-foreground gap-1",
-                //                                 "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
-                //                             )}>
-                //                                 <PlusIcon className="size-3" />
-                //                                 Add to group
-                //                             </div>
-                //                         </CommandItem>
-                //                     ))}
-                //                 </CommandGroup>
-                //             </CommandList>
-                //         </Command>
-                //     </PopoverContent>
-                // </Popover>
             )}
 
             <ScrollArea className="h-80 mb-4 border rounded-md">
@@ -300,10 +245,6 @@ function GroupUsers(props: ManageGroupUsersProps) {
                     </div>
                 ))}
             </ScrollArea>
-
-            {/* <ScrollArea className="h-48 mb-4">
-                
-            </ScrollArea> */}
 
             <div className="flex gap-2">
                 <Button

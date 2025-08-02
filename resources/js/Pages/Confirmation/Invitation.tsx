@@ -1,7 +1,7 @@
 import { Button } from '@/Components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Link, router, usePage } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
 const AcceptInvitation = ({
     invitation,
@@ -18,6 +18,8 @@ const AcceptInvitation = ({
 
     return (
         <GuestLayout>
+            <Head title="Invitation to team" />
+
             <CardHeader>
                 <CardTitle>Invitation</CardTitle>
                 <CardDescription>

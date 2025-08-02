@@ -79,22 +79,6 @@ export default function ProfileMenu() {
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {/* <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <Users />
-                        <span>Team</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <UserPlus />
-                        <span>Invite users</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <Plus />
-                        <span>New Team</span>
-                        <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator /> */}
                 <DropdownMenuItem>
                     <LifeBuoy />
                     <span>Support</span>

@@ -66,7 +66,6 @@ function TeamForm(props: TeamModalProps) {
         post,
         reset,
         processing,
-        recentlySuccessful,
     } = useForm<InitialValues>({
         name: initialValues?.name || '',
         type: initialValues?.type || '',

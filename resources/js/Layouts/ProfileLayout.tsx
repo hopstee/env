@@ -6,7 +6,6 @@ import { ArrowLeftIcon, UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
 
 export default function Profile({
-    header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     return (

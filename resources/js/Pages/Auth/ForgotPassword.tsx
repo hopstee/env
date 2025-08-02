@@ -1,10 +1,8 @@
 import InputError from '@/Components/InputError';
-import { CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Label } from '@/Components/ui/label';
+import { CardContent, CardDescription, CardHeader } from '@/Components/ui/card';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
-import { cn } from '@/lib/utils';
 import { Head, useForm } from '@inertiajs/react';
 import { Loader2Icon } from 'lucide-react';
 import { FormEventHandler } from 'react';

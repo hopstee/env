@@ -15,7 +15,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/Components/ui/sidebar"
-import { Link, router } from "@inertiajs/react"
+import { Link } from "@inertiajs/react"
 import { TeamType } from "@/types"
 import { cn } from "@/lib/utils"
 import useModalStore from "@/modalsStore/useModalStore"
@@ -34,7 +34,6 @@ export default function TeamSwitcher({
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     const selectedTeam = teams.filter(team => team.id === selectedTeamId)[0]
-    // const SelectedTeamIcon = lucideIcons[selectedTeam.icon as keyof typeof lucideIcons]
 
     const openTeamCreateDialog = () => {
         setIsDropdownOpen(false);
