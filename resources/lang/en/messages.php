@@ -289,7 +289,7 @@ return [
                 ],
             ],
 
-            'register' => [ // вероятно, опечатка — должно быть 'register'
+            'register' => [
                 'head_title' => 'Регистрация',
 
                 'card_title' => 'Регистрация в Env',
