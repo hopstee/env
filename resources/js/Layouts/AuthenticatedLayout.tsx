@@ -3,7 +3,7 @@ import ThemeSwitcher from '@/Components/ThemeSwitcher';
 import AppSidebar from '@/Components/sidebar/AppSidebar';
 import CustomTrigger from '@/Components/sidebar/partials/CustomTrigger';
 import { Button } from '@/Components/ui/button';
-import { SidebarProvider, useSidebar } from '@/Components/ui/sidebar';
+import { SidebarProvider } from '@/Components/ui/sidebar';
 import { ModalTypes } from '@/constants/modals';
 import { useGlobalHotkeys } from '@/hooks/use-hotkeys';
 import { cn } from '@/lib/utils';
@@ -11,10 +11,8 @@ import useModalStore from '@/modalsStore/useModalStore';
 import { usePage } from '@inertiajs/react';
 import { UserPlusIcon } from 'lucide-react';
 import { PropsWithChildren, ReactNode } from 'react';
-import { toast } from 'sonner';
 
 export default function Authenticated({
-    header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const {
@@ -55,7 +53,6 @@ export default function Authenticated({
                             </div>
 
                             <div className="ms-6 flex items-center gap-3">
-                                <ThemeSwitcher />
                                 {auth.user.is_admin && (
                                     <Button
                                         variant="ghost"
