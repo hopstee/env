@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\TeamsController;
 use App\Http\Controllers\Dashboard\MembersController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Dashboard\SettingsController;
+use App\Http\Controllers\Dashboard\SysLogsController;
 use App\Http\Middleware\CheckAdminAccess;
 use App\Http\Middleware\CheckTeamAccess;
 use App\Http\Middleware\RedirectToTeam;
@@ -43,7 +44,7 @@ Route::middleware('auth')->group(function () {
         ShareTeamsData::class,
     ])->group(function () {
         Route::get('/', function () {
-            return redirect()->route('t', ['team' => session('selected_team_id')]);
+            return redirect()->route('t.active', ['team' => session('selected_team_id')]);
         })->name('t');
 
         Route::prefix('{team}')->middleware([CheckTeamAccess::class])->group(function () {
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/members', [MembersController::class, 'show'])->name('t.members');
                 Route::get('/invitations', [InvitationsController::class, 'show'])->name('t.invitations');
                 Route::get('/api-keys', [ApiKeysController::class, 'show'])->name('t.api-keys');
-                Route::get('/settings', [SettingsController::class, 'show'])->name('t.settings');
+                Route::get('/sys-logs', [SysLogsController::class, 'show'])->name('t.sys-logs');
             });
         });
     });

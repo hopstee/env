@@ -212,6 +212,24 @@ export type SettingsType = {
     notifications: NotificationSettingsType
 }
 
+export enum SysLogSubjectEnum {
+    VARIABLES = 'variables',
+    GROUPS = 'groups',
+    MEMBERS = 'members',
+    INVITATIONS = 'invitations',
+    API_KEYS = 'api_keys'
+}
+
+export type SysLogType = {
+    id: number;
+    subject: SysLogSubjectEnum;
+    team_id: string;
+    team: TeamType;
+    user_id: number;
+    user: User;
+    payload: any;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {

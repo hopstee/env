@@ -1,4 +1,4 @@
-import { KeyRoundIcon, LayoutDashboardIcon, LifeBuoyIcon, ListIcon, SendIcon, SettingsIcon, UserPlusIcon, UsersIcon } from "lucide-react"
+import { KeyRoundIcon, LayoutDashboardIcon, LifeBuoyIcon, ListIcon, ScrollTextIcon, SendIcon, SettingsIcon, UserPlusIcon, UsersIcon } from "lucide-react"
 
 import {
     Sidebar,
@@ -48,10 +48,10 @@ const adminMainNav = (teamId: string): NavItemType[] => [
         route: "t.api-keys",
     },
     {
-        title: "Settings",
-        url: `/t/${teamId}/settings`,
-        icon: SettingsIcon,
-        route: "t.settings",
+        title: "Sys Logs",
+        url: `/t/${teamId}/sys-logs`,
+        icon: ScrollTextIcon,
+        route: "t.sys-logs",
     },
 ]
 

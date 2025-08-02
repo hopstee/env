@@ -144,4 +144,9 @@ class Team extends Model
 
         return $paginatedArray;
     }
+
+    public function sysLogs(): HasMany
+    {
+        return $this->hasMany(SysLog::class);
+    }
 }

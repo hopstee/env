@@ -10,7 +10,6 @@ use App\Models\Team;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ApiKeysController extends Controller
@@ -72,6 +71,15 @@ class ApiKeysController extends Controller
             'user_id' => $request->user_id,
             'expires_at' => $request->expires_at ? Carbon::parse($request->expires_at) : null,
         ]);
+
+        SysLogsController::addLog(
+            'variables',
+            $request->team_id,
+            $request->user_id,
+            [
+                'message' => 'Created new api key',
+            ],
+        );
 
         return back();
     }
